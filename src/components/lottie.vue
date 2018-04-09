@@ -16,7 +16,7 @@ export default {
     this.anim = lottie.loadAnimation({
       container: this.$refs.wrapper,
       renderer: 'svg',
-      loop: true,
+      loop: this.options.loop,
       autoplay: true,
       animationData: this.options.animationData,
     });
@@ -28,7 +28,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .bm {
-  background-color:#fff;
+  background-color:#000;
   width: 1000px;
   height: 540px;
   display:block;
