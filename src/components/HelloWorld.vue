@@ -11,28 +11,18 @@
 <script>
 import Vue from 'vue';
 import lottie from './lottie';
-import invokeData from '../animation/01_line_invoke';
-import listenData from '../animation/02_line_listening';
-import thinkData from '../animation/03_line_thinking';
-import wipeoffData from '../animation/04_line_wipe_off';
-import revealData from '../animation/05_line_reveal';
-import standby1Data from '../animation/06_line_standby_pulse_1';
-import standby2Data from '../animation/07_line_standby_pulse_2';
+import { mapState } from 'vuex';
 
 export default {
   name: 'demo',
+  computed: {
+    ...mapState('animation', [
+      'lottie',
+    ]),
+  },
   data () {
     return {
-      btns: ['invokeData', 'listenData', 'thinkData', 'wipeoffData', 'revealData', 'standby1Data', 'standby2Data'],
-      data: {
-        invokeData,
-        listenData,
-        thinkData,
-        wipeoffData,
-        revealData,
-        standby1Data,
-        standby2Data,
-      },
+      btns: [ 'invokeData', 'listenData', 'thinkData', 'wipeoffData', 'revealData', 'standby1Data', 'standby2Data', ],
       defaultOptions: {
         animationData: undefined,
         loop: false,
@@ -49,7 +39,8 @@ export default {
     changeAnimation (btn) {
       this.defaultOptions.animationData = undefined;
       Vue.nextTick(() => {
-        Vue.set(this.defaultOptions, 'animationData', this.data[btn]);
+        console.log(this.lottie[btn].animationData);
+        Vue.set(this.defaultOptions, 'animationData', this.lottie[btn].data.animationData);
       });
     },
   },
