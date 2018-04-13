@@ -1,10 +1,11 @@
+/* eslint-disable */
 /*
 This should only be imported by the "Messages" service
 */
 import Vue from 'vue';
 import io from 'socket.io-client';
 import wildcard from 'socketio-wildcard';
-import store from '../vuex/store';
+import store from '../store';
 import { mapState, mapMutations } from 'vuex';
 
 export default new Vue({

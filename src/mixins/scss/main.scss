@@ -1,0 +1,23 @@
+@import 'fonts';
+@import 'mixins';
+@import '~@samsung/lumi/dist/lib/lumi';
+@import '~@samsung/lumi/dist/lib/styles';
+
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+video, img {
+  transform: translateZ(0);
+  perspective: 0px;
+}
+
+span {
+  font-size: inherit;
+}
+
+$s: 100vw / 1920;
+$w: 100vw;
+$h: 100vw / 16 * 9;

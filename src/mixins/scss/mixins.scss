@@ -1,0 +1,106 @@
+/* mixin - for generating background urls
+----------------------------------------- */
+@mixin generateURL($prefix, $suffix, $from, $to) {
+  @for $i from $from to $to {
+    $num: $i;
+    @if $to >= 10 and $i < 10 {
+      $num: '0' + $i;
+    }
+    background-image: url(#{$prefix}#{$num}#{$suffix});
+  }
+}
+
+/* placeholder
+   - for setting default box model
+   - for setting default properties of ui elements
+-------------------------------------------------- */
+%box-model {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+%ui-element {
+  @extend %box-model;
+
+  &::before, &::after, ::before, ::after, * {
+    @extend %box-model;
+    box-sizing: inherit;
+  }
+}
+
+/* mixin
+   - flex box setup
+   - direction: flex-row, flex-col
+   - type: box-flex, inline-flex
+   - center along axis: x, y, xy, none
+-------------------------------------- */
+
+// private: to be used by public mixin
+@mixin _flex-row($center_along_axis: '') {
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  @if $center_along_axis == 'x' {
+    justify-content: center;
+    align-items: flex-start;
+  }
+  @if $center_along_axis == 'y' {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  @if $center_along_axis == 'xy' {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@mixin _flex-col($center_along_axis: '') { // private
+  flex-direction: column;
+  // flex-flow: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  @if $center_along_axis == 'x' {
+    align-items: center;
+    justify-content: flex-start;
+  }
+  @if $center_along_axis == 'y' {
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @if $center_along_axis == 'xy' {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// public: meant for use
+@mixin inline-flex-row($center_along_axis: '') {
+  display: inline-flex;
+  @include _flex-row($center_along_axis);
+}
+
+@mixin inline-flex-col($center_along_axis: '') {
+  display: inline-flex;
+  @include _flex-col($center_along_axis);
+}
+
+@mixin box-flex-row($center_along_axis: '') {
+  display: flex;
+  @include _flex-row($center_along_axis);
+}
+
+@mixin box-flex-col($center_along_axis: '') {
+  display: flex;
+  @include _flex-col($center_along_axis);
+}
+
+/* mixin - truncating text for display: block | inline-block
+------------------------------------------------------------ */
+@mixin truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

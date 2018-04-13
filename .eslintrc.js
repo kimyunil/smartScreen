@@ -23,9 +23,10 @@ module.exports = {
   rules: {
     // allow async-await
     'generator-star-spacing': 'off',
+    "space-before-function-paren": ["error", "never"],
     'semi': ["error", "always"],
     "comma-dangle": ["error", {
-        "arrays": "always",
+        "arrays": "ignore",
         "objects": "always",
         "imports": "never",
         "exports": "never",

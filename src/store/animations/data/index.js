@@ -8,7 +8,7 @@ import standby1Data from './06_line_standby_pulse_1';
 import standby2Data from './07_line_standby_pulse_2';
 
 export default {
-  invokeData: {
+  invoke: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -16,7 +16,7 @@ export default {
       animationData: invokeData,
     },
   },
-  listenData: {
+  listen: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -24,7 +24,7 @@ export default {
       animationData: listenData,
     },
   },
-  thinkData: {
+  think: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -32,7 +32,7 @@ export default {
       animationData: thinkData,
     },
   },
-  wipeoffData: {
+  wipeoff: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -40,7 +40,7 @@ export default {
       animationData: wipeoffData,
     },
   },
-  revealData: {
+  reveal: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -48,7 +48,7 @@ export default {
       animationData: revealData,
     },
   },
-  standby1Data: {
+  standby1: {
     data: {
       renderer: 'svg',
       loop: true,
@@ -56,7 +56,7 @@ export default {
       animationData: standby1Data,
     },
   },
-  standby2Data: {
+  standby2: {
     data: {
       renderer: 'svg',
       loop: true,
