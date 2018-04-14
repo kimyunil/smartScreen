@@ -1,15 +1,18 @@
 <template>
   <div class="smart-screen">
-    <bixby/>
+    <bixby @toggle-result="toggleResult"/>
     <v-source class="video-source" :config="videoconfig"></v-source>
+    <div class="result-container">
+      <result v-if="showResult"/>
+    </div>
   </div>
 </template>
 
 <script>
 
 import vSource from './common/videoSource';
-import lottie from './common/lottie';
 import bixby from './bixby/bixby';
+import result from './result/result';
 import { mapState } from 'vuex';
 
 export default {
@@ -26,17 +29,21 @@ export default {
       'selectedSourceURL',
     ]),
   },
+  methods: {
+    toggleResult(val) {
+      this.showResult = val;
+    },
+  },
   data() {
     return {
       isResult: false,
+      showResult: false,
     };
   },
   components: {
-    lottie,
     vSource,
     bixby,
-  },
-  methods: {
+    result,
   },
 };
 </script>

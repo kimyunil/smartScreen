@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import animation from '@/store/animations/';
 import source from '@/store/source/';
+import result from '@/store/result/';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
   modules: {
     animation,
     source,
+    result,
   },
 });
 export default store;

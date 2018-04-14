@@ -1,6 +1,6 @@
 <template>
   <div class="result-data">
-    <component :is="comps"> </component>
+    <component v-if="mountResult" :is="result.template" :data="result"> </component>
   </div>
 </template>
 <script>
@@ -10,26 +10,26 @@ import { mapState } from 'vuex';
 
 export default {
   mounted() {
-    this.comps = 'hList';
   },
   data() {
     return {
-      comps: '',
-      defaultOptions: {
-        animationData: undefined,
-        loop: false,
-      },
     };
+  },
+  computed: {
+    ...mapState('result', [
+      'result',
+    ]),
+    mountResult() {
+      if (this.result && this.result.template) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     handleAnimation() {
       console.log('anima:::');
     },
-  },
-  computed: {
-    ...mapState('animation', [
-      'lottie',
-    ]),
   },
   components: {
     hList,
@@ -37,7 +37,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-  @import '../../../mixins/scss/main';
+  @import '../../mixins/scss/main';
   .result-data {
     position: absolute;
     top: 0;

@@ -6,17 +6,14 @@
     <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
       <speech-text :sText="sText"></speech-text>
     </div>
-    <div class="result-container">
-      <result v-if="showResult"/>
-    </div>
   </div>
 </template>
 <script>
 
 import lottie from '../common/lottie';
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import Messages from '../../services/Messages';
-import result from './result/result';
+
 import speechText from './speechText';
 
 export default {
@@ -42,17 +39,19 @@ export default {
     ...mapMutations({
       updateBixby: 'UPDATE_BIXBY',
     }),
+    ...mapActions('result', {
+      set_result: 'SET_RESULT',
+    }),
     handleKeyDown(type) {
       console.log('Handle Key Down', type);
       switch (type) {
         case 'ONE':
-          this.showResult = false;
           this.showSpeechText = true;
+          this.$emit('toggle-result', false);
           this.text = '';
           this.updateBixby('invoke');
           break;
         case 'TWO':
-          
           this.text = 'Show me movies with Tom Hanks';
           this.updateBixby('listen');
           break;
@@ -60,25 +59,30 @@ export default {
           this.updateBixby('think');
           break;
         case 'FOUR':
-          this.updateBixby('wipeoff');
-          this.showSpeechText = false;
+          const ret = this.set_result({ category: 'movies', starrer: 'tom_hanks', });
+          if (ret) {
+            this.updateBixby('wipeoff');
+            this.showSpeechText = false;
+          } else {
+            // bixby Nagging
+          }
           break;
         case 'FIVE':
           this.updateBixby('standby1');
           break;
         case 'SIX':
-         this.updateBixby('standby2');
+          this.updateBixby('standby2');
           break;
       }
     },
     handleAnimation(anim) {
       this.anim = anim;
-      this.anim.addEventListener('complete', this.onCompleteAnim)
+      this.anim.addEventListener('complete', this.onCompleteAnim);
     },
     onCompleteAnim() {
-      if(this.bixbyState === 'wipeoff') {
-          this.updateBixby('reveal');
-          this.showResult = true;
+      if (this.bixbyState === 'wipeoff') {
+        this.updateBixby('reveal');
+        this.$emit('toggle-result', true);
       }
     },
     changeAnimation(btn) {
@@ -92,7 +96,6 @@ export default {
   data() {
     return {
       text: '',
-      showResult: false,
       showSpeechText: false,
       defaultOptions: {
         animationData: undefined,
@@ -109,7 +112,6 @@ export default {
   },
   components: {
     lottie,
-    result,
     speechText,
   },
 };
