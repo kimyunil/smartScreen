@@ -40,7 +40,8 @@ export default new Vue({
       if (this.socket !== undefined) {
         this.socket.disconnect();
       }
-
+      console.log('starte::::::');
+      console.log(`ws://${this.socketIp}:${this.socketPort}`);
       this.socket = io(`ws://${this.socketIp}:${this.socketPort}`);
       this.socket.on('connect', () => {
         this.send('subscribe', Object.keys(this.subscriptions));
@@ -109,8 +110,8 @@ export default new Vue({
       };
     },
     ...mapMutations({
-      connected: 'socket/CONNECTED',
-      disconnected: 'socket/DISCONNECTED',
+      connected: 'CONNECTED',
+      disconnected: 'DISCONNECTED',
     }),
 
     triggerKeyEvent(eventName, keyCode, payload) {

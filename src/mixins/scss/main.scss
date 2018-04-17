@@ -1,12 +1,13 @@
 @import 'fonts';
 @import 'mixins';
-@import '~@samsung/lumi/dist/lib/lumi';
-@import '~@samsung/lumi/dist/lib/styles';
+// @import '~@samsung/lumi/dist/lib/lumi';
+// @import '~@samsung/lumi/dist/lib/styles';
 
 * {
   padding: 0;
   margin: 0;
   border: 0;
+  box-sizing: border-box;
 }
 
 video, img {

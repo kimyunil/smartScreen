@@ -2,9 +2,11 @@
   <div class="smart-screen">
     <bixby @toggle-result="toggleResult"/>
     <v-source class="video-source" :config="videoconfig"></v-source>
-    <div class="result-container">
+    <!--<div class="result-container">
       <result v-if="showResult"/>
     </div>
+    -->
+    <home/>
   </div>
 </template>
 
@@ -12,11 +14,18 @@
 
 import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
-import result from './result/result';
+import home from './home/home';
+// import result from './result/result';
 import { mapState } from 'vuex';
+import Messages from '../services/Messages';
 
 export default {
   name: 'demo',
+  mounted() {
+    Messages.send('audio-input.start');
+    Messages.$on('speech-to-text.transcription-complete', this.setComplete);
+    Messages.$on('audio-input.begin', this.handleASRBegin);
+  },
   computed: {
     videoconfig() {
       const obj = {};
@@ -33,6 +42,12 @@ export default {
     toggleResult(val) {
       this.showResult = val;
     },
+    handleASRBegin() {
+      console.log('handleASRBegin:::::::::::::::');
+    },
+    setComplete(arg) {
+      console.log('SetComplete::::');
+    },
   },
   data() {
     return {
@@ -43,7 +58,8 @@ export default {
   components: {
     vSource,
     bixby,
-    result,
+    home,
+    // result,
   },
 };
 </script>

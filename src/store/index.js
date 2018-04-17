@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import animation from '@/store/animations/';
 import source from '@/store/source/';
 import result from '@/store/result/';
+import home from '@/store/home/';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -12,17 +13,17 @@ const store = new Vuex.Store({
     socket: {
       connected: false,
       ip: '127.0.0.1',
-      socketPort: '2222',
+      port: '2222',
     },
   },
   mutations: {
     UPDATE_BIXBY(state, payload) {
       state.bixbyState = payload;
     },
-    SOCKET_CONNECTED(state) {
+    CONNECTED(state) {
       state.socketConnected = true;
     },
-    SOCKET_DISCONNECTED(state) {
+    DISCONNECTED(state) {
       state.socketConnected = false;
     },
   },
@@ -30,6 +31,7 @@ const store = new Vuex.Store({
     animation,
     source,
     result,
+    home,
   },
 });
 export default store;
