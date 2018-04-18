@@ -63,10 +63,10 @@ export default {
       this.showResult = val;
     },
     handleASRBegin() {
-      // console.log('handleASRBegin:::::::::::::::');
+      console.log('handleASRBegin:::::::::::::::');
     },
     setComplete(arg) {
-      // console.log('SetComplete::::');
+      console.log('SetComplete::::');
     },
   },
   data() {
