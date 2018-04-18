@@ -7,11 +7,16 @@ export default {
   mutations: {
   },
   getters: {
-    GET_DATA: (state) => (payload) => {
-      return state.data[payload];
+    GET_PAGES(state) {
+      let pages = [];
+      for (let i = 0; i < state.data.pages.pagination.length; i++) {
+        const key = state.data.pages.pagination[i];
+        pages[i] = state.data.pages.details[key];
+      }
+      console.log(pages);
+      return pages;
     },
   },
   actions: {
-
   },
 };

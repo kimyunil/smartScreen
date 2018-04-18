@@ -16,15 +16,19 @@ import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
 // import result from './result/result';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Messages from '../services/Messages';
 
 export default {
-  name: 'demo',
+  name: 'smartscreen',
   mounted() {
     Messages.send('audio-input.start');
     Messages.$on('speech-to-text.transcription-complete', this.setComplete);
     Messages.$on('audio-input.begin', this.handleASRBegin);
+    Messages.$on('button_down', this.handleKeyDown);
+  },
+  destroyed() {
+    Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {
     videoconfig() {
@@ -37,16 +41,32 @@ export default {
     ...mapState('source', [
       'selectedSourceURL',
     ]),
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
   },
   methods: {
+    ...mapMutations({
+      updateMode: 'UPDATE_REMOTE_MODE',
+    }),
+    handleKeyDown(type) {
+      console.log('Handle Key Down', type);
+      switch (type) {
+        case 'VOICE_SEARCH':
+          this.updateMode(!this.isRemoteEnabled);
+          break;
+        default:
+          break;
+      }
+    },
     toggleResult(val) {
       this.showResult = val;
     },
     handleASRBegin() {
-      console.log('handleASRBegin:::::::::::::::');
+      // console.log('handleASRBegin:::::::::::::::');
     },
     setComplete(arg) {
-      console.log('SetComplete::::');
+      // console.log('SetComplete::::');
     },
   },
   data() {

@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     socketConnected: false,
+    isRemoteEnabled: false,
     bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
     socket: {
       connected: false,
@@ -17,6 +18,9 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
+    UPDATE_REMOTE_MODE(state, payload) {
+      state.isRemoteEnabled = payload;
+    },
     UPDATE_BIXBY(state, payload) {
       state.bixbyState = payload;
     },

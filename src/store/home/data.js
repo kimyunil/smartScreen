@@ -1,106 +1,90 @@
 export default {
-  health: {
-    title: 'Health & Fitness',
-    brand: {
-      Icon: '/static/Images/home/health/fitbit.png',
-      text: 'Fitbit',
-    },
-    slides: {
-      items: ['slide1', 'slide2', 'slide3', 'slide4'],
-      slide1: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Powerlifting 101;FitBit Coach',
+  pages: {
+    pagination: ['page-1', 'page-2', 'page-3'],
+    details: {
+      'page-1': {
+        title: 'page-1',
+        content: ['news', 'fitness', 'weather', 'spotify'],
+        news: {
+          type: 'poster',
+          template: 'poster',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/poster.png',
+        },
+        fitness: {
+          type: 'tile',
+          template: 'tile',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/tile.png',
+        },
+        weather: {
+          type: 'thumbnail-1',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail.png',
+        },
+        spotify: {
+          type: 'thumbnail-2',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail2.png',
+        },
       },
-      slide2: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Photography;Techniques',
+      'page-2': {
+        title: 'page-2',
+        content: ['iot-temp', 'iot-light', 'source', 'spotify'],
+        'iot-temp': {
+          type: 'thumbnail-1',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail.png',
+        },
+        'iot-light': {
+          type: 'thumbnail-2',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail2.png',
+        },
+        source: {
+          type: 'tile',
+          template: 'tile',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/tile.png',
+        },
+        spotify: {
+          type: 'poster',
+          template: 'poster',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/poster.png',
+        },
       },
-      slide3: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Powerlifting 101;FitBit Coach',
-      },
-      slide4: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Photography;Techniques',
-      },
-    },
-  },
-  education: {
-    title: 'Education',
-    brand: {
-      Icon: '/static/Images/home/health/fitbit.png',
-      text: 'lynda.com',
-    },
-    slides: {
-      items: ['slide1', 'slide2', 'slide3', 'slide4'],
-      slide1: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Powerlifting 101;FitBit Coach',
-      },
-      slide2: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Photography;Techniques',
-      },
-      slide3: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Powerlifting 101;FitBit Coach',
-      },
-      slide4: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Photography;Techniques',
-      },
-    },
-  },
-  game: {
-    title: 'Gaming',
-    brand: {
-      Icon: '/static/Images/home/health/fitbit.png',
-      text: 'twitch',
-    },
-    slides: {
-      items: ['slide1', 'slide2', 'slide3', 'slide4'],
-      slide1: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Overwatch Tournament;European League',
-      },
-      slide2: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Bobs Burgers;S1 E3 Burger Betrayal',
-      },
-      slide3: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Overwatch Tournament;European League',
-      },
-      slide4: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Bobs Burgers;S1 E3 Burger Betrayal',
-      },
-    },
-  },
-  entertainment: {
-    title: 'Entertainment',
-    brand: {
-      Icon: '/static/Images/home/health/fitbit.png',
-      text: 'hulu',
-      progress: 30,
-    },
-    slides: {
-      items: ['slide1', 'slide2', 'slide3', 'slide4'],
-      slide1: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Overwatch Tournament;European League',
-      },
-      slide2: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Bobs Burgers;S1 E3 Burger Betrayal',
-      },
-      slide3: {
-        img: '/static/Images/home/health/gym.jpg',
-        text: 'Overwatch Tournament;European League',
-      },
-      slide4: {
-        img: '/static/Images/home/health/run.jpg',
-        text: 'Bobs Burgers;S1 E3 Burger Betrayal',
+      'page-3': {
+        title: 'page-3',
+        content: ['fitbit-gym', 'fitbit-yoga', 'sponsor', 'source'],
+        'fitbit-gym': {
+          type: 'poster',
+          template: 'poster',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/poster.png',
+        },
+        'fitbit-yoga': {
+          type: 'tile',
+          template: 'tile',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/tile.png',
+        },
+        sponsor: {
+          type: 'thumbnail-1',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail.png',
+        },
+        source: {
+          type: 'thumbnail-2',
+          template: 'thumbnail',
+          logo: '/static/Images/home/health/fitbit.png',
+          img: '/static/Images/home/page1/thumbnail2.png',
+        },
       },
     },
   },
