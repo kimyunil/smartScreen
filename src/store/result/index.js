@@ -1,4 +1,5 @@
-import data from './data.js';
+import data from './data';
+
 export default {
   namespaced: true,
   state: {
@@ -15,7 +16,7 @@ export default {
     },
   },
   actions: {
-    SET_RESULT({ state, commit, }, payload) {
+    SET_RESULT({ state, commit }, payload) {
       if (payload.category === 'movies') {
         commit('GET_MOVIES', payload);
       }

@@ -5,10 +5,10 @@
 </template>
 <script>
 import { mapState } from 'vuex';
+
 export default {
   name: 'videoSource',
   mounted() {
-    console.log(this.config);
   },
   props: ['config'],
   computed: {

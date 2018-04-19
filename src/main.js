@@ -2,18 +2,16 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
-import router from './router';
-import store from './store';
-import jsMixin from './mixins/js/global.js';
+import store from './store/';
+import jsMixin from './mixins/js/global';
 
 Vue.config.productionTip = false;
 
+Vue.mixin(jsMixin);
 /* eslint-disable no-new */
 new Vue({
-  mixins: [jsMixin],
   el: '#app',
-  router,
   store,
-  components: { App, },
+  components: { App },
   template: '<App/>',
 });

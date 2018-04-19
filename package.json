@@ -1,8 +1,8 @@
 {
-  "name": "smartscreen",
+  "name": "smart-screen",
   "version": "1.0.0",
-  "description": "A prototype for Smart Screen.",
-  "author": "Wei Si <wei.si@samsung.com>",
+  "description": "Prototype Project",
+  "author": "sra-sri",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -11,9 +11,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.5.2",
     "@samsung/lumi": "git+ssh://git@github.com/yhu0214/18-ui-lumi.git",
-    "vue-router": "^3.0.1",
+    "gsap": "*",
+    "lottie-web": "^5.1.10",
+    "vue": "^2.5.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -23,7 +24,6 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
     "babel-preset-env": "^1.3.2",
@@ -32,14 +32,11 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
     "eslint": "^4.15.0",
-    "eslint-config-standard": "^10.2.1",
+    "eslint-config-airbnb-base": "^11.3.0",
     "eslint-friendly-formatter": "^3.0.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-import-resolver-webpack": "^0.8.1",
-    "eslint-plugin-node": "^5.2.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",

@@ -1,27 +1,27 @@
 <template>
   <div class="smart-screen">
-    <bixby @toggle-result="toggleResult"/>
+   <component :active="active" :style="{'z-index': (index + 1)}" v-for="(comps, index) in viewStack" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
     <v-source class="video-source" :config="videoconfig"></v-source>
-    <!--<div class="result-container">
+    <!-- <div class="result-container">
       <result v-if="showResult"/>
-    </div>
-    -->
-    <home/>
+    </div> -->
+     <!-- <bixby @toggle-result="toggleResult"/> -->
+    <!-- <home/> -->
   </div>
 </template>
 
 <script>
-
+import { mapState, mapMutations } from 'vuex';
 import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
 // import result from './result/result';
-import { mapState, mapMutations } from 'vuex';
 import Messages from '../services/Messages';
 
 export default {
   name: 'smartscreen',
   mounted() {
+    console.log(this);
     Messages.send('audio-input.start');
     Messages.$on('speech-to-text.transcription-complete', this.setComplete);
     Messages.$on('audio-input.begin', this.handleASRBegin);
@@ -43,14 +43,18 @@ export default {
     ]),
     ...mapState([
       'isRemoteEnabled',
+      'viewStack',
     ]),
   },
   methods: {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
+    exitCB() {
+    },
+    returnCB() {
+    },
     handleKeyDown(type) {
-      console.log('Handle Key Down', type);
       switch (type) {
         case 'VOICE_SEARCH':
           this.updateMode(!this.isRemoteEnabled);
@@ -65,7 +69,7 @@ export default {
     handleASRBegin() {
       console.log('handleASRBegin:::::::::::::::');
     },
-    setComplete(arg) {
+    setComplete() {
       console.log('SetComplete::::');
     },
   },

@@ -1,6 +1,6 @@
-# smartscreen
+# smart-screen
 
-> A prototype for Smart Screen.
+> Prototype Project
 
 ## Build Setup
 

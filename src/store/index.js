@@ -4,10 +4,14 @@ import animation from '@/store/animations/';
 import source from '@/store/source/';
 import result from '@/store/result/';
 import home from '@/store/home/';
+import config from './config';
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    gConfig: config,
+    viewStack: ['home'],
     socketConnected: false,
     isRemoteEnabled: false,
     bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]

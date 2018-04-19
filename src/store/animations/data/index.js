@@ -1,11 +1,11 @@
 
-import invokeData from './01_line_invoke';
-import listenData from './02_line_listening';
-import thinkData from './03_line_thinking';
-import wipeoffData from './04_line_wipe_off';
-import revealData from './05_line_reveal';
-import standby1Data from './06_line_standby_pulse_1';
-import standby2Data from './07_line_standby_pulse_2';
+import invokeData from './01_line_invoke.json';
+import listenData from './02_line_listening.json';
+import thinkData from './03_line_thinking.json';
+import wipeoffData from './04_line_wipe_off.json';
+import revealData from './05_line_reveal.json';
+import standby1Data from './06_line_standby_pulse_1.json';
+import standby2Data from './07_line_standby_pulse_2.json';
 
 export default {
   invoke: {

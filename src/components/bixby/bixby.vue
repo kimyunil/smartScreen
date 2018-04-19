@@ -1,7 +1,11 @@
 <template>
   <div class="bixby">
     <div class="bixby-lottie">
-      <lottie v-if="defaultOptions.animationData !== undefined" :options="defaultOptions" v-on:animCreated="handleAnimation"></lottie>
+      <lottie
+      v-if="defaultOptions.animationData !== undefined"
+      :options="defaultOptions"
+      v-on:animCreated="handleAnimation"
+      ></lottie>
     </div>
     <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
       <speech-text :sText="sText"></speech-text>
@@ -9,9 +13,8 @@
   </div>
 </template>
 <script>
-
-import lottie from '../common/lottie';
 import { mapState, mapMutations, mapActions } from 'vuex';
+import lottie from '../common/lottie';
 import Messages from '../../services/Messages';
 
 import speechText from './speechText';
@@ -58,8 +61,8 @@ export default {
         case 'THREE':
           this.updateBixby('think');
           break;
-        case 'FOUR':
-          const ret = this.set_result({ category: 'movies', starrer: 'tom_hanks', });
+        case 'FOUR': {
+          const ret = this.set_result({ category: 'movies', starrer: 'tom_hanks' });
           if (ret) {
             this.updateBixby('wipeoff');
             this.showSpeechText = false;
@@ -67,11 +70,14 @@ export default {
             // bixby Nagging
           }
           break;
+        }
         case 'FIVE':
           this.updateBixby('standby1');
           break;
         case 'SIX':
           this.updateBixby('standby2');
+          break;
+        default:
           break;
       }
     },
@@ -85,7 +91,7 @@ export default {
         this.$emit('toggle-result', true);
       }
     },
-    changeAnimation(btn) {
+    changeAnimation() {
       this.defaultOptions.animationData = undefined;
       this.$nextTick(() => {
         console.log(this.bixbyState, this.lottie);
@@ -104,7 +110,7 @@ export default {
     };
   },
   watch: {
-    bixbyState(value, old) {
+    bixbyState(value) {
       if (value !== '') {
         this.changeAnimation(value);
       }
