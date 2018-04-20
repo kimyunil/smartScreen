@@ -266,7 +266,8 @@ export default {
              width: 300 * $s;
              border: 20 * $s solid transparent;
              &.focus {
-              border: 20 * $s solid white;
+               border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+               border-width: 20 * $s;
              }
            }
          }

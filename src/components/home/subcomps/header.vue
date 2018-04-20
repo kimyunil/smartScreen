@@ -1,7 +1,7 @@
 <template>
   <transition name="show" appear>
     <div class="header">
-      <div class="nav_list">
+      <div class="nav_list" :style="{'transform': `translateX(${translateX * $s}px)`}">
           <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'selected': selectedIdx === index}]">
           {{item.title}}
           </div>
@@ -15,6 +15,10 @@ import Messages from '../../../services/Messages';
 export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    this.$nextTick(() => {
+      this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
+      this.css.headerWidth = this.$el.offsetWidth;
+    })
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -43,11 +47,22 @@ export default {
         case 'LEFT':
           if (this.hIdx > 0) {
             this.hIdx -= 1;
+            const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
+            const accOffset = left + this.translateX;
+            if (accOffset < 0) {
+              this.translateX += (accOffset * -1);
+            }
           }
           break;
         case 'RIGHT':
           if (this.hIdx < this.navItems.length - 1) {
             this.hIdx += 1;
+            const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
+            const width = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetWidth;
+            const accOffset = left + width + this.css.listOffset + this.translateX;
+            if (this.css.headerWidth < (accOffset)) {
+              this.translateX -= (accOffset - this.css.headerWidth);
+            }
           }
           break;
         default:
@@ -58,6 +73,11 @@ export default {
   data() {
     return {
       hIdx: 0,
+      css: {
+        offsetLeft: 0,
+        headerWidth: 0,
+      },
+      translateX: 0,
     };
   },
 };
@@ -73,9 +93,10 @@ export default {
     position: relative;
     width: auto;
     height: auto;
-    display: flex;
+    display: inline-flex;
     height: 80 * $s;
     left: 140 * $s;
+    transition: transform 0.3s ease;
     .nav-button {
       position: relative;
       margin-right: 50 * $s;
@@ -91,6 +112,9 @@ export default {
       background: transparent;
       font-family: SamsungOneUI700;
       transition: transform 0.3s ease;
+      &:last-child {
+        margin-right: 80 * $s;
+      }
       &.selected {
         background: grey;
         color: white;
