@@ -4,7 +4,7 @@
    <div class="bottom-footer">
      <template v-if="item.contentType==='simple'">
         <div class="text simple">
-          <template v-for="text in item.details.text1.split('$')"> 
+          <template v-for="text in item.details.text1.split('$')">
           <div :key="text">{{text}}</div>
           </template>
         </div>
@@ -12,16 +12,16 @@
        <template v-if="item.contentType==='details'">
          <div class="details">
          <div class="text">
-          <template v-for="(text, val) in item.details.text1"> 
-            <div :key="text"> 
+          <template v-for="(text, val) in item.details.text1">
+            <div :key="text">
               <span>{{val}}</span>
               <span>{{text}}</span>
             </div>
           </template>
         </div>
         <div class="text text2">
-          <template v-for="(text, val) in item.details.text2"> 
-            <div :key="text"> 
+          <template v-for="(text, val) in item.details.text2">
+            <div :key="text">
               <span>{{val}}</span>
               <span>{{text}}</span>
             </div>

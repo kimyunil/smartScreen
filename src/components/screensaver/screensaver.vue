@@ -43,11 +43,11 @@ export default {
             this.powerEnabled = true;
             this.timeOut = setTimeout(() => {
               this.powerEnabled = false;
-            }, 10000)
-          } else if(this.powerEnabled){
-            //switch Component
+            }, 10000);
+          } else if (this.powerEnabled) {
+            // switch Component
             this.reset();
-            this.switch_comp({ name: 'home'});
+            this.switch_comp({ name: 'home' });
           }
           break;
         default:

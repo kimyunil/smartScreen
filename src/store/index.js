@@ -35,7 +35,7 @@ const store = new Vuex.Store({
       state.socketConnected = false;
     },
     REMOVE_IF_EXSIST(state, name) {
-      for (let i = 0; i < state.viewStack.length; i++) {
+      for (let i = 0; i < state.viewStack.length; i += 1) {
         if (state.viewStack[i] === name) {
           state.viewStack.splice(i, 1);
           break;
@@ -52,7 +52,7 @@ const store = new Vuex.Store({
         state.viewStack.push(payload.name);
       }
     },
-    REMOVE_COMPONENT({ state, commit }) {
+    REMOVE_COMPONENT({ state }) {
       state.viewStack.pop();
     },
   },

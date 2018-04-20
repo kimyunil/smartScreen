@@ -19,7 +19,7 @@
    <template v-if="item.details.bottomText">
     <div class="bottom-footer" :class="[item.contentType]">
       <div class="text simple">
-        <template v-for="text in item.details.bottomText.split('$')"> 
+        <template v-for="text in item.details.bottomText.split('$')">
         <div :key="text">{{text}}</div>
         </template>
       </div>

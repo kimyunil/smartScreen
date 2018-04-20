@@ -18,7 +18,7 @@ export default {
     this.$nextTick(() => {
       this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
       this.css.headerWidth = this.$el.offsetWidth;
-    })
+    });
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);

@@ -76,7 +76,7 @@ export default {
       appsItems: 'GET_APPS',
     }),
     translateY() {
-      return ((this.translate * 100)/ window.innerWidth);
+      return ((this.translate * 100) / window.innerWidth);
     },
     gridFocus() {
       if (this.active && (this.focus === 'grid')) {
@@ -181,6 +181,7 @@ export default {
           break;
         case 'BACK':
           this.$emit('exit');
+          break;
         default:
           break;
       }
