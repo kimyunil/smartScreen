@@ -11,7 +11,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     gConfig: config,
-    viewStack: ['home'],
+    viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
     bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
@@ -33,6 +33,24 @@ const store = new Vuex.Store({
     },
     DISCONNECTED(state) {
       state.socketConnected = false;
+    },
+    REMOVE_IF_EXSIST(state, name) {
+      for (let i = 0; i < state.viewStack.length; i++) {
+        if (state.viewStack[i] === name) {
+          state.viewStack.splice(i, 1);
+          break;
+        }
+      }
+    },
+  },
+  actions: {
+    SWITCH_COMPONENT({ state, commit }, payload) {
+      commit('REMOVE_IF_EXSIST', payload.name);
+      if (payload.replace) {
+        Vue.set(state.viewStack, state.viewStack.length - 1, payload.name);
+      } else {
+        state.viewStack.push(payload.name);
+      }
     },
   },
   modules: {

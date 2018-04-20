@@ -1,12 +1,13 @@
 <template>
   <div class="smart-screen">
-   <component :active="active" :style="{'z-index': (index + 1)}" v-for="(comps, index) in viewStack" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+    <template v-for="(comps, index) in viewStack">
+      <component :active="topView === comps" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+    </template>
     <v-source class="video-source" :config="videoconfig"></v-source>
     <!-- <div class="result-container">
       <result v-if="showResult"/>
     </div> -->
      <!-- <bixby @toggle-result="toggleResult"/> -->
-    <!-- <home/> -->
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import { mapState, mapMutations } from 'vuex';
 import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
+import screensaver from './screensaver/screensaver';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -37,6 +39,9 @@ export default {
       obj.loop = true;
       obj.autoplay = true;
       return obj;
+    },
+    topView() {
+      return this.viewStack[this.viewStack.length - 1];
     },
     ...mapState('source', [
       'selectedSourceURL',
@@ -83,6 +88,7 @@ export default {
     vSource,
     bixby,
     home,
+    screensaver,
     // result,
   },
 };

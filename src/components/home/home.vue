@@ -73,13 +73,13 @@ export default {
       appsItems: 'GET_APPS',
     }),
     gridFocus() {
-      if (this.focus === 'grid') {
+      if (this.active && (this.focus === 'grid')) {
         return true;
       }
       return false;
     },
     headerFocus() {
-      if (this.focus === 'header') {
+      if (this.active && (this.focus === 'header')) {
         return true;
       }
       return false;
