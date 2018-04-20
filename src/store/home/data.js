@@ -97,7 +97,7 @@ export default {
           template: 'thumbnail',
           contentType: 'cp',
           details: {
-            text: 'Play Morning Playlist',
+            bottomText: 'Play Morning Playlist',
             icon: '',
           },
           logo: '/static/Images/home/icons/morning/npr.png',
@@ -199,7 +199,7 @@ export default {
           contentType: 'cp',
           details: {
             icon: '',
-            text: 'Stephen Curry$Shooting Ball-$handling',
+            bottomText: 'Stephen Curry$Shooting Ball-$handling',
           },
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
@@ -207,10 +207,10 @@ export default {
         source: {
           type: 'thumbnail2',
           template: 'thumbnail',
-          contentType: 'cp',
+          contentType: 'cp-type-1',
           details: {
             icon: '',
-            text: 'Concentration 10 Sessions',
+            bottomText: 'Concentration 10 Sessions',
           },
           logo: '/static/Images/home/icons/common/heapspace.png',
           img: '/static/Images/home/thumbnail/morning/yogo.png',

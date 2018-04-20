@@ -52,6 +52,9 @@ const store = new Vuex.Store({
         state.viewStack.push(payload.name);
       }
     },
+    REMOVE_COMPONENT({ state, commit }) {
+      state.viewStack.pop();
+    },
   },
   modules: {
     animation,

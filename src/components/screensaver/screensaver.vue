@@ -29,6 +29,11 @@ export default {
     ...mapActions({
       switch_comp: 'SWITCH_COMPONENT',
     }),
+    reset() {
+      clearTimeout(this.interval);
+      clearTimeout(this.timeOut);
+      this.powerEnabled = false;
+    },
     handleKeyDown(type) {
       console.log('Handle Key Down', type);
       if (!this.active) return;
@@ -41,6 +46,7 @@ export default {
             }, 10000)
           } else if(this.powerEnabled){
             //switch Component
+            this.reset();
             this.switch_comp({ name: 'home'});
           }
           break;
@@ -70,6 +76,7 @@ export default {
   height: 100%;
   overflow: hidden;
   position: absolute;
+  background-size: 100%;
   background-image: url('/static/bgbg.png');
   .backdrop {
     position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="thumbnail" :style="{'background-image': `url(${item.img})`}">
+  <div class="thumbnail" :style="{'background-image': `url(${item.img})`}" :class="[item.contentType]">
    <img class="icon-label" :src="item.logo" v-if="item.contentType !== 'iot'"/>
    <template v-if="item.contentType === 'iot'">
      <div class="iot-container">
@@ -16,10 +16,10 @@
         </div>
      </div>
    </template>
-   <template v-if="item.contentType === 'cp'">
-    <div class="bottom-footer">
+   <template v-if="item.details.bottomText">
+    <div class="bottom-footer" :class="[item.contentType]">
       <div class="text simple">
-        <template v-for="text in item.details.text.split('$')"> 
+        <template v-for="text in item.details.bottomText.split('$')"> 
         <div :key="text">{{text}}</div>
         </template>
       </div>
@@ -105,7 +105,9 @@ export default {
       text-align: left;
       color: white;
     }
-
+    &.cp-type-1 {
+      margin-bottom: 70 * $s;
+    }
   }
   .icon-label {
     position: absolute;

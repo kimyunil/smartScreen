@@ -1,8 +1,10 @@
 <template>
   <div class="smart-screen">
-    <template v-for="(comps, index) in viewStack">
-      <component :active="topView === comps" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
-    </template>
+    <transition-group name="fade" tag="div">
+      <template v-for="(comps, index) in viewStack">
+        <component :active="topView === comps" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+      </template>
+    </transition-group>
     <v-source class="video-source" :config="videoconfig"></v-source>
     <!-- <div class="result-container">
       <result v-if="showResult"/>
@@ -12,7 +14,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
@@ -55,14 +57,17 @@ export default {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
+    ...mapActions({
+      removeComponent: 'REMOVE_COMPONENT',
+    }),
     exitCB() {
+      this.removeComponent();
     },
     returnCB() {
     },
     handleKeyDown(type) {
       switch (type) {
         case 'VOICE_SEARCH':
-          this.updateMode(!this.isRemoteEnabled);
           break;
         default:
           break;
@@ -117,6 +122,12 @@ export default {
     height: 1080 * $s;
     z-index:22;
 
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.4s ease;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 }
 </style>

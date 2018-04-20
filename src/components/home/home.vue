@@ -18,7 +18,7 @@
         </div>
         </transition>
         </template>
-          <div class="grid-list" v-else :style="{'transform': `translateY(${translate * $s}px)`}">
+          <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
           <div class="grid-templates" v-for="(page, index) in pages" :key="page.title">
             <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
           </div>
@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import grid from './subcomps/grid';
 import homeHeader from './subcomps/header';
 import Messages from '../../services/Messages';
@@ -60,6 +60,9 @@ import Messages from '../../services/Messages';
 export default {
   name: 'home',
   computed: {
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
     ...mapState([
       'isRemoteEnabled',
     ]),
@@ -72,6 +75,9 @@ export default {
       nav_selected: 'GET_SELECTED_NAV',
       appsItems: 'GET_APPS',
     }),
+    translateY() {
+      return ((this.translate * 100)/ window.innerWidth);
+    },
     gridFocus() {
       if (this.active && (this.focus === 'grid')) {
         return true;
@@ -95,6 +101,9 @@ export default {
     Messages.$off('button_down', this.handleKeyDown);
   },
   methods: {
+    ...mapMutations({
+      updateMode: 'UPDATE_REMOTE_MODE',
+    }),
     movefocus(param) {
       if (param.from === 'header') {
         this.focus = 'grid';
@@ -138,6 +147,9 @@ export default {
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
+        case 'VOICE_SEARCH':
+          this.updateMode(!this.isRemoteEnabled);
+          break;
         case 'UP':
           if (this.isRemoteEnabled) {
             this.showHeader = true;
@@ -167,6 +179,8 @@ export default {
             }
           }
           break;
+        case 'BACK':
+          this.$emit('exit');
         default:
           break;
       }
@@ -245,7 +259,7 @@ export default {
       width: 1900 * $s;
       margin: 10 * $s;
       height: 940 * $s;
-      overflow: scroll;
+      overflow: hidden;
       left:0;
       transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
       .grid-list {
