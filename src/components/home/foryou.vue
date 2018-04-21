@@ -6,8 +6,8 @@
     >
       <template v-if="slideshow">
         <transition :name="transitionName">
-        <div class="grid-templates" :key="index">
-          <grid :details="grids[index]" :focus="false"/>
+        <div class="grid-templates">
+          <grid :details="grids[0]" :focus="false"/>
         </div>
         </transition>
       </template>
@@ -177,50 +177,54 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '../../mixins/scss/main';
-
-.grid-container {
+.foryou {
   position: absolute;
-  width: 1900 * $s;
-  margin: 10 * $s;
-  height: 940 * $s;
-  height: 807 * $s;
-  overflow: hidden;
-  left:0;
-  transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
-  .grid-list {
-    transition: transform 0.4s ease;
-    .recent-apps {
-      position: relative;
-      height: 400 * $s;
-      width: 100%;
-      .apps-list {
-        position: absolute;
-        width: 100%;
+  width: 100%;
+  height: 100%;
+  .grid-container {
+    position: absolute;
+    width: 1900 * $s;
+    margin: 10 * $s;
+    height: 940 * $s;
+    height: 807 * $s;
+    // overflow: hidden;
+    left:0;
+    transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+    .grid-list {
+      transition: transform 0.4s ease;
+      .recent-apps {
+        position: relative;
         height: 400 * $s;
-        display: flex;
-        justify-content: space-around;
-        .apps {
-          position: relative;
-          height: 300 * $s;
-          width: 300 * $s;
-          border: 20 * $s solid transparent;
-          img {
-            width: 100%;
-          }
-          &.focus {
-            border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
-            border-width: 20 * $s;
+        width: 100%;
+        .apps-list {
+          position: absolute;
+          width: 100%;
+          height: 400 * $s;
+          display: flex;
+          justify-content: space-around;
+          .apps {
+            position: relative;
+            height: 300 * $s;
+            width: 300 * $s;
+            border: 20 * $s solid transparent;
+            img {
+              width: 100%;
+            }
+            &.focus {
+              border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+              border-width: 20 * $s;
+            }
           }
         }
       }
     }
-  }
-  .grid-templates {
-    position: absolute;
-    height: 940 * $s;
-    height: 807 * $s;
-    width: 100%;
-        transition: height 0.3s ease;
+    .grid-templates {
+      position: absolute;
+      height: 940 * $s;
+      height: 807 * $s;
+      height: 100%;
+      width: 100%;
+      transition: height 0.3s ease;
         &.slideshow-enter {
           opacity: 0;
         }
@@ -232,21 +236,23 @@ export default {
         }
         &.slideshow-leave-active {
           transition: opacity 1.3s ease;
-      }
-      }
-      &.shrink {
-        width: 1720 * $s;
-        .grid-templates {
-          height: 880 * $s;
         }
-      }
-      &.listing {
-        .grid-templates {
-          position: relative;
-        }
-      }
-      &.squeeze-header {
-        // margin-top: 150 * $s;
+    }
+  &.shrink {
+    width: 1720 * $s;
+    height: 880 * $s;
+    .grid-templates {
+      height: 880 * $s;
+    }
+  }
+    &.listing {
+      .grid-templates {
+        position: relative;
       }
     }
+    &.squeeze-header {
+      // margin-top: 150 * $s;
+    }
+  } 
+}
 </style>

@@ -189,21 +189,21 @@ export default {
       }
     }
     &.page-1 {
-      grid-template-columns: 57% 21.8% 21.2%; //total is 100%
+      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "poster tile tile"
       "poster thumbnail1 thumbnail2";
     }
     &.page-2 {
-      grid-template-columns:21.8% 21.2% 57%; //total is 100%
+      grid-template-columns: 21.25% 21.25% 57.5%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "thumbnail1 thumbnail2 poster"
       "tile tile poster";
     }
     &.page-3 {
-       grid-template-columns:21.8% 21.2% 57%; //total is 100%
+       grid-template-columns:21.25% 21.25% 57.5%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "tile tile poster"

@@ -162,48 +162,48 @@ export default {
 </script>
 <style scoped lang="scss">
 @import '../../mixins/scss/main';
-
-.grid-container {
-  position: absolute;
-  width: 1900 * $s;
-  margin: 10 * $s;
-  height: 940 * $s;
-  overflow: hidden;
-  left:0;
-  transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
-  .grid-list {
-    transition: transform 0.4s ease;
-    .recent-apps {
-      position: relative;
-      height: 400 * $s;
-      width: 100%;
-      .apps-list {
-        position: absolute;
-        width: 100%;
+.health_well {
+  .grid-container {
+    position: absolute;
+    width: 1900 * $s;
+    margin: 10 * $s;
+    height: 940 * $s;
+    left:0;
+    transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+    .grid-list {
+      transition: transform 0.4s ease;
+      height: 100%;
+      .recent-apps {
+        position: relative;
         height: 400 * $s;
-        display: flex;
-        justify-content: space-around;
-        .apps {
-          position: relative;
-          height: 300 * $s;
-          width: 300 * $s;
-          border: 20 * $s solid transparent;
-          img {
-            width: 100%;
-          }
-          &.focus {
-            border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
-            border-width: 20 * $s;
+        width: 100%;
+        .apps-list {
+          position: absolute;
+          width: 100%;
+          height: 400 * $s;
+          display: flex;
+          justify-content: space-around;
+          .apps {
+            position: relative;
+            height: 300 * $s;
+            width: 300 * $s;
+            border: 20 * $s solid transparent;
+            img {
+              width: 100%;
+            }
+            &.focus {
+              border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+              border-width: 20 * $s;
+            }
           }
         }
       }
     }
-  }
-  .grid-templates {
-    position: absolute;
-    height: 807 * $s;
-    width: auto;
-        transition: height 0.3s ease;
+    .grid-templates {
+      position: absolute;
+      height: 807 * $s;
+      width: auto;
+      transition: height 0.3s ease;
         &.slideshow-enter {
           opacity: 0;
         }
@@ -215,22 +215,23 @@ export default {
         }
         &.slideshow-leave-active {
           transition: opacity 1.3s ease;
-      }
-      }
-      &.shrink {
-        // width: 1720 * $s;
-        width: 100%;
-        .grid-templates {
-          height: 807 * $s;
         }
+    }
+    &.shrink {
+      // width: 1720 * $s;
+      width: 100%;
+      .grid-templates {
+        height: 807 * $s;
       }
-      &.listing {
-        .grid-templates {
-          // position: relative;
-        }
+    }
+    &.listing {
+      .grid-templates {
+        // position: relative;
       }
-      &.squeeze-header {
-        // margin-top: 150 * $s;
-      }
+    }
+    &.squeeze-header {
+      // margin-top: 150 * $s;
+    }
   }
+}
 </style>

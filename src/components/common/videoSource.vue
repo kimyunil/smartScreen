@@ -1,6 +1,6 @@
 <template>
   <div class="source">
-    <video :src="config.url" :autoplay="config.autoplay" class="video" :loop="config.loop"></video>
+    <!-- <video :src="config.url" :autoplay="config.autoplay" class="video" :loop="config.loop"></video> -->
   </div>
 </template>
 <script>

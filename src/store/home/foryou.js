@@ -73,7 +73,7 @@ export default {
           template: 'thumbnail',
           contentType: 'cp',
           details: {
-            bottomText: 'Play Morning Playlist',
+            bottomText: 'Play Morning$Playlist',
             icon: '',
           },
           logo: '/static/Images/home/icons/morning/npr.png',

@@ -201,15 +201,16 @@ export default {
     }
     .content-body {
       position: absolute;
-      width: 1900 * $s;
-      margin: 10 * $s;
+      width: 1920 * $s;
+      // margin: 10 * $s;
       height: 940 * $s;
-      overflow: hidden;
+      // overflow: hidden;
       transform: translate(#{0 * $s}, #{100 * $s});
       transition: transform 0.3s ease;
       left:0;
       &.shrink {
         transform: translate(#{80 * $s}, #{230 * $s});
+        width: 1760 * $s;
         &.squeeze-header {
           transform: translate(#{80 * $s}, #{130 * $s});
         }

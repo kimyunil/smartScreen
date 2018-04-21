@@ -84,6 +84,7 @@ export default {
     .apps {
       position: relative;
       display: inline-block;
+      height: 100%;
       padding-right: 15 * $s;
       margin-right: 0;
       transition: margin 0.3s ease;
