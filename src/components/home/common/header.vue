@@ -2,7 +2,7 @@
   <transition name="show" appear>
     <div class="header">
       <div class="nav_list" :style="{'transform': `translateX(${translateX * $s}px)`}">
-          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'selected': selectedIdx === index}]">
+          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'hide': nav_selected !== index && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && !isRemoteEnabled && !focus},{'selected': selectedIdx === index}]">
           {{item.title}}
           </div>
       </div>
@@ -10,6 +10,7 @@
   </transition>
 </template>
 <script>
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import Messages from '../../../services/Messages';
 
 export default {
@@ -19,6 +20,14 @@ export default {
       this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
       this.css.headerWidth = this.$el.offsetWidth;
     });
+  },
+  computed: {
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
+    ...mapGetters('home', {
+      nav_selected: 'GET_SELECTED_NAV',
+    }),
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -38,6 +47,9 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('home',{
+      selectHeaderItem: 'select_nav',
+    }),
     handleKeyDown(type) {
       if (!this.focus) return;
       switch (type) {
@@ -49,10 +61,14 @@ export default {
             this.hIdx -= 1;
             const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
             const accOffset = left + this.translateX;
+            console.log(accOffset);
             if (accOffset < 0) {
               this.translateX += (accOffset * -1);
             }
           }
+          break;
+        case 'SELECT':
+          this.selectHeaderItem(this.hIdx);
           break;
         case 'RIGHT':
           if (this.hIdx < this.navItems.length - 1) {
@@ -60,6 +76,7 @@ export default {
             const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
             const width = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetWidth;
             const accOffset = left + width + this.css.listOffset + this.translateX;
+            console.log(accOffset, this.css.headerWidth);
             if (this.css.headerWidth < (accOffset)) {
               this.translateX -= (accOffset - this.css.headerWidth);
             }
@@ -89,11 +106,13 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
+  padding: 20 * $s 0;
+  overflow: hidden;
   .nav_list {
     position: relative;
     width: auto;
     height: auto;
-    display: inline-flex;
+    display: flex;
     height: 80 * $s;
     left: 140 * $s;
     transition: transform 0.3s ease;
@@ -125,6 +144,13 @@ export default {
         transform: scale(1.05);
         color: black;
         box-shadow: 0 0.52083vw 0.67708vw 0 rgba(122, 122, 122, 0.35);
+      }
+      &.idle {
+         color: black;
+         background: transparent;
+      }
+      &.hide {
+        opacity: 0;
       }
     }
   }

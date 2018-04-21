@@ -5,26 +5,35 @@ export default {
   state: {
     data,
   },
-  mutations: {
+  props: {
+    active: {
+      type: Boolean,
+      require: true,
+    },
   },
   getters: {
-    GET_PAGES(state) {
+    GET_CAT_GRID: state => (index) => {
+      console.log(index);
+      const navItem = state.data.navs.items[index];
+      const category = state.data.navs.details[navItem];
       const pages = [];
-      for (let i = 0; i < state.data.pages.pagination.length; i += 1) {
-        const key = state.data.pages.pagination[i];
-        pages[i] = state.data.pages.details[key];
+      const localData = category.data;
+      for (let i = 0; i < localData.pages.pagination.length; i += 1) {
+        const key = localData.pages.pagination[i];
+        pages[i] = localData.pages.details[key];
       }
       return pages;
     },
     GET_SELECTED_NAV(state) {
       return state.data.navs.selectedIdx;
     },
-    GET_APPS(state) {
-      const apps = state.data.apps.items;
+    GET_FORYOU_APPS(state) {
+      const foryou = state.data.navs.details.for_you.data;
+      const apps = foryou.apps.items;
       const appsArr = [];
       for (let i = 0; i < apps.length; i += 1) {
         const key = apps[i];
-        appsArr[i] = state.data.apps.details[key];
+        appsArr[i] = foryou.apps.details[key];
       }
       return appsArr;
     },
@@ -38,6 +47,9 @@ export default {
       return navesArr;
     },
   },
-  actions: {
+  mutations: {
+    select_nav(state, indx) {
+      state.data.navs.selectedIdx = indx;
+    },
   },
 };

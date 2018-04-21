@@ -1,6 +1,7 @@
 <template>
     <div class="grid" :class="[details.title]">
       <div class="grid-items"
+        :style="{'grid-area': gridItem.type}"
         v-for="gridItem in grids"
         :class="[{'shrink': isRemoteEnabled}, gridItem.type, {'selected': focus && gridItem.type === currType}]"
         :key="gridItem.key"
@@ -171,6 +172,7 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+    height: 807 * $s;
     display: grid;
     height: 100%;
     .grid-items {
@@ -180,18 +182,6 @@ export default {
       transition: margin 0.3s ease;
       &.shrink {
        margin: 20 * $s;
-      }
-      &.thumbnail1 {
-        grid-area: thumbnail1;
-      }
-      &.thumbnail2 {
-        grid-area: thumbnail2;
-      }
-      &.tile {
-        grid-area: tile;
-      }
-      &.poster {
-        grid-area: poster;
       }
       &.selected {
         border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;

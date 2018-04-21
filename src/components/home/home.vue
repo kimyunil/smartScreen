@@ -1,36 +1,20 @@
 <template>
   <div class="home">
     <div class="dashboard">
-      <div class="header-cont">
-        <div class="wrapper" :class="{'squeeze-header': (isRemoteEnabled && !headerFocus)}">
-        <home-header v-if="isRemoteEnabled" :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
-        </div>
-      </div>
-      <div class="content-body" :class="{'shrink':isRemoteEnabled}">
-      <div class="grid-container"
-        :class="{'shrink':isRemoteEnabled, 'listing': !slideshow, 'squeeze-header': (isRemoteEnabled && !headerFocus)}"
-        @transitionend="shrinkTransitionCB"
-      >
-        <template v-if="slideshow">
-        <transition :name="transitionName">
-        <div class="grid-templates" :key="index">
-          <grid :details="pages[index]" :focus="false"/>
-        </div>
+      <div class="header-cont" :class="{'squeeze-header': (!headerFocus)}" v-if="isRemoteEnabled">
+        <transition name="show">
+          <div class="wrapper">
+          <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
+          </div>
         </transition>
-        </template>
-          <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
-          <div class="grid-templates" v-for="(page, index) in pages" :key="page.title">
-            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
-          </div>
-          <div class="recent-apps">
-              <div class="apps-list">
-                <div class="apps" v-for="(i, index) in appsItems" :key="i.title" :class="{'focus': (focus === 'apps' && appIdx == index)}">
-                  {{i.title}}
-                </div>
-              </div>
-          </div>
-          </div>
       </div>
+      <!-- <div class="title">
+        {{navItems[nav_selected].title}}
+      </div> -->
+      <div class="content-body" :class="{'shrink':isRemoteEnabled,'squeeze-header': (isRemoteEnabled && !headerFocus)}">
+        <transition :name="direction">
+          <component :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
+        </transition>
       </div>
     </div>
      <transition name="show">
@@ -41,7 +25,7 @@
           </div>
           <div class="pagination-dots">
             <div class="dots"
-              v-for="(i, idx) in pages"
+              v-for="(i, idx) in grid_info(nav_selected)"
               :key="i.title"
               :class="{'selected': index === idx}"
             >
@@ -53,8 +37,9 @@
 </template>
 <script>
 import { mapGetters, mapState, mapMutations } from 'vuex';
-import grid from './subcomps/grid';
-import homeHeader from './subcomps/header';
+import foryou from './foryou';
+import health from './health';
+import homeHeader from './common/header';
 import Messages from '../../services/Messages';
 
 export default {
@@ -63,23 +48,16 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
-    ...mapState([
-      'isRemoteEnabled',
-    ]),
     ...mapGetters('home', [
       'navs',
     ]),
     ...mapGetters('home', {
-      pages: 'GET_PAGES',
       navItems: 'GET_NAVS',
+      grid_info: 'GET_CAT_GRID',
       nav_selected: 'GET_SELECTED_NAV',
-      appsItems: 'GET_APPS',
     }),
-    translateY() {
-      return ((this.translate * 100) / window.innerWidth);
-    },
-    gridFocus() {
-      if (this.active && (this.focus === 'grid')) {
+    contentFocus() {
+      if (this.active && (this.focus === 'content')) {
         return true;
       }
       return false;
@@ -92,12 +70,9 @@ export default {
     },
   },
   mounted() {
-    this.stopSlideShow();
-    this.startSlideShow();
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
-    this.stopSlideShow();
     Messages.$off('button_down', this.handleKeyDown);
   },
   methods: {
@@ -106,42 +81,9 @@ export default {
     }),
     movefocus(param) {
       if (param.from === 'header') {
-        this.focus = 'grid';
-      } else if (param.from === 'grid') {
-        if (param.dir === 'up') {
-          if (this.pageIdx > 0) {
-            this.pageIdx -= 1;
-            const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
-            this.scroll('up', top);
-          } else {
-            this.focus = 'header';
-          }
-        } else if (param.dir === 'down') {
-          if (this.pageIdx < this.pages.length - 1) {
-            this.pageIdx += 1;
-            const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
-            this.scroll('down', top);
-          } else if (this.focus !== 'apps') {
-            const top = this.$el.querySelector('.recent-apps').offsetHeight;
-            this.scroll('down', top);
-            this.focus = 'apps';
-          }
-        }
-      }
-    },
-    scroll(dir, delta) {
-      console.log(dir, delta);
-      if (dir === 'up') {
-        this.translate += delta;
-      } else {
-        this.translate -= delta;
-      }
-    },
-    shrinkTransitionCB() {
-      if (this.isRemoteEnabled) {
-        this.slideshow = false;
-      } else {
-        this.slideshow = true;
+        this.focus = 'content';
+      } else if (param.from === 'content') {
+        this.focus = 'header';
       }
     },
     handleKeyDown(type) {
@@ -186,47 +128,34 @@ export default {
           break;
       }
     },
-    startSlideShow() {
-      this.transitionName = 'slideshow';
-      this.intervalId = setInterval(() => {
-        this.index = (((this.index) + 1) % this.pages.length);
-      }, 3000);
-    },
-    stopSlideShow() {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-      this.transitionName = '';
-    },
   },
   data() {
     return {
       remote: true,
       showHeader: false,
-      transitionName: 'slideshow',
-      focus: 'header',
-      pageIdx: 0,
+      direction: 'left',
       index: 0,
-      translate: 0,
-      appIdx: 0,
-      intervalId: null,
-      slideshow: true,
+      focus: 'content',
     };
   },
   components: {
-    grid,
     homeHeader,
+    foryou,
+    health,
   },
   watch: {
-    isRemoteEnabled(val, old) {
-      console.log(val, old);
-      if (!val) this.startSlideShow();
-      else this.stopSlideShow();
+    nav_selected(old, nw) {
+      if (old > nw) {
+        this.direction = 'left';
+      } else {
+        this.direction = 'right';
+      }
     },
   },
 };
 </script>
 <style scoped lang="scss">
-@import '../../mixins/scss/main';
+  @import '../../mixins/scss/main';
 
 .home {
   position: absolute;
@@ -243,85 +172,69 @@ export default {
     .header-cont {
       position: absolute;
       height: 230 * $s;
-      overflow: hidden;
+      display: flex;
+      align-items: center;
       width: 100%;
       z-index: 2;
+      transition: height 0.3s ease;
       .wrapper {
-         transform: translateY(#{110 * $s});
-         transition: transform 0.3s ease;
-        &.squeeze-header {
-          transform: translateY(#{40 * $s});
-        }
+        position: relative;
+        top: 35 * $s;
+        width: 100%;
+        overflow: hidden;
       }
-
+      &.squeeze-header {
+        height: 100 * $s;
+      }
     }
-    .grid-container {
+    .title {
+      position: absolute;
+      left: 0;
+      height: 130 * $s;
+      display: flex;
+      align-items: center;
+      margin-left: 40 * $s;
+      padding-top: 10 * $s;
+      font-size: 30 * $s;
+      font-family: Helvetica;
+      justify-content: flex-start;
+    }
+    .content-body {
       position: absolute;
       width: 1900 * $s;
       margin: 10 * $s;
       height: 940 * $s;
       overflow: hidden;
+      transform: translate(#{0 * $s}, #{100 * $s});
+      transition: transform 0.3s ease;
       left:0;
-      transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
-      .grid-list {
-        transition: transform 0.4s ease;
-        .recent-apps {
-         position: relative;
-         height: 400 * $s;
-         width: 100%;
-         .apps-list {
-           position: absolute;
-           width: 100%;
-           height: 400 * $s;
-           display: flex;
-           justify-content: space-around;
-           .apps {
-             position: relative;
-             height: 300 * $s;
-             width: 300 * $s;
-             border: 20 * $s solid transparent;
-             &.focus {
-               border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
-               border-width: 20 * $s;
-             }
-           }
-         }
-        }
-      }
-      .grid-templates {
-        position: absolute;
-        height: 940 * $s;
-        width: 100%;
-        transition: height 0.3s ease;
-        &.slideshow-enter {
-          opacity: 0;
-        }
-        &.slideshow-leave-to {
-          opacity: 0;
-        }
-        &.slideshow-enter-active{
-          transition: opacity 1.3s ease;
-        }
-        &.slideshow-leave-active {
-          transition: opacity 1.3s ease;
-      }
-      }
       &.shrink {
-        margin: 40 * $s;
-        margin-top: 290 * $s;
-        left: 60 * $s;
-        width: 1720 * $s;
-        .grid-templates {
-          height: 880 * $s;
+        transform: translate(#{80 * $s}, #{230 * $s});
+        &.squeeze-header {
+          transform: translate(#{80 * $s}, #{130 * $s});
         }
       }
-      &.listing {
-        .grid-templates {
-          position: relative;
-        }
+      .left-enter-active, .left-leave-active {
+        transition: transform 0.4s ease, opacity 0.3s ease;
       }
-      &.squeeze-header {
-        margin-top: 150 * $s;
+      .left-enter {
+        transform: translateX(#{-1920 * $s});
+        opacity: 0;
+      }
+      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .right-enter-active, .right-leave-active {
+        transition: transform 0.4s ease, opacity 0.3s ease;
+      }
+      .right-enter {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .right-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        transform: translateX(#{-1920 * $s});
+        opacity: 0;
       }
     }
   }
