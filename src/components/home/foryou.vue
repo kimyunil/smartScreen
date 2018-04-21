@@ -108,6 +108,7 @@ export default {
     },
     startSlideShow() {
       this.transitionName = 'slideshow';
+      this.slideshow = true;
       this.intervalId = setInterval(() => {
         this.index = (((this.index) + 1) % this.grids.length);
       }, 3000);
