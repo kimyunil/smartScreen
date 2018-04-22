@@ -34,7 +34,7 @@ export default {
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
   },
-  methods:{
+  methods: {
     handleKeyDown(type) {
       console.log('LGrid');
       if (!this.focus) return;

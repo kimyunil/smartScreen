@@ -2,14 +2,11 @@
   <div class="smart-screen">
     <transition-group name="fade" tag="div">
       <template v-for="(comps, index) in viewStack">
-        <component :active="topView === comps" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+        <component :active="topView === comps && !isBixbyActive" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
     </transition-group>
     <v-source class="video-source" :config="videoconfig"></v-source>
-    <!-- <div class="result-container">
-      <result v-if="showResult"/>
-    </div> -->
-     <!-- <bixby @toggle-result="toggleResult"/> -->
+    <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
   </div>
 </template>
 
@@ -25,10 +22,6 @@ import Messages from '../services/Messages';
 export default {
   name: 'smartscreen',
   mounted() {
-    console.log(this);
-    Messages.send('audio-input.start');
-    Messages.$on('speech-to-text.transcription-complete', this.setComplete);
-    Messages.$on('audio-input.begin', this.handleASRBegin);
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
@@ -51,6 +44,7 @@ export default {
     ...mapState([
       'isRemoteEnabled',
       'viewStack',
+      'isBixbyActive',
     ]),
   },
   methods: {
@@ -59,6 +53,8 @@ export default {
     }),
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
+      switch_comp: 'SWITCH_COMPONENT',
+      launchVoice: 'LAUNCH_VOICE',
     }),
     exitCB() {
       this.removeComponent();
@@ -67,20 +63,19 @@ export default {
     },
     handleKeyDown(type) {
       switch (type) {
-        case 'VOICE_SEARCH':
+        case 'VOICE':
+          this.heyBixby();
           break;
         default:
           break;
       }
     },
+    heyBixby() {
+      this.launchVoice();
+      Messages.send('audio-input.start');
+    },
     toggleResult(val) {
       this.showResult = val;
-    },
-    handleASRBegin() {
-      console.log('handleASRBegin:::::::::::::::');
-    },
-    setComplete() {
-      console.log('SetComplete::::');
     },
   },
   data() {
@@ -125,6 +120,9 @@ export default {
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.4s ease;
+    &.bixby {
+      transition: none;
+    }
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;

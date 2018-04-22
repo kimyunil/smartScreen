@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
+    isBixbyActive: false,
     bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
     socket: {
       connected: false,
@@ -44,6 +45,14 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    LAUNCH_VOICE({ state, commit, dispatch }) {
+      commit('UPDATE_BIXBY', 'invoke');
+      state.isBixbyActive = true;
+    },
+    CLOSE_VOICE({ state, commit }) {
+      commit('UPDATE_BIXBY', '');
+      state.isBixbyActive = false;
+    },
     SWITCH_COMPONENT({ state, commit }, payload) {
       commit('REMOVE_IF_EXSIST', payload.name);
       if (payload.replace) {

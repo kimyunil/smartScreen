@@ -47,7 +47,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('home',{
+    ...mapMutations('home', {
       selectHeaderItem: 'select_nav',
     }),
     handleKeyDown(type) {

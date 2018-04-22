@@ -34,9 +34,9 @@ import Messages from '../../services/Messages';
 export default {
   mounted() {
     this.stopSlideShow();
-     if (!this.isRemoteEnabled) {
-       this.startSlideShow();
-     }
+    if (!this.isRemoteEnabled) {
+      this.startSlideShow();
+    }
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
@@ -253,6 +253,6 @@ export default {
     &.squeeze-header {
       // margin-top: 150 * $s;
     }
-  } 
+  }
 }
 </style>

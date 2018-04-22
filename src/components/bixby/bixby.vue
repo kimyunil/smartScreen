@@ -16,13 +16,17 @@
 import { mapState, mapMutations, mapActions } from 'vuex';
 import lottie from '../common/lottie';
 import Messages from '../../services/Messages';
-
 import speechText from './speechText';
+import listeners from './listeners';
 
 export default {
   name: 'bixyby',
+  mixins: [listeners],
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    this.$nextTick(() => {
+      this.changeAnimation();
+    });
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -41,6 +45,9 @@ export default {
   methods: {
     ...mapMutations({
       updateBixby: 'UPDATE_BIXBY',
+    }),
+    ...mapActions({
+      closeVoice: 'CLOSE_VOICE', 
     }),
     ...mapActions('result', {
       set_result: 'SET_RESULT',
@@ -66,6 +73,7 @@ export default {
           if (ret) {
             this.updateBixby('wipeoff');
             this.showSpeechText = false;
+            this.defaultOptions.loop = false;
           } else {
             // bixby Nagging
           }
@@ -77,9 +85,16 @@ export default {
         case 'SIX':
           this.updateBixby('standby2');
           break;
+        case 'BACK':
+          this.closeBixby();
+          break;
         default:
           break;
       }
+    },
+    closeBixby() {
+      this.closeVoice();
+      Messages.send('audio-input.stop');
     },
     handleAnimation(anim) {
       this.anim = anim;
@@ -92,11 +107,13 @@ export default {
       }
     },
     changeAnimation() {
-      this.defaultOptions.animationData = undefined;
-      this.$nextTick(() => {
-        console.log(this.bixbyState, this.lottie);
-        this.$set(this.defaultOptions, 'animationData', this.lottie[this.bixbyState].data.animationData);
-      });
+      if(this.bixbyState != '') {
+        this.defaultOptions.animationData = undefined;
+        this.$nextTick(() => {
+          console.log(this.bixbyState, this.lottie);
+          this.$set(this.defaultOptions, 'animationData', this.lottie[this.bixbyState].data.animationData);
+        });
+      }
     },
   },
   data() {
@@ -111,7 +128,9 @@ export default {
   },
   watch: {
     bixbyState(value) {
+      console.log(console.log(value));
       if (value !== '') {
+        console.log(value);
         this.changeAnimation(value);
       }
     },
@@ -131,7 +150,7 @@ export default {
   position: absolute;
   .bixby-lottie {
     position: absolute;
-    z-index:99;
+    // z-index:99;
   }
   .bixby-speech-text {
     position: absolute;

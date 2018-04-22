@@ -130,8 +130,7 @@ export default {
     movefocus(param) {
       if (param.from === 'lgrid') {
         if (param.dir === 'up') {
-         this.$emit('movefocus', { dir: 'up', from: 'content' });
-        } else if (param.dir === 'down') {
+          this.$emit('movefocus', { dir: 'up', from: 'content' });
         }
       }
     },

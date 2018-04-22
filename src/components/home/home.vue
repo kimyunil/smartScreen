@@ -89,7 +89,7 @@ export default {
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
-        case 'VOICE_SEARCH':
+        case 'NOTIFICATION':
           this.updateMode(!this.isRemoteEnabled);
           break;
         case 'UP':

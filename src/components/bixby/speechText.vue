@@ -8,7 +8,7 @@
      v-on:after-enter="afterEnter"
     v-on:enter="enter"
   >
-    <span v-for="(word, index) in sText" :key="word" v-bind:data-index="index" class="sText">
+    <span v-for="(word, index) in sText" :key="index" v-bind:data-index="index" class="sText">
         {{word}}
     </span>
   </transition-group>
