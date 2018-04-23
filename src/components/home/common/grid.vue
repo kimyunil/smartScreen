@@ -184,7 +184,7 @@ export default {
        margin: 20 * $s;
       }
       &.selected {
-        border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
         border-width: 20 * $s;
       }
     }

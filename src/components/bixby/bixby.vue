@@ -47,7 +47,7 @@ export default {
       updateBixby: 'UPDATE_BIXBY',
     }),
     ...mapActions({
-      closeVoice: 'CLOSE_VOICE', 
+      closeVoice: 'CLOSE_VOICE',
     }),
     ...mapActions('result', {
       set_result: 'SET_RESULT',
@@ -107,7 +107,7 @@ export default {
       }
     },
     changeAnimation() {
-      if(this.bixbyState != '') {
+      if (this.bixbyState !== '') {
         this.defaultOptions.animationData = undefined;
         this.$nextTick(() => {
           console.log(this.bixbyState, this.lottie);

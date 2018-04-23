@@ -7,13 +7,13 @@
     <template v-if="slideshow">
       <transition :name="transitionName">
         <div class="grid-templates" :key="index">
-            <grid :details="grids[index]" :focus="true" @movefocus="movefocus"/>
+            <grid :details="grids[index]" :focus="false" @movefocus="movefocus"/>
         </div>
       </transition>
     </template>
       <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
         <div class="grid-templates" v-for="(page) in grids" :key="page.title">
-          <grid :details="page" :focus="true" @movefocus="movefocus"/>
+          <grid :details="page" :focus="gridFocus" @movefocus="movefocus"/>
         </div>
         <!-- <div class="recent-apps">
             <div class="apps-list">
@@ -201,7 +201,7 @@ export default {
     .grid-templates {
       position: absolute;
       height: 807 * $s;
-      width: auto;
+      width: 100%;
       transition: height 0.3s ease;
         &.slideshow-enter {
           opacity: 0;

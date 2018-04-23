@@ -45,7 +45,7 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    LAUNCH_VOICE({ state, commit, dispatch }) {
+    LAUNCH_VOICE({ state, commit }) {
       commit('UPDATE_BIXBY', 'invoke');
       state.isBixbyActive = true;
     },

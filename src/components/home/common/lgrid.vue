@@ -1,7 +1,7 @@
 <template>
   <div class="list-grid">
-    <div class="list">
-      <div class="apps" v-for="(item) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled}]">
+    <div class="list" :style="{'transform': `translateX(${this.translateX}px)`}">
+      <div class="apps" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
         <img class="icon" :src="item.img"/>
         <img class="bg-thumb" :src="item.thumbnail"/>
         <div class="footer-text">
@@ -46,11 +46,35 @@ export default {
         case 'DOWN':
           break;
         case 'LEFT':
+          if (this.index !== 0) {
+            this.index -= 1;
+            this.scroll('left');
+          }
           break;
         case 'RIGHT':
+          if (this.index !== this.items.length - 1) {
+            this.index += 1;
+            this.scroll('right');
+          }
           break;
         default:
           break;
+      }
+    },
+    scroll(dir) {
+      const ele = this.$el.querySelectorAll('.list .apps')[this.index];
+      if (dir === 'left') {
+        const eleDim = ele.offsetLeft + this.translateX;
+        if (eleDim < 0) {
+          this.translateX = ele.offsetLeft;
+        }
+      } else {
+        const ele = this.$el.querySelectorAll('.list .apps')[this.index];
+        const parentWidth = this.$el.offsetWidth;
+        const eleDim = ele.offsetWidth + ele.offsetLeft + parseInt(window.getComputedStyle(ele).marginRight, 10) + this.translateX;
+        if (eleDim > this.$el.offsetWidth) {
+          this.translateX -= (eleDim - parentWidth);
+        }
       }
     },
   },
@@ -68,6 +92,12 @@ export default {
       return array;
     },
   },
+  data() {
+    return {
+      index: 0,
+      translateX: 0,
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -81,11 +111,13 @@ export default {
     position: absolute;
     white-space: nowrap;
     height: 100%;
+    transition: transform 0.3s ease;
     .apps {
       position: relative;
       display: inline-block;
       height: 100%;
-      padding-right: 15 * $s;
+      margin-right: 15 * $s;
+      border: 20 * $s solid transparent;
       margin-right: 0;
       transition: margin 0.3s ease;
       .bg-thumb {
@@ -108,6 +140,10 @@ export default {
       }
       &.shrink {
         margin-right: 30 * $s;
+      }
+      &.selected {
+        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-width: 20 * $s;
       }
     }
   }
