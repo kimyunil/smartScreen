@@ -61,7 +61,7 @@ export default {
             this.hIdx -= 1;
             const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
             const accOffset = left + this.translateX;
-            console.log(accOffset);
+            // console.log(accOffset);
             if (accOffset < 0) {
               this.translateX += (accOffset * -1);
             }
@@ -73,10 +73,11 @@ export default {
         case 'RIGHT':
           if (this.hIdx < this.navItems.length - 1) {
             this.hIdx += 1;
-            const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
-            const width = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetWidth;
-            const accOffset = left + width + this.css.listOffset + this.translateX;
-            console.log(accOffset, this.css.headerWidth);
+            const ele = this.$el.querySelectorAll('.nav-button')[this.hIdx];
+            const left = ele.offsetLeft;
+            const width = ele.offsetWidth;
+            const marginRight = parseInt(window.getComputedStyle(ele).marginRight, 10)
+            const accOffset = left + width + this.css.listOffset + this.translateX + marginRight;
             if (this.css.headerWidth < (accOffset)) {
               this.translateX -= (accOffset - this.css.headerWidth);
             }

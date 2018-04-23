@@ -1,18 +1,23 @@
 <template>
   <div class="foryou">
     <div class="grid-container"
-      :class="{'shrink':isRemoteEnabled, 'listing': !slideshow, 'squeeze-header': (isRemoteEnabled && !active)}"
+      :class="{'shrink':isRemoteEnabled, 'squeeze-header': (isRemoteEnabled && !active)}"
       @transitionend="shrinkTransitionCB"
     >
+      <transition name="fade">
       <template v-if="slideshow">
-        <transition :name="transitionName">
-        <div class="grid-templates">
-          <grid :details="grids[0]" :focus="false"/>
+        <div class="grid-templates grid-templates-slideshow" >
+          <transition :name="transitionName">
+            <div class="slideshow-wrapper" :key="index">
+              <grid :details="grids[index]" :focus="false"/>
+            </div>
+          </transition>
         </div>
-        </transition>
       </template>
-      <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
-        <div class="grid-templates" v-for="(page, index) in grids" :key="page.title">
+      </transition>
+      <transition name="fade">
+      <div class="grid-list" v-if="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
+        <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
           <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
         </div>
         <div class="recent-apps">
@@ -23,6 +28,7 @@
             </div>
         </div>
       </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -34,6 +40,7 @@ import Messages from '../../services/Messages';
 export default {
   mounted() {
     this.stopSlideShow();
+    console.log(this.isRemoteEnabled);
     if (!this.isRemoteEnabled) {
       this.startSlideShow();
     }
@@ -51,6 +58,14 @@ export default {
       cat_grid: 'GET_CAT_GRID',
       appsItems: 'GET_FORYOU_APPS',
     }),
+    getGrids() {
+      const arr = [];
+      for (let i = 0; i < this.grids.length; i++) {
+        const idx = ((this.index + i) % this.grids.length);
+        arr[i] = this.grids[idx];
+      }
+      return arr;
+    },
     grids() {
       const gridPages = this.cat_grid(0);
       console.log(gridPages);
@@ -68,11 +83,11 @@ export default {
   },
   methods: {
     shrinkTransitionCB() {
-      if (this.isRemoteEnabled) {
-        this.slideshow = false;
-      } else {
-        this.slideshow = true;
-      }
+      // if (this.isRemoteEnabled) {
+      //   this.slideshow = false;
+      // } else {
+      //   this.slideshow = true;
+      // }
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -107,17 +122,20 @@ export default {
       }
     },
     startSlideShow() {
-      this.transitionName = 'slideshow';
       this.slideshow = true;
       this.intervalId = setInterval(() => {
+        this.transitionName = 'slideshow';
         this.index = (((this.index) + 1) % this.grids.length);
+        console.log('timeout:::');
       }, 3000);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
       this.intervalId = null;
       this.transitionName = '';
-      this.slideshow = false;
+      this.$nextTick(() => {
+        this.slideshow = false;
+      });
     },
     scroll(dir, delta) {
       console.log(dir, delta);
@@ -192,6 +210,7 @@ export default {
     transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
     .grid-list {
       transition: transform 0.4s ease;
+      height: 100%;
       .recent-apps {
         position: relative;
         height: 400 * $s;
@@ -217,6 +236,15 @@ export default {
           }
         }
       }
+      &.fade-enter-active {
+        transition: opacity 0.1s ease;
+      }
+      &.fade-leave-active {
+        transition: opacity 0.1s ease;
+      }
+      &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+      }
     }
     .grid-templates {
       position: absolute;
@@ -225,6 +253,15 @@ export default {
       height: 100%;
       width: 100%;
       transition: height 0.3s ease;
+      &.grid-templates-list {
+        position: relative;
+      }
+      &.grid-templates-slideshow {
+       position: absolute;
+       .slideshow-wrapper {
+         position: absolute;
+         width: 100%;
+         height: 100%;
         &.slideshow-enter {
           opacity: 0;
         }
@@ -237,6 +274,17 @@ export default {
         &.slideshow-leave-active {
           transition: opacity 1.3s ease;
         }
+       }
+      &.fade-enter-active {
+        transition: opacity 0.1s ease;
+      }
+      &.fade-leave-active {
+        transition: opacity 0.1s ease;
+      }
+      &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+      }
+      }
     }
   &.shrink {
     width: 1720 * $s;
@@ -245,11 +293,11 @@ export default {
       height: 880 * $s;
     }
   }
-    &.listing {
-      .grid-templates {
-        position: relative;
-      }
-    }
+    // &.listing {
+    //   .grid-templates {
+    //     position: relative;
+    //   }
+    // }
     &.squeeze-header {
       // margin-top: 150 * $s;
     }

@@ -69,7 +69,7 @@ export default {
           this.translateX = ele.offsetLeft;
         }
       } else {
-        const ele = this.$el.querySelectorAll('.list .apps')[this.index];
+        // const ele = this.$el.querySelectorAll('.list .apps')[this.index];
         const parentWidth = this.$el.offsetWidth;
         const eleDim = ele.offsetWidth + ele.offsetLeft + parseInt(window.getComputedStyle(ele).marginRight, 10) + this.translateX;
         if (eleDim > this.$el.offsetWidth) {

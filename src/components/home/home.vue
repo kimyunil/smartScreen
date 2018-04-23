@@ -1,13 +1,13 @@
 <template>
   <div class="home">
     <div class="dashboard">
+      <transition name="show">
       <div class="header-cont" :class="{'squeeze-header': (!headerFocus)}" v-if="isRemoteEnabled">
-        <transition name="show">
           <div class="wrapper">
           <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
           </div>
-        </transition>
       </div>
+      </transition>
       <!-- <div class="title">
         {{navItems[nav_selected].title}}
       </div> -->
@@ -185,6 +185,18 @@ export default {
       }
       &.squeeze-header {
         height: 100 * $s;
+      }
+      &.show-enter {
+        opacity: 0;
+      }
+      &.show-leave-to {
+        opacity: 0;
+      }
+      &.show-enter-active{
+        transition: height 0.3s ease, opacity 0.3s ease;
+      }
+      &.show-leave-active {
+        transition: height 0.3s ease, opacity 0.3s ease;
       }
     }
     .title {
