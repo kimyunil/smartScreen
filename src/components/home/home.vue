@@ -17,18 +17,6 @@
         </transition>
       </div>
     </div>
-     <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled">
-          <div class="pagination-dots">
-            <div class="dots"
-              v-for="(i, idx) in grid_info(nav_selected)"
-              :key="i.title"
-              :class="{'selected': index === idx}"
-            >
-            </div>
-          </div>
-        </div>
-     </transition>
   </div>
 </template>
 <script>

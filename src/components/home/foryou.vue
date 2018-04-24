@@ -5,7 +5,7 @@
       @transitionend="shrinkTransitionCB"
     >
       <transition name="fade">
-      <!-- <template > -->
+        <!-- <template > -->
         <div class="grid-templates grid-templates-slideshow" v-show="slideshow">
           <transition :name="transitionName">
             <div class="slideshow-wrapper" :key="index">
@@ -13,23 +13,35 @@
             </div>
           </transition>
         </div>
-      <!-- </template> -->
+        <!-- </template> -->
       </transition>
       <transition name="fade">
-      <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
-        <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
-          <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
-        </div>
-        <div class="recent-apps">
-            <div class="apps-list">
-              <div class="apps" v-for="(item, index) in appsItems" :key="item.title" :class="{'focus': (focus === 'apps' && appIdx == index)}">
-                <img :src="item.img"/>
+        <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
+          <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
+            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
+          </div>
+          <div class="recent-apps">
+              <div class="apps-list">
+                <div class="apps" v-for="(item, index) in appsItems" :key="item.title" :class="{'focus': (focus === 'apps' && appIdx == index)}">
+                  <img :src="item.img"/>
+                </div>
               </div>
-            </div>
+          </div>
         </div>
-      </div>
       </transition>
     </div>
+    <!-- <transition name="show"> -->
+      <div class="bixby-suggestions" v-if="!isRemoteEnabled">
+        <div class="pagination-dots">
+          <div class="dots"
+            v-for="(i, idx) in grids"
+            :key="i.title"
+            :class="{'selected': index === idx}"
+          >
+          </div>
+        </div>
+      </div>
+    <!-- </transition> -->
   </div>
 </template>
 <script>
@@ -283,17 +295,66 @@ export default {
       }
       }
     }
-  &.shrink {
-    width: 1720 * $s;
-    height: 880 * $s;
-    .grid-templates {
-      .grid-templates-list {
+    &.shrink {
+      width: 1720 * $s;
       height: 880 * $s;
+      .grid-templates {
+        .grid-templates-list {
+        height: 880 * $s;
+        }
       }
     }
-  }
     &.squeeze-header {
       // margin-top: 150 * $s;
+    }
+  }
+  .bixby-suggestions {
+    position: absolute;
+    bottom: -140 * $s;
+    height: 135 * $s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .text-suggestion {
+      position: relative;
+      left: 132 * $s;
+      top: -3 * $s;
+      font-size: 32 * $s;
+      .text {
+        font-family: SamsungOneUI300;
+      }
+      .suggestions {
+        font-size: 31 * $s;
+        font-family: SamsungOneUI700;
+      }
+    }
+    .pagination-dots {
+      position: absolute;
+      right: 70 * $s;
+      display: flex;
+      width: 84 * $s;
+      justify-content: space-between;
+      .dots {
+        height: 10* $s;
+        width: 10* $s;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.2);
+        &.selected {
+          background-color: rgba(0,0,0,1)
+        }
+      }
+    }
+    &.show-enter {
+      opacity: 0;
+    }
+    &.show-leave-to {
+      opacity: 0;
+    }
+    &.show-enter-active{
+      transition: opacity 0.1s ease;
+    }
+    &.show-leave-active {
+      transition: opacity 0.1s ease;
     }
   }
 }

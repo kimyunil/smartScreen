@@ -64,9 +64,9 @@ export default {
     ...mapState('source', [
       'selectedSourceURL',
     ]),
-     ...mapGetters('home', {
+    ...mapGetters('home', {
       homeSuggest: 'GET_SUGGESTIONS',
-     }),
+    }),
     ...mapState([
       'isRemoteEnabled',
       'viewStack',
@@ -131,11 +131,11 @@ export default {
     // result,
   },
   watch: {
-    isRemoteEnabled(val, old) {
+    isRemoteEnabled(val) {
       if (!val) this.startSlideShow();
       else this.stopSlideShow();
     },
-  }
+  },
 };
 </script>
 

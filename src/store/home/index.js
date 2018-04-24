@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     data,
-    suggestions: ['Tell me more About Self Esteem', 'Go to Health and Wellness', 'Show me more...']
+    suggestions: ['Tell me more About Self Esteem', 'Go to Health and Wellness', 'Show me more...'],
   },
   props: {
     active: {

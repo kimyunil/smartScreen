@@ -11,6 +11,9 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     gConfig: config,
+    info: {
+      weather: null,
+    },
     viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
@@ -35,6 +38,9 @@ const store = new Vuex.Store({
     },
     DISCONNECTED(state) {
       state.socketConnected = false;
+    },
+    SET_WEATHER(state, payload) {
+      state.info.weather = payload;
     },
     REMOVE_IF_EXSIST(state, name) {
       for (let i = 0; i < state.viewStack.length; i += 1) {

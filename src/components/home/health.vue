@@ -11,25 +11,37 @@
         </div>
       </transition>
     </template>
-      <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
-        <div class="grid-templates template">
-          <grid :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
-        </div>
-        <template v-for="(subCat, index) in subCategories">
-        <div class="grid-templates template subcategory-template"  :key="index">
-          <div class="title">{{subCat.title}}</div>
-            <grid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
-        </div>
-        </template>
-        <div class="recent-apps template">
-           <div class="title">Apps</div>
-            <div class="apps-list">
-                <grid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
-              </div>
+    <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
+      <div class="grid-templates template">
+        <grid :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
+      </div>
+      <template v-for="(subCat, index) in subCategories">
+      <div class="grid-templates template subcategory-template"  :key="index">
+        <div class="title">{{subCat.title}}</div>
+          <grid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
+      </div>
+      </template>
+      <div class="recent-apps template">
+          <div class="title">Apps</div>
+          <div class="apps-list">
+              <grid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
             </div>
-        </div>
+          </div>
       </div>
     </div>
+      <transition name="show">
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled">
+          <div class="pagination-dots">
+            <div class="dots"
+              v-for="(i, idx) in grids"
+              :key="i.title"
+              :class="{'selected': index === idx}"
+            >
+            </div>
+          </div>
+        </div>
+     </transition>
+  </div>
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex';
@@ -280,6 +292,55 @@ export default {
     }
     &.squeeze-header {
       // margin-top: 150 * $s;
+    }
+  }
+    .bixby-suggestions {
+    position: absolute;
+    bottom: -30 * $s;
+    height: 135 * $s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .text-suggestion {
+      position: relative;
+      left: 132 * $s;
+      top: -3 * $s;
+      font-size: 32 * $s;
+      .text {
+        font-family: SamsungOneUI300;
+      }
+      .suggestions {
+        font-size: 31 * $s;
+        font-family: SamsungOneUI700;
+      }
+    }
+    .pagination-dots {
+      position: absolute;
+      right: 70 * $s;
+      display: flex;
+      width: 84 * $s;
+      justify-content: space-between;
+      .dots {
+        height: 10* $s;
+        width: 10* $s;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.2);
+        &.selected {
+          background-color: rgba(0,0,0,1)
+        }
+      }
+    }
+    &.show-enter {
+      opacity: 0;
+    }
+    &.show-leave-to {
+      opacity: 0;
+    }
+    &.show-enter-active{
+      transition: opacity 0.3s ease;
+    }
+    &.show-leave-active {
+      transition: opacity 0.3s ease;
     }
   }
 }
