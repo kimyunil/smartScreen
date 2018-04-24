@@ -7,21 +7,27 @@
     <template v-if="slideshow">
       <transition :name="transitionName">
         <div class="grid-templates" :key="index">
-            <grid :details="grids[index]" :focus="false" @movefocus="movefocus"/>
+            <grid :items="content" :itemType="'grid'" :focus="false" @movefocus="movefocus"/>
         </div>
       </transition>
     </template>
       <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
-        <div class="grid-templates" v-for="(page) in grids" :key="page.title">
-          <grid :details="page" :focus="gridFocus" @movefocus="movefocus"/>
+        <div class="grid-templates template">
+          <grid :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
         </div>
-        <!-- <div class="recent-apps">
+        <template v-for="(subCat, index) in subCategories"> 
+        <div class="grid-templates template subcategory-template"  :key="index">
+          <div class="title">{{subCat.title}}</div>
+            <grid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
+        </div>
+        </template>
+        <div class="recent-apps template">
+           <div class="title">Apps</div>
             <div class="apps-list">
-              <div class="apps" v-for="(item, index) in appsItems" :key="item.title" :class="{'focus': (focus === 'apps' && appIdx == index)}">
-                <img :src="item.img"/>
+                <grid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
               </div>
             </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -49,8 +55,21 @@ export default {
     ]),
     ...mapGetters('home', {
       catGrid: 'GET_CAT_GRID',
-      appsItems: 'GET_FORYOU_APPS',
+      pageSubCat: 'PAGE_SUB_CAT_HEALTH',
+      appsItems: 'GET_HEALTH_APPS',
     }),
+    subCategories(){
+      return this.pageSubCat(this.index);
+    },
+    content() {
+      const array = [];
+      const details = this.grids[this.index]
+      for (let i = 0; i < details.content.length; i += 1) {
+        const key = details.content[i];
+        array[i] = details[key];
+      }
+      return array;
+    },
     grids() {
       const gridPages = this.catGrid(1);
       console.log(gridPages);
@@ -78,29 +97,12 @@ export default {
       if (!this.active) return;
       switch (type) {
         case 'UP':
-          if (this.isRemoteEnabled) {
-            if (this.focus === 'apps') {
-              const top = this.$el.querySelector('.recent-apps').offsetHeight;
-              this.scroll('up', top);
-              this.focus = 'grid';
-            }
-          }
           break;
         case 'RIGHT':
-          if (this.focus === 'apps') {
-            if (this.appIdx < this.appsItems.length - 1) {
-              this.appIdx += 1;
-            }
-          }
           break;
         case 'DOWN':
           break;
         case 'LEFT':
-          if (this.focus === 'apps') {
-            if (this.appIdx > 0) {
-              this.appIdx -= 1;
-            }
-          }
           break;
         default:
           break;
@@ -129,8 +131,32 @@ export default {
     },
     movefocus(param) {
       if (param.from === 'lgrid') {
+        console.log(this.pageIdx);
         if (param.dir === 'up') {
-          this.$emit('movefocus', { dir: 'up', from: 'content' });
+          if (this.pageIdx === 0) {
+            this.$emit('movefocus', { dir: 'up', from: 'content' });
+          } else {
+            console.log(this.pageIdx);
+            this.pageIdx -= 1;
+            const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop;
+            if (this.translate * -1 > top) {
+               this.translate += ((this.translate * -1) - top);
+            }
+            console.log(top);
+            // this.scroll('up', top);
+          }
+        } else if(param.dir === 'down') {
+          if (this.pageIdx !== (this.subCategories.length + 1)) {
+
+            this.pageIdx += 1;
+            const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop + this.translate;
+            const height = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetHeight;
+            const diff = this.$el.offsetHeight - (top + height);
+            console.log(diff, height, top);
+            if (diff < 0) {
+              this.translate += (diff);
+            }
+          }
         }
       }
     },
@@ -162,6 +188,9 @@ export default {
 <style scoped lang="scss">
 @import '../../mixins/scss/main';
 .health_well {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   .grid-container {
     position: absolute;
     width: 1900 * $s;
@@ -174,8 +203,15 @@ export default {
       height: 100%;
       .recent-apps {
         position: relative;
+        left: 15 * $s;
         height: 400 * $s;
         width: 100%;
+        .title {
+          text-align: left;
+          height: 50 * $s;
+          font-family:Helvetica;
+          font-size: 30 * $s;
+        }
         .apps-list {
           position: absolute;
           width: 100%;
@@ -199,8 +235,8 @@ export default {
       }
     }
     .grid-templates {
-      position: absolute;
-      height: 807 * $s;
+      position: relative;
+      height: 827 * $s; /* Height 807 + 40 border */
       width: 100%;
       transition: height 0.3s ease;
         &.slideshow-enter {
@@ -215,17 +251,30 @@ export default {
         &.slideshow-leave-active {
           transition: opacity 1.3s ease;
         }
+       &.subcategory-template {
+        position: relative;
+        left: 15 * $s;
+        height: auto;
+        padding: 50 * $s 0;
+        .title {
+          text-align: left;
+          height: 50 * $s;
+          font-family:Helvetica;
+          font-size: 30 * $s;
+        }
+        width: 100%;
+        .subCategoryList {
+          height: 370 * $s;
+        }
+      }     
     }
     &.shrink {
       // width: 1720 * $s;
       width: 100%;
       .grid-templates {
-        height: 807 * $s;
-      }
-    }
-    &.listing {
-      .grid-templates {
-        // position: relative;
+        &:not(.subcategory-template) {
+          height: 760 * $s;
+        }
       }
     }
     &.squeeze-header {

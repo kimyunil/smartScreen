@@ -42,9 +42,13 @@ export default {
 </script>
 <style scoped lang="scss">
  @import '../../mixins/scss/main';
-.sText {
-  color: white;
-  font-size: 64 * $s;
-  font-family: SamsungOneUI200;
-}
+ .text-container {
+   text-align: left;
+   .sText {
+      color: white;
+      font-size: 64 * $s;
+      font-family: SamsungOneUI200;
+    }
+ }
+
 </style>

@@ -10,6 +10,9 @@
     <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
       <speech-text :sText="sText"></speech-text>
     </div>
+    <div class="result-container">
+      <result/>
+    </div>
   </div>
 </template>
 <script>
@@ -18,6 +21,7 @@ import lottie from '../common/lottie';
 import Messages from '../../services/Messages';
 import speechText from './speechText';
 import listeners from './listeners';
+import result from './result/result';
 
 export default {
   name: 'bixyby',
@@ -71,6 +75,7 @@ export default {
         case 'FOUR': {
           const ret = this.set_result({ category: 'movies', starrer: 'tom_hanks' });
           if (ret) {
+            this.loop = false;
             this.updateBixby('wipeoff');
             this.showSpeechText = false;
             this.defaultOptions.loop = false;
@@ -95,6 +100,7 @@ export default {
     closeBixby() {
       this.closeVoice();
       Messages.send('audio-input.stop');
+      this.loop = false;
     },
     handleAnimation(anim) {
       this.anim = anim;
@@ -138,6 +144,7 @@ export default {
   components: {
     lottie,
     speechText,
+    result,
   },
 };
 </script>
@@ -148,6 +155,7 @@ export default {
   height: 100%;
   overflow: hidden;
   position: absolute;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), rgba(255,255,255,0.1));
   .bixby-lottie {
     position: absolute;
     // z-index:99;

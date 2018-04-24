@@ -1,8 +1,8 @@
 <template>
   <transition name="show" appear>
     <div class="header">
-      <div class="nav_list" :style="{'transform': `translateX(${translateX * $s}px)`}">
-          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'hide': nav_selected !== index && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && !isRemoteEnabled && !focus},{'selected': selectedIdx === index}]">
+      <div class="nav_list" :style="{'transform': `translateX(${translate}vw)`}">
+          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'hide': (nav_selected !== index) && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && nav_selected !== 0 && !isRemoteEnabled && !focus},{'selected': selectedIdx === index}]">
           {{item.title}}
           </div>
       </div>
@@ -28,6 +28,9 @@ export default {
     ...mapGetters('home', {
       nav_selected: 'GET_SELECTED_NAV',
     }),
+    translate() {
+      return ((this.translateX * 100) / window.innerWidth);
+    },
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -59,29 +62,20 @@ export default {
         case 'LEFT':
           if (this.hIdx > 0) {
             this.hIdx -= 1;
-            const left = this.$el.querySelectorAll('.nav-button')[this.hIdx].offsetLeft;
-            const accOffset = left + this.translateX;
-            // console.log(accOffset);
-            if (accOffset < 0) {
-              this.translateX += (accOffset * -1);
-            }
+            const ele = this.$el.querySelectorAll('.nav-button')[this.hIdx];
+            this.translateX = ((ele.offsetLeft) * -1);
           }
+          this.selectHeaderItem(this.hIdx);
           break;
         case 'SELECT':
-          this.selectHeaderItem(this.hIdx);
           break;
         case 'RIGHT':
           if (this.hIdx < this.navItems.length - 1) {
             this.hIdx += 1;
             const ele = this.$el.querySelectorAll('.nav-button')[this.hIdx];
-            const left = ele.offsetLeft;
-            const width = ele.offsetWidth;
-            const marginRight = parseInt(window.getComputedStyle(ele).marginRight, 10)
-            const accOffset = left + width + this.css.listOffset + this.translateX + marginRight;
-            if (this.css.headerWidth < (accOffset)) {
-              this.translateX -= (accOffset - this.css.headerWidth);
-            }
+            this.translateX = ((ele.offsetLeft) * -1);
           }
+          this.selectHeaderItem(this.hIdx);
           break;
         default:
           break;

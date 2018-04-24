@@ -27,7 +27,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
- @import '../../mixins/scss/main';
+ @import '../../../mixins/scss/main';
  .result-container {
     position: absolute;
     width: 100%;
@@ -47,6 +47,7 @@ export default {
         line-height: 48 * $s;
         padding-left: 78 * $s;
         color: white;
+        text-align: left;
         font-family: SamsungOneUI200;
       .b-text {
         font-family: SamsungOneUI400;
@@ -62,6 +63,7 @@ export default {
         position: relative;
         width: 800 * $s;
         height: 385 * $s;
+        background: grey;
         img {
           height: 100%;
         }

@@ -20,18 +20,22 @@ export default {
       tvshows: {
         title: 'TV SHOWS',
         template: 'health',
+        data: health,
       },
       apps: {
         title: 'APPS',
         template: 'health',
+        data: health,
       },
       movies: {
         title: 'MOVIES',
         template: 'health',
+        data: health,
       },
       music: {
         title: 'MUSIC',
         template: 'health',
+        data: health,
       },
     },
   },

@@ -2,6 +2,7 @@
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
+const express = require('express');
 const merge = require('webpack-merge')
 const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
@@ -9,7 +10,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -27,6 +27,17 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
       ],
+    },
+    before(app){
+      console.log('Before:::');
+      // To Provide Resources Access
+      if (process.env.RESOURCES_DIR !== undefined) {
+        console.warn(`Your RESOURCES_DIR environment var is setup. Serving static assets located in /resources from ${process.env.RESOURCES_DIR}`);
+        app.use('/resources', express.static(process.env.RESOURCES_DIR))
+      }
+      else {
+        console.warn(`Your RESOURCES_DIR environment var isn't setup. Cannot serve static assets located in /resources`);
+      }    
     },
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.

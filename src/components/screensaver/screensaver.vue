@@ -1,6 +1,6 @@
 <template>
-  <div class="screensaver">
-    <div class="backdrop" :class="{'enabled': powerEnabled}">
+  <div class="screensaver" :class="{'enabled': powerEnabled}">
+    <div class="backdrop">
     </div>
       <div class="time">
           {{time}}
@@ -82,15 +82,13 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    opacity: 0;
+    opacity: 0.4;
     width: 100%;
     height: 100%;
     transition: opacity 0.4s ease;
-    background: rgba(0,0,0,1);
-    &.enabled {
-      opacity: 0.4;
-    }
+    background: rgba(0,0,0,0.4);
   }
+  
   .time {
     position: absolute;
     top: 0;
@@ -100,6 +98,14 @@ export default {
     font-size: 120 * $s;
     color:white;
     font-family: SamsungOneUI600;
+  }
+  &.enabled {
+    .backdrop {
+      opacity: 0;
+    }
+    .time {
+      color: grey;
+    }
   }
 }
 </style>

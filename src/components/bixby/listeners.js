@@ -20,7 +20,8 @@ export default {
       this.text = param;
     },
     sttComplete(param) {
-      if (this.bixbyState !== 'think') {
+      if (this.bixbyState === 'listen' && this.bixbyState !== 'think') {
+        console.log('think');
         this.showSpeechText = true;
         this.defaultOptions.loop = true;
         this.updateBixby('think');

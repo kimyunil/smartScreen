@@ -5,8 +5,8 @@
 </template>
 <script>
 
-import hList from './hList';
 import { mapState } from 'vuex';
+import hList from './hList';
 
 export default {
   mounted() {
@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     handleAnimation() {
-      console.log('anima:::');
     },
   },
   components: {
@@ -37,7 +36,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-  @import '../../mixins/scss/main';
+  @import '../../../mixins/scss/main';
   .result-data {
     position: absolute;
     top: 0;

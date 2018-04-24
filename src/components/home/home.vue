@@ -2,7 +2,7 @@
   <div class="home">
     <div class="dashboard">
       <transition name="show">
-      <div class="header-cont" :class="{'squeeze-header': (!headerFocus)}" v-if="isRemoteEnabled">
+      <div class="header-cont" :class="{'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}" v-show="isRemoteEnabled || nav_selected != 0">
           <div class="wrapper">
           <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
           </div>
@@ -11,7 +11,7 @@
       <!-- <div class="title">
         {{navItems[nav_selected].title}}
       </div> -->
-      <div class="content-body" :class="{'shrink':isRemoteEnabled,'squeeze-header': (isRemoteEnabled && !headerFocus)}">
+      <div class="content-body" :class="[{'shrink':isRemoteEnabled,'squeeze-header': (isRemoteEnabled && !headerFocus)}, navItems[nav_selected].template]">
         <transition :name="direction">
           <component :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
@@ -57,13 +57,13 @@ export default {
       nav_selected: 'GET_SELECTED_NAV',
     }),
     contentFocus() {
-      if (this.active && (this.focus === 'content')) {
+      if (this.active && (this.focus === 'content') && this.isRemoteEnabled) {
         return true;
       }
       return false;
     },
     headerFocus() {
-      if (this.active && (this.focus === 'header')) {
+      if (this.active && (this.focus === 'header') && this.isRemoteEnabled) {
         return true;
       }
       return false;
@@ -176,7 +176,10 @@ export default {
       align-items: center;
       width: 100%;
       z-index: 2;
-      transition: height 0.3s ease;
+      transition: height 0.3s ease, transform 0.3s ease;
+      &.subtitle {
+        transform: translateX(#{-150 * $s});
+      }
       .wrapper {
         position: relative;
         top: 35 * $s;
@@ -188,15 +191,17 @@ export default {
       }
       &.show-enter {
         opacity: 0;
+        height: 0;
       }
       &.show-leave-to {
         opacity: 0;
+        height: 0;
       }
       &.show-enter-active{
-        transition: height 0.3s ease, opacity 0.3s ease;
+        transition: height 0.3s ease, opacity 0.2s ease;
       }
       &.show-leave-active {
-        transition: height 0.3s ease, opacity 0.3s ease;
+        transition: height 0.3s ease, opacity 0.2s ease;
       }
     }
     .title {
@@ -217,14 +222,20 @@ export default {
       // margin: 10 * $s;
       height: 940 * $s;
       // overflow: hidden;
-      transform: translate(#{0 * $s}, #{100 * $s});
+      transform: translate(#{0 * $s}, #{0 * $s});
       transition: transform 0.3s ease;
       left:0;
+      &.health {
+        transform: translate(#{0 * $s}, #{110 * $s});
+      }
       &.shrink {
         transform: translate(#{80 * $s}, #{230 * $s});
         width: 1760 * $s;
         &.squeeze-header {
           transform: translate(#{80 * $s}, #{130 * $s});
+          &.health {
+            transform: translate(#{120 * $s}, #{150 * $s});
+          }
         }
       }
       .left-enter-active, .left-leave-active {

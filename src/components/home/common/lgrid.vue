@@ -1,15 +1,40 @@
 <template>
   <div class="list-grid">
     <div class="list" :style="{'transform': `translateX(${this.translateX}px)`}">
-      <div class="apps" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
-        <img class="icon" :src="item.img"/>
-        <img class="bg-thumb" :src="item.thumbnail"/>
-        <div class="footer-text">
-          <template v-for="text in item.bottomText.split('$')">
-            <div :key="text">{{text}}</div>
-          </template>
+      <template v-if="itemType === 'grid'">
+        <div class="grid-item item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <img class="icon" :src="item.img"/>
+          <img class="bg-thumb" :src="item.thumbnail" :style="{'width': `${($index === index ? (item.f_dim.split('*')[0] * $s):(item.f_dim.split('*')[0] * $s))}px`}"/>
+          <div class="footer-text">
+            <template v-for="text in item.bottomText.split('$')">
+              <div :key="text">{{text}}</div>
+            </template>
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-if="itemType === 'thumbnail'">
+        <div class="thumbnail item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <div class="bg-thumb-cont" :style="{'background-image': `url(${item.thumbnail})`}">
+            <!-- <img class="bg-thumb" :src="item.thumbnail"/> -->
+          </div>
+          <div class="footer-text">
+             <div class="text">
+               <div class="heading">
+                 {{item.heading}}
+               </div>
+               <div class="sub-heading">
+                  {{item.subheading}}
+                </div>
+              </div>
+              <div class="icon" :style="{'background-image': `url(${item.icon})`}"/>
+          </div>
+        </div>
+      </template>
+      <template v-if="itemType === 'apps'">
+        <div class="apps item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <img class="bg-thumb" :src="item.img"/>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -19,9 +44,13 @@ import Messages from '../../../services/Messages';
 
 export default {
   props: {
-    details: {
-      type: Object,
-      reuquired: true,
+    items: {
+      type: Array,
+      required: true,
+    },
+    itemType: {
+      type: String,
+      required: true,
     },
     focus: {
       type: Boolean,
@@ -36,7 +65,6 @@ export default {
   },
   methods: {
     handleKeyDown(type) {
-      console.log('LGrid');
       if (!this.focus) return;
       console.log('LGrid11', type);
       switch (type) {
@@ -44,6 +72,7 @@ export default {
           this.$emit('movefocus', { dir: 'up', from: 'lgrid' });
           break;
         case 'DOWN':
+          this.$emit('movefocus', { dir: 'down', from: 'lgrid' });
           break;
         case 'LEFT':
           if (this.index !== 0) {
@@ -62,7 +91,7 @@ export default {
       }
     },
     scroll(dir) {
-      const ele = this.$el.querySelectorAll('.list .apps')[this.index];
+      const ele = this.$el.querySelectorAll('.list .item')[this.index];
       if (dir === 'left') {
         const eleDim = ele.offsetLeft + this.translateX;
         if (eleDim < 0) {
@@ -82,15 +111,6 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
-    items() {
-      const array = [];
-      for (let i = 0; i < this.details.content.length; i += 1) {
-        const key = this.details.content[i];
-        array[i] = this.details[key];
-      }
-      console.log(array);
-      return array;
-    },
   },
   data() {
     return {
@@ -112,16 +132,17 @@ export default {
     white-space: nowrap;
     height: 100%;
     transition: transform 0.3s ease;
-    .apps {
+    .grid-item {
       position: relative;
       display: inline-block;
       height: 100%;
       margin-right: 15 * $s;
-      border: 20 * $s solid transparent;
+      border: 8 * $s solid transparent;
       margin-right: 0;
       transition: margin 0.3s ease;
       .bg-thumb {
         height: 100%;
+        transition: all 0.3s ease;
       }
       .icon {
         position: absolute;
@@ -140,12 +161,90 @@ export default {
       }
       &.shrink {
         margin-right: 30 * $s;
+        border: 20 * $s solid transparent;
       }
       &.selected {
         border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
         border-width: 20 * $s;
       }
     }
+    .thumbnail {
+      width: 480 * $s;
+      height: 370 * $s;
+      display: inline-block;
+      margin-right: 20 * $s;
+      border: 20 * $s solid transparent;
+      position: relative;
+      &.selected {
+        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-width: 20 * $s;
+      }
+      .bg-thumb-cont {
+        position: relative;
+        width: 100%;
+        height: 270 * $s;
+        background-size: 100%;
+        overflow: hidden;
+        .bg-thumb{
+          left: -10 * $s;
+          width: 104%;
+          top: -6 * $s;
+          position: relative;
+        }
+      }
+      .footer-text {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 15 * $s;
+        height:100 *$s;
+        background: white;
+        justify-content: space-around;
+        display: flex;
+        .text {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+        justify-content: space-around;
+         text-align: left;
+        .heading {
+          font-size: 24 * $s;
+         
+           font-family: Helvetica;
+        }
+        .subheading {
+          position: relative;
+          font-family: Helvetica;
+          font-size: 18 * $s;
+        }
+        }
+        .icon {
+          width: 20%;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+      }
+    }
+   .apps {
+      width: 260 * $s;
+      height: 260 * $s;
+      border: 20 * $s solid transparent;
+      display: inline-block;
+      margin-right: 84 * $s;
+      position: relative;
+      .bg-thumb {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      &.selected {
+        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-width: 20 * $s;
+        // border: 20 * $s solid transparent;
+      }
+    }   
   }
 }
 </style>

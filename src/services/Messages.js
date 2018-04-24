@@ -14,7 +14,6 @@ export default new Vue({
     // hijack the listener
     const oldOn = this.$on;
     this.$on = (...args) => {
-      console.log(':::::::::');
       // if the first argument is *, then we emit all events to this callback
       if (args[0] === '*') {
         const index = this.wildcardListeners.indexOf(args[1]);

@@ -5,18 +5,18 @@
       @transitionend="shrinkTransitionCB"
     >
       <transition name="fade">
-      <template v-if="slideshow">
-        <div class="grid-templates grid-templates-slideshow" >
+      <!-- <template > -->
+        <div class="grid-templates grid-templates-slideshow" v-show="slideshow">
           <transition :name="transitionName">
             <div class="slideshow-wrapper" :key="index">
               <grid :details="grids[index]" :focus="false"/>
             </div>
           </transition>
         </div>
-      </template>
+      <!-- </template> -->
       </transition>
       <transition name="fade">
-      <div class="grid-list" v-if="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
+      <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
         <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
           <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
         </div>
@@ -60,7 +60,7 @@ export default {
     }),
     getGrids() {
       const arr = [];
-      for (let i = 0; i < this.grids.length; i++) {
+      for (let i = 0; i < this.grids.length; i += 1) {
         const idx = ((this.index + i) % this.grids.length);
         arr[i] = this.grids[idx];
       }
@@ -123,19 +123,17 @@ export default {
     },
     startSlideShow() {
       this.slideshow = true;
+      clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
         this.transitionName = 'slideshow';
         this.index = (((this.index) + 1) % this.grids.length);
-        console.log('timeout:::');
       }, 3000);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
       this.intervalId = null;
       this.transitionName = '';
-      this.$nextTick(() => {
-        this.slideshow = false;
-      });
+      this.slideshow = false;
     },
     scroll(dir, delta) {
       console.log(dir, delta);
@@ -204,7 +202,7 @@ export default {
     width: 1900 * $s;
     margin: 10 * $s;
     height: 940 * $s;
-    height: 807 * $s;
+    // height: 807 * $s;
     // overflow: hidden;
     left:0;
     transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
@@ -293,11 +291,6 @@ export default {
       height: 880 * $s;
     }
   }
-    // &.listing {
-    //   .grid-templates {
-    //     position: relative;
-    //   }
-    // }
     &.squeeze-header {
       // margin-top: 150 * $s;
     }

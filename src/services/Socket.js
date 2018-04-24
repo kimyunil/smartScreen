@@ -40,7 +40,6 @@ export default new Vue({
       if (this.socket !== undefined) {
         this.socket.disconnect();
       }
-      console.log('starte::::::');
       console.log(`ws://${this.socketIp}:${this.socketPort}`);
       this.socket = io(`ws://${this.socketIp}:${this.socketPort}`);
       this.socket.on('connect', () => {
