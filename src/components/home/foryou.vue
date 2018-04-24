@@ -228,17 +228,17 @@ export default {
               width: 100%;
             }
             &.focus {
-              border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+              border-image: url("/static/Images/home/border.png") 30 round;
               border-width: 20 * $s;
             }
           }
         }
       }
       &.fade-enter-active {
-        transition: opacity 0.1s ease;
+        // transition: opacity 0.3s ease;
       }
       &.fade-leave-active {
-        transition: opacity 0.1s ease;
+        // transition: opacity 0.3s ease;
       }
       &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
@@ -274,10 +274,10 @@ export default {
         }
        }
       &.fade-enter-active {
-        transition: opacity 0.1s ease;
+        // transition: opacity 0.1s ease;
       }
       &.fade-leave-active {
-        transition: opacity 0.1s ease;
+        // transition: opacity 0.1s ease;
       }
       &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
@@ -288,7 +288,9 @@ export default {
     width: 1720 * $s;
     height: 880 * $s;
     .grid-templates {
+      .grid-templates-list {
       height: 880 * $s;
+      }
     }
   }
     &.squeeze-header {

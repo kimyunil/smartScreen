@@ -123,7 +123,7 @@ export default {
       },
       'page-2': {
         title: 'page-2',
-        content: ['content1', 'content2', 'content3'],
+        content: ['content2', 'content1', 'content3'],
         content1: {
           bottomText: '',
           type: 'content',
@@ -160,7 +160,7 @@ export default {
       },
       'page-3': {
         title: 'page-3',
-        content: ['content1', 'content2', 'content3'],
+        content: ['content3', 'content1', 'content3'],
         content1: {
           type: 'content',
           bottomText: '',

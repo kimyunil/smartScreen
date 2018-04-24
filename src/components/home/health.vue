@@ -62,7 +62,7 @@ export default {
     },
     content() {
       const array = [];
-      const details = this.grids[0];
+      const details = this.grids[this.index];
       for (let i = 0; i < details.content.length; i += 1) {
         const key = details.content[i];
         array[i] = details[key];
@@ -108,7 +108,7 @@ export default {
       }
     },
     startSlideShow() {
-      this.transitionName = '';
+      this.transitionName = 'slideshow';
       this.slideshow = true;
       this.intervalId = setInterval(() => {
         this.index = (((this.index) + 1) % this.grids.length);
@@ -225,7 +225,7 @@ export default {
               width: 100%;
             }
             &.focus {
-              border-image: url(https://www.w3schools.com/cssref/border.png) 30 round;
+              border-image: url("/static/Images/home/border.png") 30 round;
               border-width: 20 * $s;
             }
           }

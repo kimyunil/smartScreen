@@ -175,7 +175,7 @@ export default {
         border: 20 * $s solid transparent;
       }
       &.selected {
-        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-image: url("/static/Images/home/border.png") 30 round;
         border-width: 20 * $s;
       }
     }
@@ -187,7 +187,7 @@ export default {
       border: 20 * $s solid transparent;
       position: relative;
       &.selected {
-        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-image: url("/static/Images/home/border.png") 30 round;
         border-width: 20 * $s;
       }
       .bg-thumb-cont {
@@ -249,7 +249,7 @@ export default {
         top: 0;
       }
       &.selected {
-        border-image: url("https://mdn.mozillademos.org/files/6015/border-image-5.png") 30 round;
+        border-image: url("/static/Images/home/border.png") 30 round;
         border-width: 20 * $s;
         // border: 20 * $s solid transparent;
       }
