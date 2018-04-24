@@ -234,7 +234,7 @@ export default {
         &.squeeze-header {
           transform: translate(#{80 * $s}, #{130 * $s});
           &.health {
-            transform: translate(#{120 * $s}, #{150 * $s});
+            transform: translate(#{80 * $s}, #{150 * $s});
           }
         }
       }

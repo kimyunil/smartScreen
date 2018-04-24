@@ -38,49 +38,49 @@ export default {
         heading: '7 Min Yoga',
         subheading: 'Yoga with Adrienne',
         thumbnail: 'static/Images/home/health/content/tt1.png',
-        icon: 'static/Images/home/health/icon/youtube.png'
+        icon: 'static/Images/home/health/icon/youtube.png',
       },
       lifting: {
         heading: 'Weightlifting 101',
         subheading: 'PowerUP Fitness',
         thumbnail: 'static/Images/home/health/content/tt2.png',
-        icon: 'static/Images/home/health/icon/burn.png'
+        icon: 'static/Images/home/health/icon/burn.png',
       },
       running: {
         heading: 'Running techniques...',
         subheading: 'RunRun Videos',
         thumbnail: 'static/Images/home/health/content/tt3.png',
-        icon: 'static/Images/home/health/icon/coby.png'
+        icon: 'static/Images/home/health/icon/coby.png',
       },
       dailyyoga: {
         heading: 'Daily Yoga - Finesse',
         subheading: 'Yoga with Adrienne',
         thumbnail: 'static/Images/home/health/content/tt4.png',
-        icon: 'static/Images/home/health/icon/coby.png'
+        icon: 'static/Images/home/health/icon/coby.png',
       },
       dance: {
         heading: '30Min Feel Good Dance',
         subheading: 'POPSUGAR Fitness',
         thumbnail: 'static/Images/home/health/content/tt5.png',
-        icon: 'static/Images/home/health/icon/fitbit.png'
+        icon: 'static/Images/home/health/icon/fitbit.png',
       },
       workoutdance: {
         heading: 'Enjoyable Workout Dance',
         subheading: 'Moore Dancing',
         thumbnail: 'static/Images/home/health/content/tt6.png',
-        icon: 'static/Images/home/health/icon/fitbit.png'
+        icon: 'static/Images/home/health/icon/fitbit.png',
       },
       cardiodancebasic: {
         heading: 'Cardio Dance Basics 1',
         subheading: 'BR Dance',
         thumbnail: 'static/Images/home/health/content/tt7.png',
-        icon: 'static/Images/home/health/icon/fitbit.png'
+        icon: 'static/Images/home/health/icon/fitbit.png',
       },
       cardiodance: {
         heading: 'Daily Cardio Dance',
         subheading: 'Dance with Angela',
         thumbnail: 'static/Images/home/health/content/tt10.png',
-        icon: 'static/Images/home/health/icon/fitbit.png'
+        icon: 'static/Images/home/health/icon/fitbit.png',
       },
     },
     details: {
@@ -114,11 +114,11 @@ export default {
         sublist: ['workout', 'fitbitcardio'],
         workout: {
           title: 'BODYWEIGHT WORKOUT',
-          items: ['yoga', 'lifting', 'running', 'dailyyoga']
+          items: ['yoga', 'lifting', 'running', 'dailyyoga'],
         },
         fitbitcardio: {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance']
+          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
       },
       'page-2': {
@@ -151,11 +151,11 @@ export default {
         sublist: ['workout', 'fitbitcardio'],
         workout: {
           title: 'BODYWEIGHT WORKOUT',
-          items: ['yoga', 'lifting', 'running', 'dailyyoga']
+          items: ['yoga', 'lifting', 'running', 'dailyyoga'],
         },
         fitbitcardio: {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance']
+          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
       },
       'page-3': {
@@ -188,11 +188,11 @@ export default {
         sublist: ['workout', 'fitbitcardio'],
         workout: {
           title: 'BODYWEIGHT WORKOUT',
-          items: ['yoga', 'lifting', 'running', 'dailyyoga']
+          items: ['yoga', 'lifting', 'running', 'dailyyoga'],
         },
         fitbitcardio: {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance']
+          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
       },
     },

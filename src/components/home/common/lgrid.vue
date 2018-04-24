@@ -4,7 +4,8 @@
       <template v-if="itemType === 'grid'">
         <div class="grid-item item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
           <img class="icon" :src="item.img"/>
-          <img class="bg-thumb" :src="item.thumbnail" :style="{'width': `${($index === index ? (item.f_dim.split('*')[0] * $s):(item.f_dim.split('*')[0] * $s))}px`}"/>
+          <div class="bg-thumb" :src="item.thumbnail" :style="[{'background-image': `url(${item.thumbnail})`}, setWidth(item)]">
+          </div>
           <div class="footer-text">
             <template v-for="text in item.bottomText.split('$')">
               <div :key="text">{{text}}</div>
@@ -64,6 +65,14 @@ export default {
     Messages.$off('button_down', this.handleKeyDown);
   },
   methods: {
+    setWidth(item) {
+      console.log(item);
+      let width = item.dim.split('*')[0];
+      if (this.isRemoteEnabled) {
+        width = item.f_dim.split('*')[0];
+      }
+      return { width: `${(width * 100) / 1920}vw` };
+    },
     handleKeyDown(type) {
       if (!this.focus) return;
       console.log('LGrid11', type);
@@ -142,6 +151,8 @@ export default {
       transition: margin 0.3s ease;
       .bg-thumb {
         height: 100%;
+        background-size: 100% 100%;
+        background-position: center;
         transition: all 0.3s ease;
       }
       .icon {
@@ -183,12 +194,11 @@ export default {
         position: relative;
         width: 100%;
         height: 270 * $s;
-        background-size: 100%;
+        background-size: 105% 100%;
+        background-position: center -5 * $s;
+        background-repeat: no-repeat;
         overflow: hidden;
         .bg-thumb{
-          left: -10 * $s;
-          width: 104%;
-          top: -6 * $s;
           position: relative;
         }
       }
@@ -209,8 +219,7 @@ export default {
          text-align: left;
         .heading {
           font-size: 24 * $s;
-         
-           font-family: Helvetica;
+          font-family: Helvetica;
         }
         .subheading {
           position: relative;
@@ -244,7 +253,7 @@ export default {
         border-width: 20 * $s;
         // border: 20 * $s solid transparent;
       }
-    }   
+    }
   }
 }
 </style>

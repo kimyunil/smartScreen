@@ -1,6 +1,7 @@
 <template>
   <div class="tile" :style="{'background-image': `url(${item.details.tile})`}">
-    <img class="icon" :src="item.logo"/>
+    <div class="icon" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]">
+    </div>
     <div class="header-text" >
       <div class="sponsor" v-if="item.contentType === 'sponsored'">
         Sponsored
@@ -23,6 +24,14 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    dim(d) {
+      return {
+        width: `${(d.w * 100) / 1920}vw`,
+        height: `${(d.h * 100) / 1920}vw`,
+      };
     },
   },
   mounted() {
@@ -73,8 +82,11 @@ export default {
   }
   .icon {
     position: absolute;
-     right: 5%;
+    right: 5%;
     bottom: 30 * $s;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
 </style>

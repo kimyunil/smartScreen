@@ -1,6 +1,6 @@
 <template>
   <div class="poster" :style="{'background-image': `url(${item.details.poster})`}">
-   <img class="icon" :src="item.logo"/>
+   <div class="icon" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]"></div>
    <div class="bottom-footer">
      <template v-if="item.contentType==='simple'">
         <div class="text simple">
@@ -38,6 +38,14 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    dim(d) {
+      return {
+        width: `${(d.w * 100) / 1920}vw`,
+        height: `${(d.h * 100) / 1920}vw`,
+      };
     },
   },
   mounted() {
@@ -81,6 +89,9 @@ export default {
   .icon {
     position: absolute;
     right: 6%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
     bottom: 5%;
   }
 }

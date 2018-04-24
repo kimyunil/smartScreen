@@ -57,7 +57,6 @@ export default {
       set_result: 'SET_RESULT',
     }),
     handleKeyDown(type) {
-      console.log('Handle Key Down', type);
       switch (type) {
         case 'ONE':
           this.showSpeechText = true;

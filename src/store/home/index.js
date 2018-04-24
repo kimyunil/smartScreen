@@ -28,16 +28,16 @@ export default {
       const pageKey = healthPages.pagination[index];
       const page = healthPages.details[pageKey];
       const arr = [];
-      for (let i = 0; i < page.sublist.length; i++) {
+      for (let i = 0; i < page.sublist.length; i += 1) {
         const sKey = page.sublist[i];
         const obj = {};
         obj.title = page[sKey].title;
         obj.items = [];
-        for (let j = 0; j < page[sKey].items.length; j++) {
+        for (let j = 0; j < page[sKey].items.length; j += 1) {
           const ssKey = page[sKey].items[j];
           obj.items[j] = healthPages.subCategories[ssKey];
         }
-        arr[i] = obj
+        arr[i] = obj;
       }
       return arr;
     },

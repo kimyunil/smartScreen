@@ -1,6 +1,6 @@
 <template>
   <div class="thumbnail" :style="{'background-image': `url(${item.img})`}" :class="[item.contentType]">
-   <img class="icon-label" :src="item.logo" v-if="item.contentType !== 'iot'"/>
+   <div class="icon-label" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]" v-if="item.contentType !== 'iot'"></div>
    <template v-if="item.contentType === 'iot'">
      <div class="iot-container">
        <div class="icon">
@@ -33,6 +33,15 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    dim(d) {
+      if (!d) return {};
+      return {
+        width: `${(d.w * 100) / 1920}vw`,
+        height: `${(d.h * 100) / 1920}vw`,
+      };
     },
   },
   mounted() {
@@ -113,6 +122,9 @@ export default {
     position: absolute;
     right: 5%;
     bottom: 30 * $s;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
 </style>

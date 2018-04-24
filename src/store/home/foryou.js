@@ -43,6 +43,10 @@ export default {
             text1: 'Trump to Impose New$Sanctions on Russia Over$Support for Syria',
           },
           logo: '/static/Images/home/icons/morning/news.png',
+          dim: {
+            w: '40',
+            h: '50',
+          },
           img: '',
         },
         fitness: {
@@ -54,6 +58,10 @@ export default {
             tile: '/static/Images/home/tile/morning/fitbit.png',
           },
           logo: '/static/Images/home/icons/common/fitbit.png',
+          dim: {
+            w: '121',
+            h: '30',
+          },
           img: '',
         },
         weather: {
@@ -75,6 +83,10 @@ export default {
           details: {
             bottomText: 'Play Morning$Playlist',
             icon: '',
+          },
+          dim: {
+            w: '90',
+            h: '30',
           },
           logo: '/static/Images/home/icons/morning/npr.png',
           img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
@@ -119,6 +131,10 @@ export default {
             bottomText: 'Game of Thrones',
             tile: '/static/Images/home/tile/morning/GOT.png',
           },
+          dim: {
+            w: '75',
+            h: '31',
+          },
           logo: '/static/Images/home/icons/morning/hbo.png',
           img: '',
         },
@@ -128,6 +144,10 @@ export default {
           details: {
             poster: '/static/Images/home/posters/morning/spotify.png',
             text1: 'Today\'s Trending Music',
+          },
+          dim: {
+            w: '150',
+            h: '30',
           },
           template: 'poster',
           logo: '/static/Images/home/icons/morning/spotify.png',
@@ -155,6 +175,10 @@ export default {
             },
           },
           template: 'poster',
+          dim: {
+            w: '166',
+            h: '37',
+          },
           logo: '/static/Images/home/icons/morning/DailyBurn.png',
           img: '/static/Images/home/page1/poster.png',
         },
@@ -166,6 +190,10 @@ export default {
             bottomText: 'Yoga Challenge',
             tile: '/static/Images/home/tile/morning/yoga.png',
           },
+          dim: {
+            w: '60',
+            h: '37',
+          },
           logo: '/static/Images/home/icons/morning/Daily-Yoga.png',
           img: '',
         },
@@ -176,6 +204,10 @@ export default {
           details: {
             icon: '',
             bottomText: 'Stephen Curry$Shooting Ball-$handling',
+          },
+          dim: {
+            w: '50',
+            h: '33',
           },
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
@@ -190,6 +222,10 @@ export default {
           },
           logo: '/static/Images/home/icons/common/heapspace.png',
           img: '/static/Images/home/thumbnail/morning/yogo.png',
+          dim: {
+            w: '160',
+            h: '30',
+          },
         },
       },
     },

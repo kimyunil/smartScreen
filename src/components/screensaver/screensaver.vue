@@ -35,7 +35,6 @@ export default {
       this.powerEnabled = false;
     },
     handleKeyDown(type) {
-      console.log('Handle Key Down', type);
       if (!this.active) return;
       switch (type) {
         case 'POWER':
@@ -88,7 +87,6 @@ export default {
     transition: opacity 0.4s ease;
     background: rgba(0,0,0,0.4);
   }
-  
   .time {
     position: absolute;
     top: 0;

@@ -15,7 +15,7 @@
         <div class="grid-templates template">
           <grid :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
         </div>
-        <template v-for="(subCat, index) in subCategories"> 
+        <template v-for="(subCat, index) in subCategories">
         <div class="grid-templates template subcategory-template"  :key="index">
           <div class="title">{{subCat.title}}</div>
             <grid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
@@ -30,7 +30,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex';
@@ -58,12 +57,12 @@ export default {
       pageSubCat: 'PAGE_SUB_CAT_HEALTH',
       appsItems: 'GET_HEALTH_APPS',
     }),
-    subCategories(){
+    subCategories() {
       return this.pageSubCat(this.index);
     },
     content() {
       const array = [];
-      const details = this.grids[this.index]
+      const details = this.grids[0];
       for (let i = 0; i < details.content.length; i += 1) {
         const key = details.content[i];
         array[i] = details[key];
@@ -140,14 +139,13 @@ export default {
             this.pageIdx -= 1;
             const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop;
             if (this.translate * -1 > top) {
-               this.translate += ((this.translate * -1) - top);
+              this.translate += ((this.translate * -1) - top);
             }
             console.log(top);
             // this.scroll('up', top);
           }
-        } else if(param.dir === 'down') {
+        } else if (param.dir === 'down') {
           if (this.pageIdx !== (this.subCategories.length + 1)) {
-
             this.pageIdx += 1;
             const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop + this.translate;
             const height = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetHeight;
@@ -235,7 +233,7 @@ export default {
       }
     }
     .grid-templates {
-      position: relative;
+      position: absolute;
       height: 827 * $s; /* Height 807 + 40 border */
       width: 100%;
       transition: height 0.3s ease;
@@ -251,22 +249,25 @@ export default {
         &.slideshow-leave-active {
           transition: opacity 1.3s ease;
         }
-       &.subcategory-template {
-        position: relative;
-        left: 15 * $s;
-        height: auto;
-        padding: 50 * $s 0;
-        .title {
-          text-align: left;
-          height: 50 * $s;
-          font-family:Helvetica;
-          font-size: 30 * $s;
+        &.template {
+          position: relative;
+          &.subcategory-template {
+            position: relative;
+            left: 15 * $s;
+            height: auto;
+            padding: 50 * $s 0;
+            .title {
+              text-align: left;
+              height: 50 * $s;
+              font-family:Helvetica;
+              font-size: 30 * $s;
+            }
+            width: 100%;
+            .subCategoryList {
+              height: 370 * $s;
+            }
+          }
         }
-        width: 100%;
-        .subCategoryList {
-          height: 370 * $s;
-        }
-      }     
     }
     &.shrink {
       // width: 1720 * $s;
