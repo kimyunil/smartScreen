@@ -14,8 +14,8 @@
         </div>
       </template>
       <template v-if="itemType === 'thumbnail'">
-        <div class="thumbnail item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
-          <div class="bg-thumb-cont" :style="{'background-image': `url(${item.thumbnail})`}">
+        <div class="thumbnail item" :style="{'left': `${ (($index * 500) * 100) / 1920}vw`}" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <div class="bg-thumb-cont" :style="[{'background-image': `url(${item.thumbnail})`}]">
             <!-- <img class="bg-thumb" :src="item.thumbnail"/> -->
           </div>
           <div class="footer-text">
@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     setWidth(item) {
-      console.log(item);
       let width = item.dim.split('*')[0];
       if (this.isRemoteEnabled) {
         width = item.f_dim.split('*')[0];
@@ -75,7 +74,6 @@ export default {
     },
     handleKeyDown(type) {
       if (!this.focus) return;
-      console.log('LGrid11', type);
       switch (type) {
         case 'UP':
           this.$emit('movefocus', { dir: 'up', from: 'lgrid' });
@@ -180,12 +178,12 @@ export default {
       }
     }
     .thumbnail {
-      width: 480 * $s;
+      width: 520 * $s;
       height: 370 * $s;
       display: inline-block;
-      margin-right: 20 * $s;
+      // margin-right: 20 * $s;
       border: 20 * $s solid transparent;
-      position: relative;
+      position: absolute;
       &.selected {
         border-image: url("/static/Images/home/border.png") 30 round;
         border-width: 20 * $s;

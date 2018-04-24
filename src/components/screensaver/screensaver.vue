@@ -26,6 +26,12 @@ export default {
       this.time = moment().format('LT');
     }, 1000);
     Messages.$on('horizon-weather.forecast', this.handleForecast);
+    Messages.$on('horizon-news.get-articles-result', this.getArticle);
+    Messages.send('horizon-news.get-articles', {
+      sources: ['bbc-news'],
+      shuffle: true,
+      maxSourceResults: 5,
+    });
     Messages.send('horizon-weather.get-forecast', {
       place: 'Mountain View',
     });
@@ -37,6 +43,8 @@ export default {
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+    Messages.$off('horizon-weather.forecast', this.handleForecast);
+    Messages.$off('horizon-news.get-articles-result', this.getArticle);
     clearTimeout(this.interval);
     clearTimeout(this.timeOut);
   },
@@ -49,6 +57,9 @@ export default {
     }),
     handleForecast(param) {
       this.set_weather(param);
+    },
+    getArticle() {
+      console.log('getArticle');
     },
     reset() {
       clearTimeout(this.interval);
@@ -117,6 +128,7 @@ export default {
     font-size: 120 * $s;
     color:white;
     font-family: SamsungOneUI600;
+    transition: color 0.3s ease;
   }
   .weather {
     position: absolute;
@@ -128,11 +140,15 @@ export default {
     left: 50 * $s;
     font-size: 60 * $s;
     color:white;
+    transition: color 0.3s ease;
     font-family: SamsungOneUI600;
   }
   &.enabled {
     .backdrop {
       opacity: 0;
+    }
+    .weather {
+      color: grey;
     }
     .time {
       color: grey;

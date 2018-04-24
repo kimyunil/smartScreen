@@ -83,7 +83,6 @@ export default {
     },
     grids() {
       const gridPages = this.catGrid(1);
-      console.log(gridPages);
       return gridPages;
     },
     translateY() {
