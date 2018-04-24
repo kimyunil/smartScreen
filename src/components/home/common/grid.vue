@@ -6,7 +6,9 @@
         :class="[{'shrink': isRemoteEnabled}, gridItem.type, {'selected': focus && gridItem.type === currType}]"
         :key="gridItem.key"
       >
-        <component :is="gridItem.template" :item="gridItem"></component>
+        <div class="item-wrapper">
+          <component :is="gridItem.template" :item="gridItem"></component>
+        </div>
       </div>
     </div>
 </template>
@@ -177,15 +179,24 @@ export default {
     height: 100%;
     .grid-items {
       position: relative;
-      border: 20 * $s solid transparent;
       margin: 0;
-      transition: margin 0.3s ease;
+      .item-wrapper {
+        position: absolute;
+        width: 100%;
+        border: 20 * $s solid transparent;
+        height: 100%;
+        transition: transform 0.3s ease;
+      }
       &.shrink {
-       margin: 20 * $s;
+        .item-wrapper {
+          transform: scale(0.98);
+        }
       }
       &.selected {
-        border-image: url("/static/Images/home/border.png") 30 round;
-        border-width: 20 * $s;
+         .item-wrapper {
+          border-image: url("/static/Images/home/border.png") 30 round;
+          border-width: 20 * $s;
+         }
       }
     }
     &.page-1 {

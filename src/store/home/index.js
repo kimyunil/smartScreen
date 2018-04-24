@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     data,
+    suggestions: ['Tell me more About Self Esteem', 'Go to Health and Wellness', 'Show me more...']
   },
   props: {
     active: {
@@ -22,6 +23,12 @@ export default {
         pages[i] = localData.pages.details[key];
       }
       return pages;
+    },
+    GET_SUGGESTIONS(state) {
+      const navItem = state.data.navs.items[state.data.navs.selectedIdx];
+      const category = state.data.navs.details[navItem].data;
+      console.log(category);
+      return category.suggestions;
     },
     PAGE_SUB_CAT_HEALTH: state => (index) => {
       const healthPages = state.data.navs.details.health.data.pages;

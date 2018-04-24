@@ -28,8 +28,8 @@ export default {
       },
     },
   },
+  suggestions: ['Tell me more About Fitness', 'Tell me more about Self Esteem', 'Show me npm...', 'Go to Health'],
   subCategory: {
-
   },
   pages: {
     pagination: ['page-1', 'page-2', 'page-3'],

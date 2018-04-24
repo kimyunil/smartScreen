@@ -1,4 +1,5 @@
 export default {
+  suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npm...', 'Go to Health'],
   apps: {
     items: ['netflix', 'hulu', 'spotify', 'fitbit', 'masterclass'],
     details: {
@@ -91,6 +92,7 @@ export default {
           logo: '/static/Images/home/icons/morning/npr.png',
           img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
         },
+        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npm...', 'Go to Health'],
       },
       'page-2': {
         title: 'page-2',
@@ -153,6 +155,7 @@ export default {
           logo: '/static/Images/home/icons/morning/spotify.png',
           img: '/static/Images/home/page1/poster.png',
         },
+        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npm...', 'Go to Health'],
       },
       'page-3': {
         title: 'page-3',
@@ -227,6 +230,7 @@ export default {
             h: '30',
           },
         },
+        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npm...', 'Go to Health'],
       },
     },
   },

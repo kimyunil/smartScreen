@@ -19,10 +19,6 @@
     </div>
      <transition name="show">
         <div class="bixby-suggestions" v-if="!isRemoteEnabled">
-          <div class="text-suggestion">
-            <span class="text"> Say</span>
-            <span class="suggestions">" Hey Bixby, show me more..."</span>
-          </div>
           <div class="pagination-dots">
             <div class="dots"
               v-for="(i, idx) in grid_info(nav_selected)"

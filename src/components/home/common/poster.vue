@@ -43,8 +43,8 @@ export default {
   methods: {
     dim(d) {
       return {
-        width: `${(d.w * 100) / 1920}vw`,
-        height: `${(d.h * 100) / 1920}vw`,
+        width: `${(d.w * 100) / window.innerWidth}vw`,
+        height: `${(d.h * 100) / window.innerWidth}vw`,
       };
     },
   },

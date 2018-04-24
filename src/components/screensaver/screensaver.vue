@@ -76,7 +76,6 @@ export default {
   overflow: hidden;
   position: absolute;
   background-size: 100%;
-  background-image: url('/static/bgbg.png');
   .backdrop {
     position: absolute;
     left: 0;

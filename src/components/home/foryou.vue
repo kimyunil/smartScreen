@@ -40,7 +40,6 @@ import Messages from '../../services/Messages';
 export default {
   mounted() {
     this.stopSlideShow();
-    console.log(this.isRemoteEnabled);
     if (!this.isRemoteEnabled) {
       this.startSlideShow();
     }

@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
+    suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
     isBixbyActive: false,
     bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
     socket: {

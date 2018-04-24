@@ -1,5 +1,7 @@
 <template>
   <div class="smart-screen">
+    <div class="backdrop">
+    </div>
     <transition-group name="fade" tag="div">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
@@ -7,11 +9,21 @@
     </transition-group>
     <v-source class="video-source" :config="videoconfig"></v-source>
     <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
+    <transition name="show">
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled" :style="{'z-index': (viewStack.length + 1)}" >
+          <transition name="slideshow">
+            <div class="text-suggestion" :key="index">
+              <span class="text"> Say</span>
+              <span class="suggestions">" Hey Bixby, <span>{{bSuggestions[index]}}</span>"</span>
+            </div>
+          </transition>
+        </div>
+     </transition>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
@@ -22,6 +34,10 @@ import Messages from '../services/Messages';
 export default {
   name: 'smartscreen',
   mounted() {
+    this.stopSlideShow();
+    if (!this.isRemoteEnabled) {
+      this.startSlideShow();
+    }
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
@@ -35,15 +51,26 @@ export default {
       obj.autoplay = true;
       return obj;
     },
+    bSuggestions() {
+      if (this.topView === 'home') {
+        console.log(this.homeSuggest);
+        return this.homeSuggest;
+      }
+      return this.suggestions;
+    },
     topView() {
       return this.viewStack[this.viewStack.length - 1];
     },
     ...mapState('source', [
       'selectedSourceURL',
     ]),
+     ...mapGetters('home', {
+      homeSuggest: 'GET_SUGGESTIONS',
+     }),
     ...mapState([
       'isRemoteEnabled',
       'viewStack',
+      'suggestions',
       'isBixbyActive',
     ]),
   },
@@ -58,6 +85,16 @@ export default {
     }),
     exitCB() {
       this.removeComponent();
+    },
+    startSlideShow() {
+      clearInterval(this.intervalId);
+      this.intervalId = setInterval(() => {
+        this.index = (((this.index) + 1) % this.bSuggestions.length);
+      }, 5000);
+    },
+    stopSlideShow() {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     },
     returnCB() {
     },
@@ -82,6 +119,8 @@ export default {
     return {
       isResult: false,
       showResult: false,
+      intervalId: null,
+      index: 0,
     };
   },
   components: {
@@ -91,6 +130,12 @@ export default {
     screensaver,
     // result,
   },
+  watch: {
+    isRemoteEnabled(val, old) {
+      if (!val) this.startSlideShow();
+      else this.stopSlideShow();
+    },
+  }
 };
 </script>
 
@@ -117,6 +162,78 @@ export default {
     height: 1080 * $s;
     z-index:22;
 
+  }
+  .backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/bgbg.png');
+    background-size: 100%;
+  }
+    .bixby-suggestions {
+    position: absolute;
+    bottom: 0;
+    height: 135 * $s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .text-suggestion {
+      position: absolute;
+      top: 35%;
+      left: 132 * $s;
+      // top: -3 * $s;
+      font-size: 32 * $s;
+        &.slideshow-enter {
+          opacity: 0;
+        }
+        &.slideshow-leave-to {
+          opacity: 0;
+        }
+        &.slideshow-enter-active{
+          transition: opacity 0.3s ease;
+        }
+        &.slideshow-leave-active {
+          transition: opacity 0.3s ease;
+        }
+      .text {
+        font-family: SamsungOneUI300;
+      }
+      .suggestions {
+        font-size: 31 * $s;
+        font-family: SamsungOneUI700;
+      }
+    }
+    .pagination-dots {
+      position: absolute;
+      right: 70 * $s;
+      display: flex;
+      width: 84 * $s;
+      justify-content: space-between;
+      .dots {
+        height: 10* $s;
+        width: 10* $s;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.2);
+        &.selected {
+          background-color: rgba(0,0,0,1)
+        }
+      }
+    }
+    &.show-enter {
+      opacity: 0;
+    }
+    &.show-leave-to {
+      opacity: 0;
+    }
+    &.show-enter-active{
+      transition: height 0.3s ease, opacity 0.3s ease;
+    }
+    &.show-leave-active {
+      transition: height 0.3s ease, opacity 0.3s ease;
+    }
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.4s ease;
