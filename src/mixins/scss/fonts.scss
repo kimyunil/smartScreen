@@ -27,3 +27,37 @@
     font-family: SamsungOneUI700;
     src: url('/resources/fonts/SamsungOneUI/SamsungOneUI-700.ttf');
 }
+
+@font-face {
+    font-family: TTNormsBlack;
+    src: url('/static/fonts/TTNorms-Black.otf');
+}
+
+@font-face {
+    font-family: TTNormsHeavy;
+    src: url('/static/fonts/TTNorms-Heavy.otf');
+}
+
+@font-face {
+    font-family: TTNormsItalic;
+    src: url('/static/fonts/TTNorms-Italic.otf');
+}
+
+@font-face {
+    font-family: TTNormsLight;
+    src: url('/static/fonts/TTNorms-Light.otf');
+}
+
+@font-face {
+    font-family: TTNormsMedium;
+    src: url('/static/fonts/TTNorms-Medium.otf');
+}
+
+@font-face {
+    font-family: TTNormsRegular;
+    src: url('/static/fonts/TTNorms-Regular.otf');
+}
+@font-face {
+    font-family: TTNormsThin;
+    src: url('/static/fonts/TTNorms-Thin.otf');
+}

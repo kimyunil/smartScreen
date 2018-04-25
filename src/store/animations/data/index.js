@@ -1,9 +1,9 @@
 
-import invokeData from './01_line_invoke.json';
-import listenData from './02_line_listening.json';
-import thinkData from './03_line_thinking.json';
-import wipeoffData from './04_line_wipe_off.json';
-import revealData from './05_line_reveal.json';
+import invokeData from './json/01_line_invoke_v02.json';
+import listenData from './json/02_line_listening_v02.json';
+import thinkData from './json/03_line_thinking_v02.json';
+import wipeoffData from './json/04_line_wipe-off_v02.json';
+import revealData from './json/05_line_reveal_v02.json';
 import standby1Data from './06_line_standby_pulse_1.json';
 import standby2Data from './07_line_standby_pulse_2.json';
 
