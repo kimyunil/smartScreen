@@ -117,7 +117,7 @@ export default {
     width: 100%;
     height: 100%;
     transition: opacity 0.4s ease;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,1);
   }
   .time {
     position: absolute;

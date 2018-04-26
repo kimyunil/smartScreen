@@ -1,4 +1,4 @@
-import mark_540 from './json/mark_540.json';
+import markAlpha from './json/mark_540.json';
 
 export default {
   movies: {
@@ -10,7 +10,7 @@ export default {
           renderer: 'svg',
           loop: false,
           autoplay: false,
-          animationData: mark_540,
+          animationData: markAlpha,
         },
         heading: ['Here are', 'b-text:movies', 'with', 'b-text:Tom Hanks'],
         result: ['item1', 'item2', 'item3'],

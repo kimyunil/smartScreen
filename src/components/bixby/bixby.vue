@@ -37,7 +37,7 @@ export default {
     console.log(document.getElementById('clipmotion_result'));
     if (!document.getElementById('clipmotion_result')) {
       const div = document.createElement('div');
-      div.setAttribute('id', 'clipmotion_result')
+      div.setAttribute('id', 'clipmotion_result');
       div.classList.add('clipmotion_result');
       console.log(document.body);
       document.body.appendChild(div);
@@ -76,7 +76,7 @@ export default {
     ...mapActions({
       closeVoice: 'CLOSE_VOICE',
     }),
-    ...mapMutations('bixby',{
+    ...mapMutations('bixby', {
       resetResult: 'RESET_RESULT',
     }),
     ...mapActions('bixby', {
@@ -101,14 +101,10 @@ export default {
           this.updateBixby('think');
           break;
         case 'FOUR': {
-          if (true) {
-            this.defaultOptions.loop = false;
-            this.translate = this.default;
-            this.updateBixby('wipeoff');
-            this.translate = 0;
-          } else {
-            // bixby Nagging
-          }
+          this.defaultOptions.loop = false;
+          this.translate = this.default;
+          this.updateBixby('wipeoff');
+          this.translate = 0;
           break;
         }
         case 'FIVE':
@@ -148,7 +144,7 @@ export default {
     noResultWipe() {
       this.resetResult();
       this.utilClass = '';
-      const ret = this.set_result({ category: 'movies', starrer: 'tom_hanks' });
+      this.set_result({ category: 'movies', starrer: 'tom_hanks' });
       this.updateBixby('reveal');
       if (this.clipAnim === null) {
         this.clipAnim = lottie.loadAnimation({
@@ -301,9 +297,8 @@ export default {
         }
       }
       &.show-result {
-        .result-data {
-
-        }
+        // .result-data {
+        // }
         .result-template {
           transform: translateY(0%);
           transition: transform 0.5s cubic-bezier(.33,0,.83,1);

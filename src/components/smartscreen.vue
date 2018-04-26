@@ -2,7 +2,7 @@
   <div class="smart-screen">
     <div class="backdrop">
     </div>
-    <transition-group name="fade" tag="div">
+    <transition-group name="fade" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
@@ -28,6 +28,8 @@ import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
 import screensaver from './screensaver/screensaver';
+import hbo from './hbo/hbo';
+import hulu from './hulu/hulu';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -130,6 +132,8 @@ export default {
   components: {
     vSource,
     bixby,
+    hbo,
+    hulu,
     home,
     screensaver,
     // result,
@@ -166,6 +170,11 @@ export default {
     height: 1080 * $s;
     z-index:22;
 
+  }
+  .component {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
   .backdrop {
     position: absolute;
