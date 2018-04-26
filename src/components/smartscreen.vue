@@ -82,6 +82,7 @@ export default {
       removeComponent: 'REMOVE_COMPONENT',
       switch_comp: 'SWITCH_COMPONENT',
       launchVoice: 'LAUNCH_VOICE',
+      closeVoice: 'CLOSE_VOICE',
     }),
     exitCB() {
       this.removeComponent();
@@ -101,6 +102,9 @@ export default {
     handleKeyDown(type) {
       switch (type) {
         case 'VOICE':
+          if (this.isBixbyActive) {
+            this.closeVoice();
+          }
           this.heyBixby();
           break;
         default:

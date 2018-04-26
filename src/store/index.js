@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import animation from '@/store/animations/';
 import source from '@/store/source/';
-import result from '@/store/result/';
+import bixby from '@/store/bixby/';
 import home from '@/store/home/';
 import config from './config';
 
@@ -75,7 +75,7 @@ const store = new Vuex.Store({
   modules: {
     animation,
     source,
-    result,
+    bixby,
     home,
   },
 });

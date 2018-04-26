@@ -1,44 +1,41 @@
 <template>
-  <transition appear name="slide">
-    <div class="result-container">
+    <div class="result">
       <div class="h-list">
-        <div class="head">
+        <!-- <div class="head">
           <template v-for="item in data.heading">
             <span :key="item" :class="(item.split(':').length > 1 ? item.split(':')[0] :'') ">
               {{(item.split(':').length > 1 ? item.split(':')[1] : item.split(':')[0])}}
             </span>
           </template>
-        </div>
+        </div> -->
         <div class="list">
           <div v-for="item in data.result" class="item" :key="item">
               <img :src="data[item].url"/>
           </div>
         </div>
       </div>
-      </div>
-  </transition>
+    </div>
 </template>
 <script>
 export default {
   mounted() {
-    // console.log(this.data);
   },
   props: ['data'],
 };
 </script>
 <style scoped lang="scss">
  @import '../../../mixins/scss/main';
- .result-container {
-    position: absolute;
+ .result {
+    position: relative;
     width: 100%;
     bottom: 0;
-    height: 670 * $s;
+    height: auto;
     overflow: hidden;
   .h-list {
-    position: absolute;
+    position: relative;
     width: 100%;
     bottom: 0;
-    height: 670 * $s;
+    height: auto;
     overflow: hidden;
     .head {
         position: relative;
@@ -63,6 +60,7 @@ export default {
         position: relative;
         width: 800 * $s;
         height: 385 * $s;
+        margin-bottom: 60 * $s;
         background: grey;
         img {
           height: 100%;
@@ -73,24 +71,6 @@ export default {
       }
     }
   }
-   &.slide-enter {
-     transform: translateY(410px);
-     .h-list {
-       transform: translateY(-110px);
-     }
-   }
-    &.slide-enter-to {
-     transform: translateY(0);
-     .h-list {
-       transform: translateY(0px);
-     }
-   }
-   &.slide-enter-active {
-     .h-list {
-       transition: transform 0.5s;
-     }
-     transition: transform 0.5s;
-   }
  }
 
 </style>

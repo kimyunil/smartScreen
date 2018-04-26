@@ -23,7 +23,7 @@ export default {
     sttComplete(param) {
       if (this.bixbyState === 'listen' && this.bixbyState !== 'think') {
         clearTimeout(this.timeout);
-        //give some time to user to update
+        // give some time to user to update
         this.timeout = setTimeout(() => {
           this.showSpeechText = true;
           this.defaultOptions.loop = true;
@@ -31,7 +31,7 @@ export default {
           Messages.send('audio-input.stop');
         }, 3000);
       }
-      // this.text = param;
+      this.text = param;
     },
   },
 };

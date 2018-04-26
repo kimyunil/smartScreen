@@ -2,7 +2,7 @@
 export default {
   namespaced: true,
   state: {
-    selectedSourceURL: '/static/videos/tom_hanks_v01b_no_line.mp4',
+    selectedSourceURL: '/resources/ambient/Mountain/forest_long.mp4',
     metataData: {
       title: 'breaking bad',
       rating: 'sample',
