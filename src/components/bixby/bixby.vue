@@ -172,7 +172,7 @@ export default {
       // this.clipAnim.goToAndStop(0);
       setTimeout(() => {
         this.clipAnim.play(0);
-      }, 100);
+      }, 150);
     },
     onCompleteAnim() {
       if (this.bixbyState === 'wipeoff') {
@@ -180,7 +180,6 @@ export default {
         if (!this.showResult) {
           this.noResultWipe();
         } else {
-          this.wipeResult();
         }
       }
     },

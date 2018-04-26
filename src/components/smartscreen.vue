@@ -30,6 +30,7 @@ import home from './home/home';
 import screensaver from './screensaver/screensaver';
 import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
+import volume from './system/volume';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -80,6 +81,10 @@ export default {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
+    ...mapMutations('source', {
+      updateVolume: 'UPDATE_VOLUME',
+      toggleMute: 'TOGGLE_MUTE',
+    }),
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
       switch_comp: 'SWITCH_COMPONENT',
@@ -109,6 +114,16 @@ export default {
           }
           this.heyBixby();
           break;
+        case 'VOLUME_UP':
+          this.switch_comp({ name: 'volume' });
+          this.updateVolume('++');
+          break;
+        case 'VOLUME_DOWN':
+          this.updateVolume('--');
+          break;
+        case 'MUTE':
+          this.toggleMute();
+          break;
         default:
           break;
       }
@@ -135,6 +150,7 @@ export default {
     hbo,
     hulu,
     home,
+    volume,
     screensaver,
     // result,
   },
