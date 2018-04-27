@@ -11,19 +11,19 @@ export default {
         title: 'dailyyoga',
       },
       headspace: {
-        img: 'static/Images/home/health/apps/bb1.png',
+        img: 'static/Images/home/health/apps/bb3.png',
         title: 'headspace',
       },
       dailyburn: {
-        img: 'static/Images/home/health/apps/bb2.png',
+        img: 'static/Images/home/health/apps/bb4.png',
         title: 'dailyburn',
       },
       cody: {
-        img: 'static/Images/home/health/apps/bb1.png',
+        img: 'static/Images/home/health/apps/bb5.png',
         title: 'cody',
       },
       fitness: {
-        img: 'static/Images/home/health/apps/bb2.png',
+        img: 'static/Images/home/health/apps/bb6.png',
         title: 'Fitness',
       },
     },
@@ -82,6 +82,13 @@ export default {
         thumbnail: 'static/Images/home/health/content/tt10.png',
         icon: 'static/Images/home/health/icon/fitbit.png',
       },
+      gotofit: {
+        heading: '',
+        subheading: '',
+        goto: true,
+        thumbnail: 'static/Images/home/health/content/tt_fit.png',
+        icon: '',
+      },
     },
     details: {
       'page-1': {
@@ -118,7 +125,7 @@ export default {
         },
         fitbitcardio: {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
+          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance', 'gotofit'],
         },
       },
       'page-2': {
@@ -192,7 +199,7 @@ export default {
         },
         fitbitcardio: {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
+          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance', 'gotofit'],
         },
       },
     },

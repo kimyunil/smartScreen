@@ -1,20 +1,20 @@
 <template>
   <div id="app">
     <smartscreen/>
-    <videosource/>
+    <!-- <videosource/> -->
   </div>
 </template>
 
 <script>
 import smartscreen from './components/smartscreen';
-import videosource from './components/common/videoSource';
+// import videosource from './components/common/videoSource';
 
 
 export default {
   name: 'App',
   components: {
     smartscreen,
-    videosource,
+    // videosource,
   },
 };
 </script>

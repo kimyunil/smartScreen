@@ -1,5 +1,5 @@
 <template>
-  <div class="screensaver" :class="{'enabled': powerEnabled}">
+  <div class="screensaver" :class="{'enabled': powerEnabled, 'blur': !active}">
     <div class="backdrop">
     </div>
       <div class="time">
@@ -109,6 +109,7 @@ export default {
   overflow: hidden;
   position: absolute;
   background-size: 100%;
+  // background-image: url('./static/Images/background.png');
   .backdrop {
     position: absolute;
     left: 0;
@@ -117,7 +118,6 @@ export default {
     width: 100%;
     height: 100%;
     transition: opacity 0.4s ease;
-    background: rgba(0,0,0,1);
   }
   .time {
     position: absolute;
@@ -152,6 +152,17 @@ export default {
     }
     .time {
       color: grey;
+    }
+  }
+  &.blur {
+    .backdrop {
+      opacity: 0;
+    }
+    .weather {
+      opacity: 0;
+    }
+    .time {
+      opacity: 0;
     }
   }
 }

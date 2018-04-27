@@ -138,7 +138,7 @@ export default {
       this.intervalId = setInterval(() => {
         this.transitionName = 'slideshow';
         this.index = (((this.index) + 1) % this.grids.length);
-      }, 3000);
+      }, 10000);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
@@ -174,6 +174,11 @@ export default {
             this.scroll('down', top);
             this.focus = 'apps';
           }
+        }
+        if (this.pageIdx === 0) {
+          this.$emit('showHeader', true);
+        } else {
+          this.$emit('showHeader', false);
         }
       }
     },

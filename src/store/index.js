@@ -40,6 +40,7 @@ const store = new Vuex.Store({
       state.socketConnected = false;
     },
     SET_WEATHER(state, payload) {
+      console.log(payload);
       state.info.weather = payload;
     },
     REMOVE_IF_EXSIST(state, name) {

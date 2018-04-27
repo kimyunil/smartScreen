@@ -168,6 +168,11 @@ export default {
           }
         }
       }
+      if (this.pageIdx === 0) {
+        this.$emit('showHeader', true);
+      } else {
+        this.$emit('showHeader', false);
+      }
     },
   },
   data() {

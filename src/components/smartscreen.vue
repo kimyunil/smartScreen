@@ -1,13 +1,12 @@
 <template>
   <div class="smart-screen">
-    <div class="backdrop">
+    <div class="backdrop" :class="{'blur': viewStack.length > 1}">
     </div>
     <transition-group name="fade" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
     </transition-group>
-    <v-source class="video-source" :config="videoconfig"></v-source>
     <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
     <transition name="show">
         <div class="bixby-suggestions" v-if="!isRemoteEnabled" :style="{'z-index': (viewStack.length + 1)}" >
@@ -24,7 +23,6 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import vSource from './common/videoSource';
 import bixby from './bixby/bixby';
 import home from './home/home';
 import screensaver from './screensaver/screensaver';
@@ -151,7 +149,6 @@ export default {
     };
   },
   components: {
-    vSource,
     bixby,
     hbo,
     hulu,
@@ -177,6 +174,7 @@ export default {
   top: 0;
   width: 1920 * $s;
   height: 1080 * $s;
+  
   .video-source {
     position: absolute;
     width: 1920 * $s;
@@ -205,15 +203,21 @@ export default {
     opacity: 1;
     width: 100%;
     height: 100%;
-    background-image: url('/static/bgbg.png');
+    background-image: url('/static/Images/background.png');
+    transition: 0.5s -webkit-filter linear;
+    &.blur {
+      filter: blur(50px);
+      -webkit-filter: blur(50px);
+    }
+    // background-image: url('/static/bgbg.png');
     background-size: 100%;
   }
     .bixby-suggestions {
-    position: absolute;
-    bottom: 0;
-    height: 135 * $s;
-    width: 100%;
-    display: flex;
+      position: absolute;
+      bottom: 0;
+      height: 135 * $s;
+      width: 100%;
+      display: flex;
     align-items: center;
     .text-suggestion {
       position: absolute;
@@ -271,7 +275,7 @@ export default {
     }
   }
   .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.4s ease;
+    transition: opacity 0.4s linear;
     &.bixby {
       transition: none;
     }

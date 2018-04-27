@@ -2,18 +2,15 @@
   <div class="home">
     <div class="dashboard">
       <transition name="show">
-      <div class="header-cont" :class="{'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}" v-show="isRemoteEnabled || nav_selected != 0">
+      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}" v-show="isRemoteEnabled || nav_selected != 0">
           <div class="wrapper">
           <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
           </div>
       </div>
       </transition>
-      <!-- <div class="title">
-        {{navItems[nav_selected].title}}
-      </div> -->
       <div class="content-body" :class="[{'shrink':isRemoteEnabled,'squeeze-header': (isRemoteEnabled && !headerFocus)}, navItems[nav_selected].template]">
         <transition :name="direction">
-          <component :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
+          <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
       </div>
     </div>
@@ -70,6 +67,9 @@ export default {
         this.focus = 'header';
       }
     },
+    headerVisible(bool) {
+      this.showHeader = bool; 
+    },
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
@@ -78,7 +78,6 @@ export default {
           break;
         case 'UP':
           if (this.isRemoteEnabled) {
-            this.showHeader = true;
             if (this.focus === 'apps') {
               const top = this.$el.querySelector('.recent-apps').offsetHeight;
               this.scroll('up', top);
@@ -95,7 +94,7 @@ export default {
           break;
         case 'DOWN':
           if (this.isRemoteEnabled) {
-            this.showHeader = true;
+            this.showHeader = false; 
           }
           break;
         case 'LEFT':
@@ -106,7 +105,14 @@ export default {
           }
           break;
         case 'BACK':
-          this.$emit('exit');
+          if (this.isRemoteEnabled) {
+            if (!this.showHeader) {
+               this.showHeader = true; 
+            } else {
+              this.$emit('exit');
+              this.showHeader = true;
+            }
+          }
           break;
         default:
           break;
@@ -116,7 +122,7 @@ export default {
   data() {
     return {
       remote: true,
-      showHeader: false,
+      showHeader: true,
       direction: 'left',
       index: 0,
       focus: 'content',
@@ -145,9 +151,8 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('/static/bgbg.png');
-  background-color: grey;
-  background-size: 100%;
+  background-image: url('/static/Images/home/home_bg.png');
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   .dashboard {
     position: absolute;
@@ -186,6 +191,9 @@ export default {
       }
       &.show-leave-active {
         transition: height 0.3s ease, opacity 0.2s ease;
+      }
+      &.hideHeader {
+        opacity: 0;
       }
     }
     .title {

@@ -14,11 +14,11 @@
         </div>
       </template>
       <template v-if="itemType === 'thumbnail'">
-        <div class="thumbnail item" :style="{'left': `${ (($index * 500) * 100) / 1920}vw`}" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+        <div class="thumbnail item" :style="[{'left': `${ (($index * 500) * 100) / 1920}vw`}]" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'goto': item.goto},{'selected': focus && $index === index}]">
           <div class="bg-thumb-cont" :style="[{'background-image': `url(${item.thumbnail})`}]">
             <!-- <img class="bg-thumb" :src="item.thumbnail"/> -->
           </div>
-          <div class="footer-text">
+          <div class="footer-text" v-if="!item.goto">
              <div class="text">
                <div class="heading">
                  {{item.heading}}
@@ -102,7 +102,7 @@ export default {
       if (dir === 'left') {
         const eleDim = ele.offsetLeft + this.translateX;
         if (eleDim < 0) {
-          this.translateX = ele.offsetLeft;
+          this.translateX = ele.offsetLeft * -1;
         }
       } else {
         // const ele = this.$el.querySelectorAll('.list .apps')[this.index];
@@ -187,6 +187,15 @@ export default {
       &.selected {
         border-image: url("/static/Images/home/border.png") 30 round;
         border-width: 20 * $s;
+      }
+      &.goto {
+        width: 262 * $s;
+        height: 100%;
+         .bg-thumb-cont {
+            width: 100%;
+            height: 100%;
+            background-size: 100% 102%;
+         }
       }
       .bg-thumb-cont {
         position: relative;
