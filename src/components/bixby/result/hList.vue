@@ -1,18 +1,12 @@
 <template>
     <div class="result">
       <div class="h-list">
-        <!-- <div class="head">
-          <template v-for="item in data.heading">
-            <span :key="item" :class="(item.split(':').length > 1 ? item.split(':')[0] :'') ">
-              {{(item.split(':').length > 1 ? item.split(':')[1] : item.split(':')[0])}}
-            </span>
-          </template>
-        </div> -->
         <div class="list">
-          <div v-for="item in data.result" class="item" :key="item">
-              <img :src="data[item].url"/>
+          <div v-for="item in resultData.dataList" class="item" :key="item.url" :style="{'background-image': `url(${item.url})`}">
           </div>
         </div>
+      </div>
+      <div class="drivers">
       </div>
     </div>
 </template>
@@ -20,7 +14,12 @@
 export default {
   mounted() {
   },
-  props: ['data'],
+  props: {
+    resultData: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 <style scoped lang="scss">
@@ -37,39 +36,30 @@ export default {
     bottom: 0;
     height: auto;
     overflow: hidden;
-    .head {
-        position: relative;
-        margin-top: 135 * $s;
-        font-size: 48 * $s;
-        line-height: 48 * $s;
-        padding-left: 78 * $s;
-        color: white;
-        text-align: left;
-        font-family: SamsungOneUI200;
-      .b-text {
-        font-family: SamsungOneUI400;
-      }
-    }
     .list {
       position: relative;
       display: flex;
       height: auto;
-      left: 75 * $s;
-      top: 21 * $s;
+      left: 80 * $s;
+      top: 50 * $s;
       .item {
         position: relative;
-        width: 800 * $s;
-        height: 385 * $s;
+        width: 267 * $s;
+        height: 400 * $s;
         margin-bottom: 60 * $s;
         background: grey;
         img {
           height: 100%;
         }
         &:not(:first-child) {
-           margin-left: 10px;
+           margin-left: 10 * $s;
         }
       }
     }
+  }
+  .drivers {
+    position: relative;
+    height: 140 * $s;
   }
  }
 

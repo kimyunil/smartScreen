@@ -61,7 +61,7 @@ export default {
   watch: {
     volume(val) {
       if (!this.playerEle) return;
-      this.playerEle.volume = val * 0.1;
+      this.playerEle.volume = (val * 1) / 16;
     },
     playerState(val) {
       if (val) {

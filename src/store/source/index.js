@@ -30,7 +30,7 @@ export default {
     player: {
       volume: 5,
       muted: false,
-      maxVol: 10,
+      maxVol: 16,
       playerState: 0, // 0-play 1-pause
       url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4',
     },
@@ -46,14 +46,13 @@ export default {
     UPDATE_VOLUME(state, payload) {
       if (payload === '++') {
         if (state.player.volume < state.player.maxVol) {
-          state.player.volume++;
+          state.player.volume += 1;
         }
-      } else if(payload === '--') {
+      } else if (payload === '--') {
         if (state.player.volume > 0) {
-          state.player.volume--;
+          state.player.volume -= 1;
         }
       }
-      
     },
     TOGGLE_MUTE(state) {
       state.player.muted = !state.player.muted;

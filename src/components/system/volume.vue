@@ -22,8 +22,15 @@
 </template>
 <script>
 import { mapState } from 'vuex';
+import Messages from '../../services/Messages';
 
 export default {
+  mounted() {
+    Messages.$on('button_down', this.handleKeyDown);
+  },
+  destroyed() {
+    Messages.$off('button_down', this.handleKeyDown);
+  },
   computed: {
     ...mapState('source', {
       volume: state => state.player.volume,
@@ -35,6 +42,18 @@ export default {
         return '/static/Images/system/mute.png';
       }
       return '/static/Images/system/volume.png';
+    },
+  },
+  methods: {
+    handleKeyDown(type) {
+      if (!this.active) return;
+      switch (type) {
+        case 'BACK':
+          this.$emit('exit');
+          break;
+        default:
+          break;
+      }
     },
   },
 };

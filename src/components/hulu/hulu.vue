@@ -24,6 +24,7 @@ export default {
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    this.setPlayer({ url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4' });
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -48,6 +49,7 @@ export default {
     ...mapMutations('source', {
       updateComponent: 'UPDATE_HULU_COMP',
       returnHuluComp: 'RETURN_HULU_COMP',
+      setPlayer: 'UPDATE_PLAYER',
     }),
     exitCB(param) {
       if (param.from === 'splash') {

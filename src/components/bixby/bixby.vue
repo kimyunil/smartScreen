@@ -11,20 +11,24 @@
       <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
         <speech-text :sText="sText"></speech-text>
       </div>
+      <div class="bixby-response-text" :class="{'hideText': !showResponseText}" v-if="response !== ''">
+        <response :response="response" :isSpeechEnabled="text!==''"></response>
+      </div>
     </div>
-    <div class="result-container" :class="{'show-result': showResult}" :style="[{'transform': `translateY(${resTrans}vw)`}, {'clip-path': clippath}]">
+    <div class="result-container" :class="{'show-result': isResult}" :style="[{'transform': `translateY(${resTrans}vw)`}, {'clip-path': clippath}]">
       <div class="result-data">
-        <component v-if="result" :is="result.template" :data="result" class="result-template"> </component>
+        <component v-if="result && result.data" :is="result.data.template" :resultData="result" class="result-template"> </component>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import lottie from 'lottie-web';
+// import lottie from 'lottie-web';
 import weblottie from '../common/lottie';
 import Messages from '../../services/Messages';
 import speechText from './speechText';
+import response from './responseText';
 import listeners from './listeners';
 import hList from './result/hList';
 
@@ -94,6 +98,7 @@ export default {
           this.updateBixby('invoke');
           break;
         case 'TWO':
+          this.showSpeechText = true;
           this.text = 'Show me movies with Tom Hanks';
           this.updateBixby('listen');
           break;
@@ -101,6 +106,8 @@ export default {
           this.updateBixby('think');
           break;
         case 'FOUR': {
+          this.showSpeechText = false;
+          this.showResponseText = true;
           this.defaultOptions.loop = false;
           this.translate = this.default;
           this.updateBixby('wipeoff');
@@ -128,10 +135,11 @@ export default {
     resetBixby() {
       this.resetResult();
       this.utilClass = '';
-      this.showResult = false;
+      this.isResult = false;
       this.updateBixby('invoke');
       this.resTranslate = 0;
       this.clippath = '';
+      this.response = '';
       if (this.clipAnim) {
         this.clipAnim.goToAndStop(0);
       }
@@ -141,45 +149,62 @@ export default {
       this.anim = anim;
       this.anim.addEventListener('complete', this.onCompleteAnim);
     },
-    noResultWipe() {
-      this.resetResult();
+    showResult() {
+      this.showSpeechText = false;
+      this.showResponseText = true;
+      this.defaultOptions.loop = false;
+      this.translate = this.default;
+      this.updateBixby('wipeoff');
+      this.translate = 0;
+      this.isResult = false;
+    },
+    revealResult() {
       this.utilClass = '';
-      this.set_result({ category: 'movies', starrer: 'tom_hanks' });
+      this.showResponseText = true;
+      this.set_result({ category: 'movies', subcategory: 'action' });
+      this.response = this.result.data.response;
       this.updateBixby('reveal');
-      if (this.clipAnim === null) {
-        this.clipAnim = lottie.loadAnimation({
-          container: document.getElementById('clipmotion_result'), // the dom element
-          renderer: 'svg',
-          loop: false,
-          autoplay: false,
-          animationData: this.result.clipanim.animationData, // the animation data
-        });
-      }
-      window.anim = this.clipAnim;
+      // if (this.clipAnim === null) {
+      //   this.clipAnim = lottie.loadAnimation({
+      //     container: document.getElementById('clipmotion_result'), // the dom element
+      //     renderer: 'svg',
+      //     loop: false,
+      //     autoplay: false,
+      //     animationData: this.result.data.clipanim.animationData, // the animation data
+      //   });
+      // }
+      // window.anim = this.clipAnim;
+      // const clip = document.querySelector('#clipmotion_result svg g g').getAttribute('clip-path');
+      // this.clippath = clip;
       setTimeout(() => {
         const temp = this.$el.querySelector('.result-data').offsetHeight;
-        this.showResult = true;
-        this.resTranslate = temp * -1;
-        this.translate = (temp - (this.default / 2)) * -1;
-      }, 0);
-      const clip = document.querySelector('#clipmotion_result svg g g').getAttribute('clip-path');
-      this.clippath = clip;
+        this.isResult = true;
+        this.resTranslate = (temp + 150) * -1;
+        this.translate = (temp + 150) * -1;
+      }, 10);
+    },
+    noResultWipe() {
+      this.revealResult();
     },
     wipeResult() {
-      this.translate = 0;
       this.utilClass = 'clear';
+      this.showResponseText = false;
+      this.showSpeechText = false;
+      this.resTranslate = (0) * -1;
+      this.translate = (0) * -1;
+      this.isResult = false;
       this.updateBixby('wipeoff');
       // this.clipAnim.goToAndStop(0);
-      setTimeout(() => {
-        this.clipAnim.play(0);
-      }, 150);
+      // setTimeout(() => {
+      //   this.clipAnim.play(0);
+      // }, 100);
     },
     onCompleteAnim() {
       if (this.bixbyState === 'wipeoff') {
         // alert();
-        if (!this.showResult) {
+        this.text = '';
+        if (!this.isResult) {
           this.noResultWipe();
-        } else {
         }
       }
     },
@@ -196,9 +221,11 @@ export default {
   data() {
     return {
       text: '',
+      response: '',
       clipAnim: null,
       showSpeechText: false,
-      showResult: false,
+      showResponseText: false,
+      isResult: false,
       translate: 0,
       utilClass: '',
       clippath: '',
@@ -223,6 +250,7 @@ export default {
   components: {
     weblottie,
     speechText,
+    response,
     hList,
   },
 };
@@ -248,7 +276,7 @@ export default {
     &.wipeoff {
       transition: transform 0.5s cubic-bezier(.33,0,.83,1);
       &.clear {
-        transition: transform 1.5s cubic-bezier(.33,0,.83,1);
+        transition: transform 0.5s cubic-bezier(.33,0,.83,1);
       }
     }
     &.reveal {
@@ -258,15 +286,28 @@ export default {
   .bixby-speech-text {
     position: absolute;
     width: 100%;
-    top: 0;
-    height: 100%;
+    top: 20 * $s;
+    height: 150 * $s;
     font-size: 64 * $s;
     color: white;
     left: 90 * $s;
     font-family: TTNormsLight;
-    transition: transform 0.8s ease, opacity 0.8s ease;
+    transition: opacity 0.8s ease;
     &.hideText {
-      transform: translateY(150px);
+      opacity: 0;
+    }
+  }
+  .bixby-response-text {
+    position: absolute;
+    width: 100%;
+    top: 20 * $s;
+    height: 150 * $s;
+    font-size: 64 * $s;
+    color: white;
+    left: 90 * $s;
+    font-family: TTNormsLight;
+    transition: opacity 0.8s ease;
+    &.hideText {
       opacity: 0;
     }
   }
@@ -274,7 +315,7 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 540 * $s;
+    top: (540 + 150) * $s;
     // background: red;
     overflow: hidden;
     transition: transform 0.5s cubic-bezier(.33,0,.83,1);
@@ -292,6 +333,7 @@ export default {
         .result-template {
           position: relative;
           transform: translateY(-80%);
+          transition: transform 0.5s cubic-bezier(.33,0,.83,1);
           // background: blue;
         }
       }
@@ -306,12 +348,13 @@ export default {
   }
 }
 </style>
-<style>
+<style lang="scss">
+@import '../../mixins/scss/main';
 .clipmotion_result {
   position: absolute;
   width: 100%;
-  width: 1920px;
-  height: 1080px;
+  width: 1920 * $s;
+  height: 1080 * $s;
   /* z-index:999; */
   top: 0;
   opacity: 0;

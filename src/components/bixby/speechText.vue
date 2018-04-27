@@ -28,6 +28,7 @@ export default {
     enter(ele, done) {
       const el = ele;
       const delay = el.dataset.index * 150;
+      el.style.transition = 'opacity 0.3s ease';
       setTimeout(() => {
         el.style.opacity = 1;
         done();

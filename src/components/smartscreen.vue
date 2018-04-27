@@ -114,6 +114,12 @@ export default {
           }
           this.heyBixby();
           break;
+        case 'ONE':
+          this.switch_comp({ name: 'hbo' });
+          break;
+        case 'TWO':
+          this.switch_comp({ name: 'hulu' });
+          break;
         case 'VOLUME_UP':
           this.switch_comp({ name: 'volume' });
           this.updateVolume('++');
