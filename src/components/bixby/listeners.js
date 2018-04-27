@@ -41,15 +41,17 @@ export default {
       this.text = param;
     },
     sttComplete(param) {
-      if (this.bixbyState === 'listen' && this.bixbyState !== 'think') {
+      if (this.bixbyState === 'listen') {
         clearTimeout(this.timeout);
         // give some time to user to update
         this.timeout = setTimeout(() => {
-          this.showSpeechText = true;
-          this.defaultOptions.loop = true;
-          this.updateBixby('think');
+          if (this.bixbyState === 'listen') {
+            this.showSpeechText = true;
+            this.defaultOptions.loop = true;
+            this.updateBixby('think');
+          }
           Messages.send('audio-input.stop');
-        }, 3000);
+        }, 2000);
       }
       this.text = param;
     },
@@ -69,6 +71,7 @@ export default {
         this.heyBixby();
       } else if (param.action === 'listen') {
         Messages.send('audio-input.start');
+        this.updateBixby('listen');
       } else if (param.action === 'close') {
         if (this.isBixbyActive) {
           this.resetBixby();

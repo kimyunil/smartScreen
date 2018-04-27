@@ -9,7 +9,7 @@
     </transition-group>
     <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
     <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled" :style="{'z-index': (viewStack.length + 1)}" >
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive" :style="{'z-index': (viewStack.length + 1)}" >
           <transition name="slideshow">
             <div class="text-suggestion" :key="index">
               <span class="text"> Say</span>
@@ -54,7 +54,6 @@ export default {
     },
     bSuggestions() {
       if (this.topView === 'home') {
-        console.log(this.homeSuggest);
         return this.homeSuggest;
       }
       return this.suggestions;
@@ -113,10 +112,14 @@ export default {
           this.heyBixby();
           break;
         case 'ONE':
-          this.switch_comp({ name: 'hbo' });
+          if (!this.isBixbyActive) {
+            this.switch_comp({ name: 'hbo' });
+          }
           break;
         case 'TWO':
-          this.switch_comp({ name: 'hulu' });
+          if (!this.isBixbyActive) {
+            this.switch_comp({ name: 'hulu' });
+          }
           break;
         case 'VOLUME_UP':
           this.switch_comp({ name: 'volume' });

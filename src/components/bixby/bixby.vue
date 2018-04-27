@@ -99,7 +99,7 @@ export default {
           break;
         case 'TWO':
           this.showSpeechText = true;
-          this.text = 'Show me movies with Tom Hanks';
+          this.text = 'Show me funny Movies';
           this.updateBixby('listen');
           break;
         case 'THREE':
@@ -139,7 +139,9 @@ export default {
       this.updateBixby('invoke');
       this.resTranslate = 0;
       this.clippath = '';
+      this.text = '';
       this.response = '';
+      this.defaultOptions.loop = false;
       if (this.clipAnim) {
         this.clipAnim.goToAndStop(0);
       }
@@ -210,6 +212,9 @@ export default {
     },
     changeAnimation() {
       if (this.bixbyState !== '') {
+        if (this.bixbyState  === 'listen') {
+          this.defaultOptions.loop = false;
+        }
         this.defaultOptions.animationData = undefined;
         this.$nextTick(() => {
           console.log(this.bixbyState, this.lottieanim);

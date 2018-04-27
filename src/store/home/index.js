@@ -27,7 +27,6 @@ export default {
     GET_SUGGESTIONS(state) {
       const navItem = state.data.navs.items[state.data.navs.selectedIdx];
       const category = state.data.navs.details[navItem].data;
-      console.log(category);
       return category.suggestions;
     },
     PAGE_SUB_CAT_HEALTH: state => (index) => {

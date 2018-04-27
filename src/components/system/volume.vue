@@ -65,10 +65,12 @@ export default {
     bottom: 46 * $s;
     width: 100%;
     height: 216 * $s;
+    
     display: flex;
     flex-direction: column;
     .icon {
       position: relative;
+      background-size: contain;
       width: 100%;
       height: 87 * $s;
       background-position: center;

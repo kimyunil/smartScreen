@@ -28,7 +28,7 @@ export default {
       },
     },
   },
-  suggestions: ['Tell me more About Fitness', 'Tell me more about Self Esteem', 'Show me npm...', 'Go to Health'],
+  suggestions: ['Tell me more About Fitness', 'Tell me more about Self Esteem', 'Show me npr...', 'Go to Health'],
   subCategory: {
   },
   pages: {

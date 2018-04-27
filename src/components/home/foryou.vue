@@ -31,7 +31,7 @@
       </transition>
     </div>
     <!-- <transition name="show"> -->
-      <div class="bixby-suggestions" v-if="!isRemoteEnabled">
+      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
         <div class="pagination-dots">
           <div class="dots"
             v-for="(i, idx) in grids"
@@ -64,6 +64,7 @@ export default {
   computed: {
     ...mapState([
       'isRemoteEnabled',
+      'isBixbyActive',
     ]),
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
