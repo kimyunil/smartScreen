@@ -69,6 +69,43 @@ const store = new Vuex.Store({
         state.viewStack.push(payload.name);
       }
     },
+    LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
+      switch(payload.category) {
+        case 'hbo':
+          state.source.source.currentSource = 'hbo';
+          while(state.source.source.hbo.subComp.length !== 0) {
+            state.source.source.hbo.subComp.pop();
+          }
+          state.source.source.hbo.subComp.push(payload.subcategory);
+          dispatch('SWITCH_COMPONENT', { replace: false, name:'hbo' });
+          break;
+        case 'hulu':
+          state.source.source.currentSource = 'hulu';
+          while(state.source.source.hbo.subComp.length !== 0) {
+            state.source.source.hbo.subComp.pop();
+          }
+          state.source.source.hbo.subComp.push(payload.subcategory);
+          dispatch('SWITCH_COMPONENT', { replace: false, name:'hulu' });
+          break;
+          case 'volume':
+            if (payload.data === 'decrease') {
+              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });
+              commit('source/UPDATE_VOLUME', '--');            
+            } else if (payload.data === 'increase'){
+              commit('source/UPDATE_VOLUME', '++');
+              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });  
+            } else if (payload.data === 'mute'){
+              commit('source/TOGGLE_MUTE');
+              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });
+            }
+            break;
+          case 'back': 
+            break;
+        default:
+          break;
+          
+      }
+    },
     REMOVE_COMPONENT({ state }) {
       state.viewStack.pop();
     },

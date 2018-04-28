@@ -164,7 +164,7 @@ export default {
     revealResult() {
       this.utilClass = '';
       this.showResponseText = true;
-      this.set_result({ category: 'info', subcategory: 'lostintrans' });
+      // this.set_result({ category: 'info', subcategory: 'lostintrans' });
       this.response = this.result.data.response;
       this.updateBixby('reveal');
       // if (this.clipAnim === null) {

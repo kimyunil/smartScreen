@@ -18,6 +18,7 @@ export default {
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
       switch_comp: 'SWITCH_COMPONENT',
+      launchComponent: 'LAUNCH_COMPONENT',
       launchVoice: 'LAUNCH_VOICE',
       closeVoice: 'CLOSE_VOICE',
     }),
@@ -55,9 +56,16 @@ export default {
       }
       this.text = param;
     },
-    updateBixbyResult(param) {
-      console.log(param);
-      this.resetResult();
+    updateBixbyResult(payload) {
+      console.log(payload);
+      if (payload.type === 'launch') {
+        this.launchComponent(payload.param);
+        return;
+      } else {
+        this.resetResult();
+        console.log(payload.param);
+        this.set_result(payload.param);
+      }
       // this.set_result(param);
       this.showResult();
     },
