@@ -17,7 +17,7 @@
     </div>
     <div class="result-container" :class="{'show-result': isResult}" :style="[{'transform': `translateY(${resTrans}vw)`}, {'clip-path': clippath}]">
       <div class="result-data">
-        <component v-if="result && result.data" :is="result.data.template" :resultData="result" class="result-template"> </component>
+        <component v-if="result && result.data" :class="result.data.contentType" :is="result.data.template" :resultData="result" class="result-template"> </component>
       </div>
     </div>
   </div>
@@ -30,7 +30,8 @@ import Messages from '../../services/Messages';
 import speechText from './speechText';
 import response from './responseText';
 import listeners from './listeners';
-import hList from './result/hList';
+import list from './result/list';
+import info from './result/infocard';
 
 export default {
   name: 'bixyby',
@@ -163,7 +164,7 @@ export default {
     revealResult() {
       this.utilClass = '';
       this.showResponseText = true;
-      this.set_result({ category: 'movies', subcategory: 'action' });
+      this.set_result({ category: 'info', subcategory: 'lostintrans' });
       this.response = this.result.data.response;
       this.updateBixby('reveal');
       // if (this.clipAnim === null) {
@@ -255,8 +256,9 @@ export default {
   components: {
     weblottie,
     speechText,
+    info,
     response,
-    hList,
+    list,
   },
 };
 </script>
@@ -267,7 +269,8 @@ export default {
   height: 100%;
   overflow: hidden;
   position: absolute;
-  background: linear-gradient(to top, rgba(0,0,0,0.4), rgba(255,255,255,0.1));
+  background-image: url('/static/Images/results/BGBG.png');
+  background-size: 100% 100%;
   .bixby-wrapper {
     top: 100%;
     width: 100%;

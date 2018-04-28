@@ -32,6 +32,7 @@ export default {
     play() {
       if (this.playerEle) {
         this.playerEle.play();
+        console.log('play');
       }
     },
     pause() {

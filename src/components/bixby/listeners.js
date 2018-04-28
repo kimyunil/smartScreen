@@ -58,7 +58,7 @@ export default {
     updateBixbyResult(param) {
       console.log(param);
       this.resetResult();
-      this.set_result(param);
+      // this.set_result(param);
       this.showResult();
     },
     bixbyaction(param) {

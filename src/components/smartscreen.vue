@@ -17,7 +17,8 @@
             </div>
           </transition>
         </div>
-     </transition>
+    </transition>
+    <music-player></music-player>
   </div>
 </template>
 
@@ -26,6 +27,8 @@ import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import bixby from './bixby/bixby';
 import home from './home/home';
 import screensaver from './screensaver/screensaver';
+import musicPlayer from './common/musicplayer';
+import spotify from './spotify/spotify';
 import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
 import volume from './system/volume';
@@ -157,7 +160,9 @@ export default {
     hulu,
     home,
     volume,
+    spotify,
     screensaver,
+    musicPlayer,
     // result,
   },
   watch: {
