@@ -213,7 +213,7 @@ export default {
     },
     changeAnimation() {
       if (this.bixbyState !== '') {
-        if (this.bixbyState  === 'listen') {
+        if (this.bixbyState === 'listen') {
           this.defaultOptions.loop = false;
         }
         this.defaultOptions.animationData = undefined;

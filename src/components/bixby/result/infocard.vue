@@ -28,9 +28,9 @@ export default {
     resultData: {
       type: Object,
       require: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped lang="scss">
  @import '../../../mixins/scss/main';

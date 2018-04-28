@@ -182,7 +182,6 @@ export default {
   top: 0;
   width: 1920 * $s;
   height: 1080 * $s;
-  
   .video-source {
     position: absolute;
     width: 1920 * $s;

@@ -68,7 +68,7 @@ export default {
       }
     },
     headerVisible(bool) {
-      this.showHeader = bool; 
+      this.showHeader = bool;
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -94,7 +94,7 @@ export default {
           break;
         case 'DOWN':
           if (this.isRemoteEnabled) {
-            this.showHeader = false; 
+            this.showHeader = false;
           }
           break;
         case 'LEFT':
@@ -107,7 +107,7 @@ export default {
         case 'BACK':
           if (this.isRemoteEnabled) {
             if (!this.showHeader) {
-               this.showHeader = true; 
+              this.showHeader = true;
             } else {
               this.$emit('exit');
               this.showHeader = true;

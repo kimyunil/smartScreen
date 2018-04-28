@@ -33,7 +33,7 @@ export default {
       state.result = result;
     },
     GET_INFO(state, payload) {
-      let result = {};
+      const result = {};
       if (state.db.info[payload.subcategory]) {
         result.data = state.db.info[payload.subcategory];
       }
@@ -48,9 +48,9 @@ export default {
     SET_RESULT({ commit }, payload) {
       if (payload.category === 'movies') {
         commit('GET_MOVIES', payload);
-      } else if(payload.category === 'music') {
+      } else if (payload.category === 'music') {
         commit('GET_MUSIC', payload);
-      } else if(payload.category === 'info') {
+      } else if (payload.category === 'info') {
         commit('GET_INFO', payload);
       }
     },

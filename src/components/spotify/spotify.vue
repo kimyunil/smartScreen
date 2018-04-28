@@ -39,8 +39,8 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import moment from 'moment';
+
+import { mapState } from 'vuex';
 
 export default {
   computed: {
@@ -48,25 +48,23 @@ export default {
       'musicplayer',
     ]),
     progress() {
-      return (this.musicplayer.elapsedTime/this.musicplayer.total) * 100;
+      return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
     total() {
-      let minutes = parseInt(this.musicplayer.total / 60);
-      let sec = parseInt((this.musicplayer.total % 60));
-      
+      let minutes = parseInt(this.musicplayer.total / 60, 10);
+      let sec = parseInt((this.musicplayer.total % 60), 10);
       if (minutes < 10) minutes = `0${minutes}`;
       if (sec < 10) sec = `0${sec}`;
       return `${minutes}:${sec}`;
     },
     elapsed() {
-      let minutes = parseInt(this.musicplayer.elapsedTime / 60);
-      let sec = parseInt((this.musicplayer.elapsedTime % 60));
-      
+      let minutes = parseInt(this.musicplayer.elapsedTime / 60, 10);
+      let sec = parseInt((this.musicplayer.elapsedTime % 60), 10);
       if (minutes < 10) minutes = `0${minutes}`;
       if (sec < 10) sec = `0${sec}`;
       return `${minutes}:${sec}`;
     },
-  }, 
+  },
 };
 </script>
 <style lang="scss" scoped>

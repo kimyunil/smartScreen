@@ -26,7 +26,7 @@ export default {
         loop: false,
         autoplay: false,
         animationData: markAlpha,
-      },      
+      },
     },
     starwar: {
       template: 'list',
@@ -135,5 +135,5 @@ export default {
         url: './static/Images/results/funny/funny6.png',
       },
     },
-  },    
-}
+  },
+};
