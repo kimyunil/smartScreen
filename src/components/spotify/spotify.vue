@@ -40,13 +40,38 @@
 </template>
 <script>
 
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
+  mounted() {
+    this.initiateTimer();
+  },
+  destroyed() {
+    clearTimeout(this.timeoutId);
+    this.timeoutId = null;
+  },
+  data() {
+    return {
+      timeoutId: null,
+    };
+  },
+  methods: {
+    ...mapActions({
+    switch_comp: 'SWITCH_COMPONENT',
+    }),
+    initiateTimer() {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+      this.timeoutId = setTimeout(() => {
+        this.switch_comp({ replace: true, name: 'home' });
+      }, 5000);
+    }
+  },
   computed: {
-    ...mapState('source', [
-      'musicplayer',
-    ]),
+    ...mapState('source', {
+      musicplayer: 'musicplayer',
+      thumbnail: state => state.musicplayer.thumbnail
+    }),
     progress() {
       return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
@@ -63,6 +88,11 @@ export default {
       if (minutes < 10) minutes = `0${minutes}`;
       if (sec < 10) sec = `0${sec}`;
       return `${minutes}:${sec}`;
+    },
+  },
+  watch: {
+    thumbnail(){
+      this.initiateTimer();
     },
   },
 };

@@ -19,7 +19,6 @@ const store = new Vuex.Store({
     isRemoteEnabled: false,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
     isBixbyActive: false,
-    bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
     socket: {
       connected: false,
       ip: '127.0.0.1',
@@ -29,9 +28,6 @@ const store = new Vuex.Store({
   mutations: {
     UPDATE_REMOTE_MODE(state, payload) {
       state.isRemoteEnabled = payload;
-    },
-    UPDATE_BIXBY(state, payload) {
-      state.bixbyState = payload;
     },
     CONNECTED(state) {
       state.socketConnected = true;
@@ -54,11 +50,11 @@ const store = new Vuex.Store({
   },
   actions: {
     LAUNCH_VOICE({ state, commit }) {
-      commit('UPDATE_BIXBY', 'invoke');
+      commit('bixby/UPDATE_BIXBY', 'invoke');
       state.isBixbyActive = true;
     },
     CLOSE_VOICE({ state, commit }) {
-      commit('UPDATE_BIXBY', '');
+      commit('bixby/UPDATE_BIXBY', 'initial');
       state.isBixbyActive = false;
     },
     SWITCH_COMPONENT({ state, commit }, payload) {
@@ -67,6 +63,41 @@ const store = new Vuex.Store({
         Vue.set(state.viewStack, state.viewStack.length - 1, payload.name);
       } else {
         state.viewStack.push(payload.name);
+      }
+    },
+    LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
+      console.log(payload.category);
+      switch (payload.category) {
+        case 'hulu': {
+          const appSource = state.source.source;
+          appSource.currentSource = 'hulu';
+          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
+            appSource.hbo.subComp.pop();
+          }
+          appSource.hbo.subComp.push(payload.subcategory);
+          if (payload.url) commit('source/UPDATE_PLAYER', { url: payload.url });
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hulu' });
+          break;
+        }
+        case 'hbo': {
+          const appSource = state.source.source;
+          appSource.currentSource = 'hbo';
+          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
+            appSource.hbo.subComp.pop();
+          }
+          appSource.hbo.subComp.push(payload.subcategory);
+          if (payload.url) commit('source/UPDATE_PLAYER', { url: payload.url });
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
+          break;
+        }
+        case 'spotify': {
+          console.log(payload.artist);
+          if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', { artist: payload.artist });
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'spotify' });
+          break;
+        }
+        default:
+          break;
       }
     },
     REMOVE_COMPONENT({ state }) {

@@ -47,9 +47,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 100%;
     left: 80 * $s;
-    top: 90 * $s;
-    width: calc(100% - #{160 * $s});
-    height: 100%;
+    margin-top: 90 * $s;
     &.everest-img {
       background-position: center;
       background-size: 1400 * $s 240 * $s;

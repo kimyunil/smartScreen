@@ -6,27 +6,30 @@ export default {
     Messages.$on('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$on('speech-to-text.transcription-update', this.sttUpdate);
     Messages.$on('launch.bixby', this.bixbyaction);
-    Messages.$on('bixby.result', this.updateBixbyResult);
+    Messages.$on('bixby.result', this.actionResult);
   },
   destroyed() {
     Messages.$off('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$off('speech-to-text.transcription-update', this.sttUpdate);
     Messages.$off('launch.bixby', this.bixbyaction);
-    Messages.$off('bixby.result', this.updateBixbyResult);
+    Messages.$off('bixby.result', this.actionResult);
   },
-  methods: {
-    ...mapActions({
-      removeComponent: 'REMOVE_COMPONENT',
-      switch_comp: 'SWITCH_COMPONENT',
-      launchVoice: 'LAUNCH_VOICE',
-      closeVoice: 'CLOSE_VOICE',
-    }),
+  computed: {
     ...mapState([
       'isRemoteEnabled',
       'viewStack',
       'suggestions',
       'isBixbyActive',
     ]),
+  },
+  methods: {
+    ...mapActions({
+      removeComponent: 'REMOVE_COMPONENT',
+      switch_comp: 'SWITCH_COMPONENT',
+      launchComponent: 'LAUNCH_COMPONENT',
+      launchVoice: 'LAUNCH_VOICE',
+      closeVoice: 'CLOSE_VOICE',
+    }),
     heyBixby() {
       this.launchVoice();
       Messages.send('audio-input.start');
@@ -38,7 +41,7 @@ export default {
         // this.defaultOptions.loop = true;
         this.updateBixby('listen');
       }
-      this.text = param;
+      this.speechText = param;
     },
     sttComplete(param) {
       if (this.bixbyState === 'listen') {
@@ -53,29 +56,34 @@ export default {
           Messages.send('audio-input.stop');
         }, 2000);
       }
-      this.text = param;
+      this.speechText = param;
     },
-    updateBixbyResult(param) {
-      console.log(param);
-      this.resetResult();
-      // this.set_result(param);
-      this.showResult();
+    actionResult(payload) {
+      if (payload.type === 'action') {
+        this.showResults(payload.param);
+      } else {
+        if (this.isBixbyActive) {
+          this.closeBixby(false);
+        }
+        this.launchComponent(payload.param);
+      }
     },
     bixbyaction(param) {
       console.log('launchBixby', param);
       if (param.action === 'launch') {
         if (this.isBixbyActive) {
-          this.resetBixby();
-          this.closeVoice();
+          this.closeBixby(true);
+        } else {
+          this.launchVoice();
         }
-        this.heyBixby();
       } else if (param.action === 'listen') {
         Messages.send('audio-input.start');
         this.updateBixby('listen');
       } else if (param.action === 'close') {
         if (this.isBixbyActive) {
-          this.resetBixby();
-          this.closeVoice();
+          this.closeBixby(false);
+          // this.resetBixby();
+          // this.closeVoice();
         }
       }
     },

@@ -1,7 +1,9 @@
+import musicDB from './music';
 
 export default {
   namespaced: true,
   state: {
+    musicDB,
     selectedSourceURL: '/resources/ambient/Mountain/forest_long.mp4',
     metataData: {
       title: 'breaking bad',
@@ -11,6 +13,7 @@ export default {
       currentSource: 'hbo',
       hbo: {
         splashActive: true,
+        default: '/resources/videos/hbo/GOT.mp4',
         subComp: ['home'], // home, player
         splash: {
           splashBG: '/static/Images/source/hbo.png',
@@ -21,6 +24,7 @@ export default {
       },
       hulu: {
         splashActive: true,
+        default: '/resources/videos/HBO_Family/maze_runner_scorch.mp4',
         subComp: ['player'], // home, player
         splash: {
           splashBG: '/static/Images/source/hulu.png',
@@ -42,7 +46,7 @@ export default {
       total: 0,
       thumbnail: '/static/Images/spotify/songs/thumbnail/phareell.png',
       playerState: 0, // 0-play 1-pause
-      url: '/resources/audio/MyMusic/major-lazer.mp3',
+      url: '',
     },
   },
   mutations: {
@@ -73,6 +77,14 @@ export default {
     SET_MUSIC_DURATION(state, payload) {
       state.musicplayer.total = payload;
     },
+    SET_MUSIC_DATA(state, payload) {
+      state.musicplayer.artist = payload.artist;
+      state.musicplayer.song = payload.song;
+      state.musicplayer.art = payload.art;
+      state.musicplayer.thumbnail = payload.thumbnail;
+      state.musicplayer.url = payload.url;
+      state.musicplayer.playerState = 0
+    },
     TOGGLE_MUTE(state) {
       state.player.muted = !state.player.muted;
     },
@@ -99,6 +111,29 @@ export default {
         state.source.hulu.subComp.splice(idx, 1);
       }
       state.source.hulu.subComp.push(payload);
+    },
+  },
+  actions: {
+    SET_MUSIC_PLAYER({ state, commit }, payload) {
+      console.log(payload.artist)
+      switch (payload.artist) {
+        case 'ariana':
+          commit('SET_MUSIC_DATA', state.musicDB.ariana.default);
+          break;
+        case 'coldplay':
+          commit('SET_MUSIC_DATA', state.musicDB.coldplay.default);
+          break;
+        case 'classical':
+          commit('SET_MUSIC_DATA', state.musicDB.classical.default);
+          break;
+        case 'mj':
+          commit('SET_MUSIC_DATA', state.musicDB.michael.default);
+          break;
+        case 'pharelle':
+          commit('SET_MUSIC_DATA', state.musicDB.pharrell.default);
+        default:
+          break;
+      }
     },
   },
 };

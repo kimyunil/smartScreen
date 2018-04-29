@@ -1,6 +1,6 @@
 <template>
   <div class="audio-player">
-    <audio :src="musicplayer.url" @loadstart="musicLoad(-1, $event)" @loadeddata="musicLoad(1, $event)" @timeupdate="updateTime($event)"/>
+    <audio :src="musicplayer.url" @loaderror="loadErrorCB" @loadstart="musicLoad(-1, $event)" @loadeddata="musicLoad(1, $event)" @timeupdate="updateTime($event)"/>
   </div>
 </template>
 <script>
@@ -43,6 +43,9 @@ export default {
     updateTime(event) {
       this.elapsedTime(event.target.currentTime);
     },
+    loadErrorCB() {
+      console.log('loadErrorCB');
+    },
     musicLoad(status, event) {
       console.log(status, event);
       if (status === -1) {
@@ -50,7 +53,7 @@ export default {
         this.elapsedTime(event.target.currentTime);
         this.totalDuration(event.target.duration);
       } else {
-        // this.updateState(0);
+        this.updateState(0);
         this.elapsedTime(event.target.currentTime);
         this.totalDuration(event.target.duration);
       }

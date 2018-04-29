@@ -85,6 +85,9 @@ export default {
       updateVolume: 'UPDATE_VOLUME',
       toggleMute: 'TOGGLE_MUTE',
     }),
+    ...mapMutations('bixby', {
+      updateBixby: 'UPDATE_BIXBY',
+    }),
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
       switch_comp: 'SWITCH_COMPONENT',

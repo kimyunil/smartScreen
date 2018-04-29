@@ -5,6 +5,7 @@ export default {
   state: {
     db: data,
     result: null,
+    bixbyState: 'initial', // ['initial', invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
   },
   mutations: {
     GET_MOVIES(state, payload) {
@@ -18,6 +19,9 @@ export default {
         }
       }
       state.result = result;
+    },
+    UPDATE_BIXBY(state, payload) {
+      state.bixbyState = payload;
     },
     GET_MUSIC(state, payload) {
       const result = {};
