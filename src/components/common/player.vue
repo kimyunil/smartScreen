@@ -88,7 +88,7 @@ export default {
         this.playerEle.muted = true;
       } else {
         this.playerEle.muted = false;
-        this.playerEle.volume = this.volume;
+        this.playerEle.volume = (this.volume * 1) / 16;
       }
     },
   },

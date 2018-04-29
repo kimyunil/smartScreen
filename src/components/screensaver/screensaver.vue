@@ -73,6 +73,7 @@ export default {
       }
     },
     getWeatherImg(code) {
+      /* eslint-disable no-tabs */
       let img = '';
       switch (code) {
         case 31: // clear (night)
@@ -83,21 +84,18 @@ export default {
         case 26: // cloudy
           img = 'cloudy';
           break;
-        case 20: //foggy
+        case 20: // foggy
           img = 'fog';
           break;
-        case 4:	// thunderstorms
-        case 5:	// mixed rain and snow
         case 6: // mixed rain and sleet
         case 7: // mixed snow and sleet
         case 18: // sleet
-        case 10:
         case 25: // cold
           img = 'ice, sleet, freezing rain';
           break;
         case 11: // showers
         case 12: // showers
-          img = 'shower'
+          img = 'shower';
           break;
         case 44: // partly cloudy
         case 29: // partly cloudy (night)
@@ -113,8 +111,6 @@ export default {
           img = 'thunderstorm';
           break;
         case 5:	// mixed rain and snow
-        case 6: // mixed rain and sleet
-        case 7: // mixed snow and sleet
           img = 'rain and snow mixed';
           break;
         case 13: // snow flurries
@@ -131,6 +127,7 @@ export default {
         case 42: // scattered snow showers
         case 35: // mixed rain and hail
           img = 'rain and snow mixed';
+          break;
         case 2:	// hurricane
         case 24: // windy
           img = 'windy';
@@ -156,8 +153,7 @@ export default {
         case 23://  blustery
           img = 'sandstorm';
           break;
-        case 0:
-        // tornado
+        case 0: // tornado
         case 1:	// tropical storm
           img = 'thundershowers with hail';
           break;

@@ -12,7 +12,7 @@
         ></weblottie>
       </div>
       <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
-        <speech-text :sText="sText"></speech-text>
+        <speech-text :sText="speechText"></speech-text>
       </div>
       <div class="bixby-response-text" :class="{'hideText': !showResponseText}" v-if="response !== ''">
         <response :response="response" :isSpeechEnabled="speechText!==''"></response>
@@ -44,8 +44,6 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.translate = this.default;
-    console.log(this.translate);
-    console.log(document.getElementById('clipmotion_result'));
     if (!document.getElementById('clipmotion_result')) {
       const div = document.createElement('div');
       div.setAttribute('id', 'clipmotion_result');
@@ -93,6 +91,7 @@ export default {
       window.anim = anim;
     },
     handleKeyDown(type) {
+      if (!this.active) return;
       switch (type) {
         case 'ONE':
           this.showSpeechText = true;

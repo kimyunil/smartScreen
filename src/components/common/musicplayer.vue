@@ -22,6 +22,8 @@ export default {
   computed: {
     ...mapState('source', {
       musicplayer: state => state.musicplayer,
+      volume: state => state.player.volume,
+      muted: state => state.player.muted,
       playstate: state => state.musicplayer.playerState,
     }),
     url() {
@@ -30,6 +32,19 @@ export default {
     },
   },
   watch: {
+    volume(val) {
+      if (!this.audioEle) return;
+      this.audioEle.volume = (val * 1) / 16;
+    },
+    muted(val) {
+      if (!this.audioEle) return;
+      if (val) {
+        this.audioEle.muted = true;
+      } else {
+        this.audioEle.muted = false;
+        this.audioEle.volume = (this.volume * 1) / 16;
+      }
+    },
     playstate(val) {
       if (val === 0) {
         this.play();

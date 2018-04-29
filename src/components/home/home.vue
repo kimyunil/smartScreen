@@ -29,9 +29,6 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
-    ...mapGetters('home', [
-      'navs',
-    ]),
     ...mapGetters('home', {
       navItems: 'GET_NAVS',
       grid_info: 'GET_CAT_GRID',

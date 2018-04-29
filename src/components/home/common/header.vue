@@ -2,7 +2,7 @@
   <transition name="show" appear>
     <div class="header">
       <div class="nav_list" :style="{'transform': `translateX(${translate}vw)`}">
-          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && hIdx === index)}, {'hide': (nav_selected !== index) && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && nav_selected !== 0 && !isRemoteEnabled && !focus},{'selected': selectedIdx === index}]">
+          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && nav_selected === index)}, {'hide': (nav_selected !== index) && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && nav_selected !== 0 && !isRemoteEnabled && !focus},{'selected': nav_selected === index}]">
           {{item.title}}
           </div>
       </div>
@@ -19,6 +19,7 @@ export default {
     this.$nextTick(() => {
       this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
       this.css.headerWidth = this.$el.offsetWidth;
+      this.translateHeadr(this.nav_selected);
     });
   },
   computed: {
@@ -53,6 +54,10 @@ export default {
     ...mapMutations('home', {
       selectHeaderItem: 'select_nav',
     }),
+    translateHeadr(index) {
+      const ele = this.$el.querySelectorAll('.nav-button')[index];
+      this.translateX = ((ele.offsetLeft) * -1);
+    },
     handleKeyDown(type) {
       if (!this.focus) return;
       switch (type) {
@@ -62,8 +67,6 @@ export default {
         case 'LEFT':
           if (this.hIdx > 0) {
             this.hIdx -= 1;
-            const ele = this.$el.querySelectorAll('.nav-button')[this.hIdx];
-            this.translateX = ((ele.offsetLeft) * -1);
           }
           this.selectHeaderItem(this.hIdx);
           break;
@@ -72,8 +75,6 @@ export default {
         case 'RIGHT':
           if (this.hIdx < this.navItems.length - 1) {
             this.hIdx += 1;
-            const ele = this.$el.querySelectorAll('.nav-button')[this.hIdx];
-            this.translateX = ((ele.offsetLeft) * -1);
           }
           this.selectHeaderItem(this.hIdx);
           break;
@@ -91,6 +92,12 @@ export default {
       },
       translateX: 0,
     };
+  },
+  watch: {
+    nav_selected(val) {
+      console.log(val);
+      this.translateHeadr(val);
+    },
   },
 };
 </script>

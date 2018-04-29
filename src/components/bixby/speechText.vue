@@ -1,17 +1,9 @@
 <template>
-  <transition-group
-    name="staggered-fade"
-    tag="div"
-    class="text-container"
-    v-bind:css="false"
-    v-on:before-enter="beforeEnter"
-     v-on:after-enter="afterEnter"
-    v-on:enter="enter"
-  >
-    <span v-for="(word, index) in sText" :key="index" v-bind:data-index="index" class="sText">
-        {{word}}
+  <div class="text-container">
+    <span class="sText">
+        {{sText}}
     </span>
-  </transition-group>
+  </div>
 </template>
 <script>
 
@@ -47,6 +39,7 @@ export default {
    text-align: left;
    .sText {
       color: white;
+      text-align: left;
       font-size: 64 * $s;
       font-family: SamsungOneUI200;
     }

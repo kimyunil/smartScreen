@@ -27,6 +27,14 @@ const store = new Vuex.Store({
       port: '2222',
     },
   },
+  getters: {
+    visibleComp(state) {
+      if (state.viewStack.length > 0) {
+        return state.gConfig.components[state.viewStack[state.viewStack.length - 1]];
+      }
+      return {};
+    },
+  },
   mutations: {
     UPDATE_REMOTE_MODE(state, payload) {
       state.isRemoteEnabled = payload;
@@ -44,7 +52,6 @@ const store = new Vuex.Store({
       state.info.todays = payload;
     },
     SET_WEATHER(state, payload) {
-      console.log(payload);
       state.info.weather = payload;
       state.info.todays = payload.condition;
     },
@@ -55,6 +62,14 @@ const store = new Vuex.Store({
           break;
         }
       }
+      // remove other type;
+      const tConfig = state.gConfig.components;
+      for (let i = state.viewStack.length - 1; i !== -1; i -= 1) {
+        const stkComp = state.viewStack[i];
+        if (tConfig[stkComp].type === tConfig[name].type) {
+          state.viewStack.splice(i, 1);
+        }
+      }
     },
   },
   actions: {
@@ -62,30 +77,53 @@ const store = new Vuex.Store({
       if (cpName === 'spotify') {
         state.source.musicplayer.details.save.key = 'spotify';
         commit('home/SAVE_CONT_DATA', state.source.musicplayer.details.save);
-      } else if(cpName === 'hbo' || cpName === 'hulu') {
+      } else if (cpName === 'hbo' || cpName === 'hulu') {
         state.source.player.details.save.key = cpName;
         commit('home/SAVE_CONT_DATA', state.source.player.details.save);
       }
     },
-    LAUNCH_VOICE({ state, commit }) {
+    LAUNCH_VOICE({ state, commit, dispatch }) {
       commit('bixby/UPDATE_BIXBY', 'invoke');
+      dispatch('REMOVE_COMPONENT_TYPE', { type: 'system' });
       state.isBixbyActive = true;
     },
     CLOSE_VOICE({ state, commit }) {
       commit('bixby/UPDATE_BIXBY', 'initial');
       state.isBixbyActive = false;
     },
-    SWITCH_COMPONENT({ state, commit }, payload) {
+    SWITCH_COMPONENT({ state, commit, getters }, payload) {
       commit('REMOVE_IF_EXSIST', payload.name);
       if (payload.replace) {
-        Vue.set(state.viewStack, state.viewStack.length - 1, payload.name);
+        let idx = state.viewStack.length - 1;
+        if (idx < 0) idx = 0;
+        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+          // dont remove system if it exist at top
+          console.log(idx);
+          state.viewStack.splice(idx, 0, payload.name);
+        } else {
+          state.viewStack.splice(idx, 1, payload.name);
+        }
       } else {
-        state.viewStack.push(payload.name);
+        let idx = state.viewStack.length - 1;
+        if (idx < 0) idx = 0;
+        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+          // dont remove system if it exist at top
+          state.viewStack.splice(idx, 0, payload.name);
+        } else {
+          state.viewStack.push(payload.name);
+        }
       }
     },
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
       console.log(payload.category);
       switch (payload.category) {
+        case 'home': {
+          commit('home/select_nav', payload.subcategory);
+          if (state.viewStack[state.viewStack.length - 1] !== 'home') {
+            dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
+          }
+          break;
+        }
         case 'hulu': {
           const appSource = state.source.source;
           appSource.currentSource = 'hulu';
@@ -109,17 +147,34 @@ const store = new Vuex.Store({
           break;
         }
         case 'spotify': {
-          if (state.viewStack[state.viewStack.length - 1] === 'home') dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotify' });
-          else dispatch('SWITCH_COMPONENT', { replace: false, name: 'spotify' });
+          dispatch('SWITCH_COMPONENT', { name: 'spotify' });
           if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', { artist: payload.artist });
+          break;
+        }
+        case 'volume': {
+          commit('source/UPDATE_VOLUME', payload.data);
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
           break;
         }
         default:
           break;
       }
     },
-    REMOVE_COMPONENT({ state }) {
+    REMOVE_COMPONENT_TYPE({ state }, payload) {
+      const name = payload.type;
+      const tConfig = state.gConfig.components;
+      for (let i = state.viewStack.length - 1; i !== -1; i -= 1) {
+        const stkComp = state.viewStack[i];
+        if (tConfig[stkComp].type === name) {
+          state.viewStack.splice(i, 1);
+        }
+      }
+    },
+    REMOVE_COMPONENT({ state, dispatch }) {
       state.viewStack.pop();
+      if (state.viewStack.length === 0) {
+        dispatch('SWITCH_COMPONENT', { replace: false, name: 'screensaver' });
+      }
     },
   },
   modules: {

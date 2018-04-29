@@ -35,6 +35,8 @@ export default {
     },
     player: {
       volume: 5,
+      isDimVol: false,
+      bckVol: 5,
       details: null,
       muted: false,
       maxVol: 16,
@@ -50,6 +52,15 @@ export default {
     },
   },
   mutations: {
+    SET_VOlUME_DIM(state, payload) {
+      state.player.isDimVol = payload;
+      if (payload) {
+        state.player.bckVol = state.player.volume;
+        state.player.volume = 2;
+      } else {
+        state.player.volume = state.player.bckVol;
+      }
+    },
     UPDATE_PLAYER(state, payload) {
       const arr = Object.keys(payload);
       for (let i = 0; i < arr.length; i += 1) {
@@ -58,6 +69,7 @@ export default {
       }
     },
     UPDATE_VOLUME(state, payload) {
+      if (state.player.isDimVol) return;
       if (payload === '++') {
         if (state.player.volume < state.player.maxVol) {
           state.player.volume += 1;
@@ -66,6 +78,8 @@ export default {
         if (state.player.volume > 0) {
           state.player.volume -= 1;
         }
+      } else if (payload === 'mute') {
+        state.player.muted = !state.player.muted;
       }
     },
     SET_MUSIC_ELAPSED(state, payload) {

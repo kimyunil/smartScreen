@@ -69,7 +69,7 @@ export default {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
       this.timeoutId = setTimeout(() => {
-        this.switch_comp({ replace: true, name: 'home' });
+        this.switch_comp({ replace: false, name: 'home' });
       }, 5000);
     },
   },

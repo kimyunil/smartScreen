@@ -9,7 +9,7 @@
     </transition-group>
     <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
     <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive" :style="{'z-index': (viewStack.length + 1)}" >
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion" :style="{'z-index': (viewStack.length + 1)}" >
           <transition name="slideshow">
             <div class="text-suggestion" :key="index">
               <span class="text"> Say</span>
@@ -70,6 +70,9 @@ export default {
     ...mapGetters('home', {
       homeSuggest: 'GET_SUGGESTIONS',
     }),
+    ...mapGetters([
+      'visibleComp',
+    ]),
     ...mapState([
       'isRemoteEnabled',
       'viewStack',

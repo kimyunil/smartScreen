@@ -1,16 +1,20 @@
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
   created() {
     Messages.$on('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$on('speech-to-text.transcription-update', this.sttUpdate);
+    Messages.$on('audio-input.started', this.initAudioRecording);
+    Messages.$on('audio-input.stopped', this.stopAudioRecording);
     Messages.$on('launch.bixby', this.bixbyaction);
     Messages.$on('bixby.result', this.actionResult);
   },
   destroyed() {
     Messages.$off('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$off('speech-to-text.transcription-update', this.sttUpdate);
+    Messages.$off('audio-input.started', this.initAudioRecording);
+    Messages.$off('audio-input.stopped', this.stopAudioRecording);
     Messages.$off('launch.bixby', this.bixbyaction);
     Messages.$off('bixby.result', this.actionResult);
   },
@@ -30,17 +34,23 @@ export default {
       launchVoice: 'LAUNCH_VOICE',
       closeVoice: 'CLOSE_VOICE',
     }),
-    heyBixby() {
-      this.launchVoice();
-      Messages.send('audio-input.start');
+    ...mapMutations('source', {
+      setVolumeDim: 'SET_VOlUME_DIM',
+    }),
+    initAudioRecording() {
+      this.setVolumeDim(true);
+    },
+    stopAudioRecording() {
+      this.setVolumeDim(false);
     },
     sttUpdate(param) {
       if (this.bixbyState !== 'listen') {
         clearTimeout(this.timeout);
-        this.showSpeechText = true;
         // this.defaultOptions.loop = true;
         this.updateBixby('listen');
       }
+      this.showSpeechText = true;
+      console.log(param);
       this.speechText = param;
     },
     sttComplete(param) {
@@ -60,8 +70,10 @@ export default {
     },
     actionResult(payload) {
       if (payload.type === 'action') {
-        this.showResults(payload.param);
-      } else {
+        if (this.isBixbyActive) {
+          this.showResults(payload.param);
+        }
+      } else if (payload.type === 'launch') {
         if (this.isBixbyActive) {
           this.closeBixby(false);
         }
@@ -82,8 +94,6 @@ export default {
       } else if (param.action === 'close') {
         if (this.isBixbyActive) {
           this.closeBixby(false);
-          // this.resetBixby();
-          // this.closeVoice();
         }
       }
     },
