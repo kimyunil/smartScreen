@@ -1,6 +1,6 @@
 <template>
   <div class="audio-player">
-    <audio :src="musicplayer.url" @loaderror="loadErrorCB" @loadstart="musicLoad(-1, $event)" @loadeddata="musicLoad(1, $event)" @timeupdate="updateTime($event)"/>
+    <audio :src="url" @loaderror="loadErrorCB" @loadstart="musicLoad(-1, $event)" @loadeddata="musicLoad(1, $event)" @timeupdate="updateTime($event)"/>
   </div>
 </template>
 <script>
@@ -24,6 +24,10 @@ export default {
       musicplayer: state => state.musicplayer,
       playstate: state => state.musicplayer.playerState,
     }),
+    url() {
+      if (this.musicplayer.details) return this.musicplayer.details.url;
+      return '';
+    },
   },
   watch: {
     playstate(val) {
@@ -59,10 +63,14 @@ export default {
       }
     },
     play() {
-      this.audioEle.play();
+      if (this.audioEle) {
+        this.audioEle.play();
+      }
     },
     pause() {
-      this.audioEle.pause();
+      if (this.audioEle) {
+        this.audioEle.pause();
+      }
     },
   },
 };

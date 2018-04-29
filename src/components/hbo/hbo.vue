@@ -2,7 +2,7 @@
   <div class="hbo-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="hbo.splash" @exit="exitCB"></splash>
-      <component v-else :is="topView" :active="!showSplash&&active" class="hbo-content" :details="hbo[hbo.subComp]" @exit="exitCB">
+      <component v-else :is="topView" :active="!showSplash&&active" class="hbo-content" :name="'hbo'"  :details="hbo[hbo.subComp]" @exit="exitCB">
     </component>
     </transition>
   </div>

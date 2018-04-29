@@ -1,6 +1,6 @@
 <template>
   <div class="tile" :style="{'background-image': `url(${item.details.tile})`}">
-    <div class="icon" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]">
+    <div class="icon" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]">
     </div>
     <div class="header-text" >
       <div class="sponsor" v-if="item.contentType === 'sponsored'">

@@ -84,5 +84,33 @@ export default {
     select_nav(state, indx) {
       state.data.navs.selectedIdx = indx;
     },
+    SAVE_CONT_DATA(state, payload) {
+      // fetch category ie. for you
+      console.log(payload);
+      const navItem = state.data.navs.items[payload.index];
+      const category = state.data.navs.details[navItem].data;
+      console.log(category);
+      // fetch page
+      const pageKey = category.pages.pagination[payload.pageIdx];
+      const pageDetail = category.pages.details[pageKey];
+      console.log(pageDetail);
+      // add basic data from replaced app;
+      const appSave = pageDetail[payload.rmvApp];
+      const nwApp = payload;
+      nwApp.type = appSave.type;
+      nwApp.template = appSave.template;
+      nwApp.contentType = appSave.contentType;
+      pageDetail[payload.key] = nwApp;
+      // update content list
+      const idx = pageDetail.content.indexOf(payload.rmvApp);
+      if (idx === -1) {
+        // update the already added app details
+        if (pageDetail.content.indexOf(payload.key) === -1) {
+          pageDetail.content.push(payload.key);
+        }
+      } else {
+        pageDetail.content.splice(idx, 1, payload.key);
+      }
+    },
   },
 };

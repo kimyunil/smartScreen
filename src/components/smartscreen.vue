@@ -119,7 +119,7 @@ export default {
           break;
         case 'ONE':
           if (!this.isBixbyActive) {
-            this.switch_comp({ name: 'hbo' });
+            this.switch_comp({ name: 'spotify' });
           }
           break;
         case 'TWO':

@@ -1,21 +1,49 @@
 <template>
-  <div class="thumbnail" :style="{'background-image': `url(${item.img})`}" :class="[item.contentType]">
-   <div class="icon-label" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]" v-if="item.contentType !== 'iot'"></div>
-   <template v-if="item.contentType === 'iot'">
-     <div class="iot-container">
+  <div class="thumbnail" :style="{'background-image': `url(${item.details.img})`}" :class="[item.contentType]">
+   <div class="icon-label" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]" v-if="item.contentType !== 'iot'"></div>
+      <template v-if="item.contentType === 'iot-weather'">
+     <div class="iot-container" v-if="weather === null">
        <div class="icon">
          <img :src="item.details.icon"/>
       </div>
        <div class="info">
         <div class="measure">
-          {{item.details.measure}}
+          {{item.details.measure}}<span>&deg;C</span>
           </div>
           <div class="place">
           {{item.details.place}}
           </div>
         </div>
      </div>
-   </template>
+    <div class="iot-container"  v-else>
+       <div class="icon">
+         <img :src="weather.img"/>
+      </div>
+       <div class="info">
+        <div class="measure">
+          {{weather.temp}}<span>&deg;C</span>
+          </div>
+          <div class="place">
+          {{item.details.place}}
+          </div>
+        </div>
+    </div>
+  </template>
+  <template v-else-if="item.contentType.indexOf('iot') !== -1">
+    <div class="iot-container">
+      <div class="icon">
+        <img :src="item.details.icon"/>
+      </div>
+      <div class="info">
+        <div class="measure">
+          {{item.details.measure}}<span v-if="item.contentType === 'iot-temp'">&deg;C</span>
+          </div>
+          <div class="place">
+          {{item.details.place}}
+          </div>
+        </div>
+    </div>
+  </template>
    <template v-if="item.details.bottomText">
     <div class="bottom-footer" :class="[item.contentType]">
       <div class="text simple">
@@ -28,12 +56,19 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     item: {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapState({
+      weather: state => state.info.todays,
+    }),
   },
   methods: {
     dim(d) {

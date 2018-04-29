@@ -1,9 +1,11 @@
 import musicDB from './music';
+import moviesDB from './movies';
 
 export default {
   namespaced: true,
   state: {
     musicDB,
+    moviesDB,
     selectedSourceURL: '/resources/ambient/Mountain/forest_long.mp4',
     metataData: {
       title: 'breaking bad',
@@ -33,18 +35,16 @@ export default {
     },
     player: {
       volume: 5,
+      details: null,
       muted: false,
       maxVol: 16,
       playerState: 0, // 0-play 1-pause
-      url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4',
+      url: '',
     },
     musicplayer: {
-      artist: 'Ariana Grande',
-      song: 'No Tears Left to Cry',
-      art: '/static/Images/spotify/songs/art/art2.png',
+      details: null,
       elapsedTime: 0,
       total: 0,
-      thumbnail: '/static/Images/spotify/songs/thumbnail/phareell.png',
       playerState: 0, // 0-play 1-pause
       url: '',
     },
@@ -77,14 +77,6 @@ export default {
     SET_MUSIC_DURATION(state, payload) {
       state.musicplayer.total = payload;
     },
-    SET_MUSIC_DATA(state, payload) {
-      state.musicplayer.artist = payload.artist;
-      state.musicplayer.song = payload.song;
-      state.musicplayer.art = payload.art;
-      state.musicplayer.thumbnail = payload.thumbnail;
-      state.musicplayer.url = payload.url;
-      state.musicplayer.playerState = 0
-    },
     TOGGLE_MUTE(state) {
       state.player.muted = !state.player.muted;
     },
@@ -114,23 +106,32 @@ export default {
     },
   },
   actions: {
-    SET_MUSIC_PLAYER({ state, commit }, payload) {
-      console.log(payload.artist)
+    LOAD_APP_PLAYER({ state, commit }, payload) {
+      state.player.details = state.moviesDB[payload.content].default;
+      commit('UPDATE_PLAYER', { url: state.player.details.url });
+    },
+    SET_MUSIC_PLAYER({ state }, payload) {
       switch (payload.artist) {
         case 'ariana':
-          commit('SET_MUSIC_DATA', state.musicDB.ariana.default);
+          state.musicplayer.details = state.musicDB.ariana.default;
+          state.musicplayer.playerState = 0;
           break;
         case 'coldplay':
-          commit('SET_MUSIC_DATA', state.musicDB.coldplay.default);
+          state.musicplayer.details = state.musicDB.coldplay.default;
+          state.musicplayer.playerState = 0;
           break;
         case 'classical':
-          commit('SET_MUSIC_DATA', state.musicDB.classical.default);
+          state.musicplayer.details = state.musicDB.classical.default;
+          state.musicplayer.playerState = 0;
           break;
         case 'mj':
-          commit('SET_MUSIC_DATA', state.musicDB.michael.default);
+          state.musicplayer.details = state.musicDB.michael.default;
+          state.musicplayer.playerState = 0;
           break;
         case 'pharelle':
-          commit('SET_MUSIC_DATA', state.musicDB.pharrell.default);
+          state.musicplayer.details = state.musicDB.pharrell.default;
+          state.musicplayer.playerState = 0;
+          break;
         default:
           break;
       }

@@ -1,13 +1,13 @@
 <template>
   <div class="spotify">
     <div class="wrapper">
-      <div class="background" :style="{'background-image': `url(${musicplayer.art})`}">
+      <div class="background" :style="{'background-image': `url(${musicplayer.details.art})`}">
       </div>
       <div class="player">
         <div class="thumbnail-controls">
          <div class="playbck bkwd">
           </div>
-          <div class="thumbnail" :style="{'background-image': `url(${musicplayer.thumbnail})`}">
+          <div class="thumbnail" :style="{'background-image': `url(${musicplayer.details.thumbnail})`}">
             <div class="ctrl">
             </div>
           </div>
@@ -16,10 +16,10 @@
         </div>
         <div class="metadata">
           <div class="song">
-            {{musicplayer.song}}
+            {{musicplayer.details.song}}
           </div>
           <div class="artist">
-            {{musicplayer.artist}}
+            {{musicplayer.details.artist}}
           </div>
         </div>
         <div class="seekbar">
@@ -43,8 +43,10 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
+  name: 'spotify',
   mounted() {
     this.initiateTimer();
+    this.saveContinue('spotify');
   },
   destroyed() {
     clearTimeout(this.timeoutId);
@@ -57,20 +59,24 @@ export default {
   },
   methods: {
     ...mapActions({
-    switch_comp: 'SWITCH_COMPONENT',
+      switch_comp: 'SWITCH_COMPONENT',
+      saveContinue: 'SAVE_CONTINUE',
     }),
+    // ...mapActions('source', {
+    //   saveContinue: 'SAVE_CONTINUE',
+    // }),
     initiateTimer() {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
       this.timeoutId = setTimeout(() => {
         this.switch_comp({ replace: true, name: 'home' });
       }, 5000);
-    }
+    },
   },
   computed: {
     ...mapState('source', {
       musicplayer: 'musicplayer',
-      thumbnail: state => state.musicplayer.thumbnail
+      thumbnail: state => state.musicplayer.details.thumbnail,
     }),
     progress() {
       return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
@@ -91,7 +97,7 @@ export default {
     },
   },
   watch: {
-    thumbnail(){
+    thumbnail() {
       this.initiateTimer();
     },
   },

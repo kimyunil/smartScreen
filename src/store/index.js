@@ -13,6 +13,8 @@ const store = new Vuex.Store({
     gConfig: config,
     info: {
       weather: null,
+      todays: null,
+      portland: null,
     },
     viewStack: ['screensaver'],
     socketConnected: false,
@@ -35,9 +37,16 @@ const store = new Vuex.Store({
     DISCONNECTED(state) {
       state.socketConnected = false;
     },
+    SET_PORT_WEATHER(state, payload) {
+      state.info.portland = payload;
+    },
+    SET_TODAY_WEATHER(state, payload) {
+      state.info.todays = payload;
+    },
     SET_WEATHER(state, payload) {
       console.log(payload);
       state.info.weather = payload;
+      state.info.todays = payload.condition;
     },
     REMOVE_IF_EXSIST(state, name) {
       for (let i = 0; i < state.viewStack.length; i += 1) {
@@ -49,6 +58,15 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    SAVE_CONTINUE({ state, commit }, cpName) {
+      if (cpName === 'spotify') {
+        state.source.musicplayer.details.save.key = 'spotify';
+        commit('home/SAVE_CONT_DATA', state.source.musicplayer.details.save);
+      } else if(cpName === 'hbo' || cpName === 'hulu') {
+        state.source.player.details.save.key = cpName;
+        commit('home/SAVE_CONT_DATA', state.source.player.details.save);
+      }
+    },
     LAUNCH_VOICE({ state, commit }) {
       commit('bixby/UPDATE_BIXBY', 'invoke');
       state.isBixbyActive = true;
@@ -75,7 +93,7 @@ const store = new Vuex.Store({
             appSource.hbo.subComp.pop();
           }
           appSource.hbo.subComp.push(payload.subcategory);
-          if (payload.url) commit('source/UPDATE_PLAYER', { url: payload.url });
+          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'hulu' });
           break;
         }
@@ -86,14 +104,14 @@ const store = new Vuex.Store({
             appSource.hbo.subComp.pop();
           }
           appSource.hbo.subComp.push(payload.subcategory);
-          if (payload.url) commit('source/UPDATE_PLAYER', { url: payload.url });
+          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
           break;
         }
         case 'spotify': {
-          console.log(payload.artist);
+          if (state.viewStack[state.viewStack.length - 1] === 'home') dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotify' });
+          else dispatch('SWITCH_COMPONENT', { replace: false, name: 'spotify' });
           if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', { artist: payload.artist });
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'spotify' });
           break;
         }
         default:

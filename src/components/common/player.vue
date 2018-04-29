@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
@@ -17,6 +17,11 @@ export default {
     } else {
       this.autoplay = false;
     }
+  },
+  props: {
+    name: {
+      type: String,
+    },
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
@@ -29,6 +34,9 @@ export default {
     Messages.$off('button_down', this.handleKeyDown);
   },
   methods: {
+    ...mapActions({
+      saveContinue: 'SAVE_CONTINUE',
+    }),
     play() {
       if (this.playerEle) {
         this.playerEle.play();
@@ -52,6 +60,9 @@ export default {
         case 'LEFT':
           break;
         case 'BACK':
+          if (this.name === 'hbo' || this.name === 'hulu') {
+            this.saveContinue(this.name);
+          }
           this.$emit('exit', { from: 'player' });
           break;
         default:

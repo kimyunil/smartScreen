@@ -2,7 +2,7 @@
   <div class="hulu-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="hulu.splash" @exit="exitCB"></splash>
-      <component v-else :is="topView" :active="!showSplash&&active" class="hulu-content" :details="hulu[hulu.subComp]" @exit="exitCB">
+      <component v-else :is="topView" :active="!showSplash&&active" class="hulu-content" :name="'hulu'" :details="hulu[hulu.subComp]" @exit="exitCB">
     </component>
     </transition>
   </div>
