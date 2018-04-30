@@ -5,10 +5,7 @@
       <div class="time">
           {{time}}
       </div>
-      <div class="weather">
-        <span v-if="info.weather !== null">
-          {{info.weather.condition.text}}
-        </span>
+      <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
       </div>
   </div>
 </template>
@@ -20,6 +17,7 @@ import Messages from '../../services/Messages';
 export default {
   name: 'screensaver',
   mounted() {
+    window.getWeatherImg = this.getWeatherImg;
     Messages.$on('button_down', this.handleKeyDown);
     this.time = moment().format('LT');
     this.interval = setInterval(() => {
@@ -27,13 +25,16 @@ export default {
     }, 1000);
     Messages.$on('horizon-weather.forecast', this.handleForecast);
     Messages.$on('horizon-news.get-articles-result', this.getArticle);
-    Messages.send('horizon-news.get-articles', {
-      sources: ['bbc-news'],
-      shuffle: true,
-      maxSourceResults: 5,
-    });
+    // Messages.send('horizon-news.get-articles', {
+    //   sources: ['bbc-news'],
+    //   shuffle: true,
+    //   maxSourceResults: 5,
+    // });
     Messages.send('horizon-weather.get-forecast', {
       place: 'Mountain View',
+    });
+    Messages.send('horizon-weather.get-forecast', {
+      place: 'portland',
     });
   },
   computed: {
@@ -54,9 +55,112 @@ export default {
     }),
     ...mapMutations({
       set_weather: 'SET_WEATHER',
+      todayWeather: 'SET_TODAY_WEATHER',
+      set_port_weather: 'SET_PORT_WEATHER',
     }),
+    setTodaysWeather(condition) {
+      const wToday = {};
+      wToday.temp = condition.temp;
+      wToday.img = `/static/Images/results/weather/${window.getWeatherImg(parseInt(condition.code, 10))}.png`;
+      this.todayWeather(wToday);
+    },
     handleForecast(param) {
-      this.set_weather(param);
+      if (param.location.city.toLowerCase() === 'mountain view') {
+        this.set_weather(param);
+        this.setTodaysWeather(param.condition);
+      } else if (param.location.city.toLowerCase() === 'portland') {
+        this.set_port_weather(param);
+      }
+    },
+    getWeatherImg(code) {
+      /* eslint-disable no-tabs */
+      let img = '';
+      switch (code) {
+        case 31: // clear (night)
+          img = 'clear';
+          break;
+        case 27: // mostly cloudy (night)
+        case 28: // mostly cloudy (day)
+        case 26: // cloudy
+          img = 'cloudy';
+          break;
+        case 20: // foggy
+          img = 'fog';
+          break;
+        case 6: // mixed rain and sleet
+        case 7: // mixed snow and sleet
+        case 18: // sleet
+        case 25: // cold
+          img = 'ice, sleet, freezing rain';
+          break;
+        case 11: // showers
+        case 12: // showers
+          img = 'shower';
+          break;
+        case 44: // partly cloudy
+        case 29: // partly cloudy (night)
+        case 30: // partly cloudy (day)
+          img = 'partly cloudy';
+          break;
+        case 37: // isolated thunderstorms
+        case 38: // scattered thunderstorms
+        case 39: // scattered thunderstorms
+        case 47: // isolated thundershowers
+        case 3:	// severe thunderstorms
+        case 4:	// thunderstorms
+          img = 'thunderstorm';
+          break;
+        case 5:	// mixed rain and snow
+          img = 'rain and snow mixed';
+          break;
+        case 13: // snow flurries
+        case 14: // light snow showers
+        case 15: // blowing snow
+        case 43: // heavy snow
+        case 16: // snow
+          img = 'snow';
+          break;
+        case 32: // sunny
+          img = 'sunny';
+          break;
+        case 41: // heavy snow
+        case 42: // scattered snow showers
+        case 35: // mixed rain and hail
+          img = 'rain and snow mixed';
+          break;
+        case 2:	// hurricane
+        case 24: // windy
+          img = 'windy';
+          break;
+        case 8: // freezing drizzle
+        case 17: // hail
+        case 45: // thundershowers
+        case 46: // snow showers
+        case 10: // freezing rain
+          img = 'thundershowers with hail';
+          break;
+        case 9: // drizzle
+          img = 'rain';
+          break;
+        case 33: // fair (night)
+        case 34: // fair (day)
+        case 36: // hot
+          img = 'sunny';
+          break;
+        case 19://  dust
+        case 21://  haze
+        case 22://  smoky
+        case 23://  blustery
+          img = 'sandstorm';
+          break;
+        case 0: // tornado
+        case 1:	// tropical storm
+          img = 'thundershowers with hail';
+          break;
+        default:
+          break;
+      }
+      return img;
     },
     getArticle() {
       console.log('getArticle');
@@ -135,8 +239,9 @@ export default {
     position: absolute;
     top: 200 * $s;
     // top: relative;
-    width: auto;
-    height:auto;
+    width: 130 * $s;
+    height: 130  *$s;
+    background-size: 100% 100%;
     padding: 50 * $s;
     left: 50 * $s;
     font-size: 60 * $s;

@@ -1,6 +1,6 @@
 <template>
   <div class="tile" :style="{'background-image': `url(${item.details.tile})`}">
-    <div class="icon" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]">
+    <div class="icon" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]">
     </div>
     <div class="header-text" >
       <div class="sponsor" v-if="item.contentType === 'sponsored'">
@@ -16,6 +16,12 @@
         {{item.details.bottomText}}
       </div>
     </div>
+    <template v-if="item.key === 'hbo' || item.key === 'hulu'">
+      <div class="seekbar">
+        <div class="progress" :style="{'width': `${item.elapsedTime/item.total * 100}%`}">
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -79,6 +85,24 @@ export default {
       color: white;
     }
 
+  }
+  .seekbar {
+    background: red;
+    width: 87%;
+    height: 8 * $s;
+    margin:0 15 * $s;
+    position: absolute;
+    bottom: 10 * $s;
+    border-radius:20 * $s;
+    overflow: hidden;
+    background: rgba(255,255,255,0.1);
+    .progress {
+      position: absolute;
+      left: 0;
+      width: 20%;
+      height: 100%;
+      background: white;
+    }
   }
   .icon {
     position: absolute;

@@ -1,6 +1,6 @@
 <template>
   <div class="poster" :style="{'background-image': `url(${item.details.poster})`}">
-   <div class="icon" :style="[{'background-image': `url(${item.logo})`},dim(item.dim)]"></div>
+   <div class="icon" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]"></div>
    <div class="bottom-footer">
      <template v-if="item.contentType==='simple'">
         <div class="text simple">

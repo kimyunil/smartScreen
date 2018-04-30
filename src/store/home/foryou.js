@@ -42,13 +42,13 @@ export default {
           details: {
             poster: '/static/Images/home/posters/morning/news.png',
             text1: 'Trump to Impose New$Sanctions on Russia Over$Support for Syria',
+            logo: '/static/Images/home/icons/morning/news.png',
+            dim: {
+              w: '40',
+              h: '50',
+            },
+            img: '',
           },
-          logo: '/static/Images/home/icons/morning/news.png',
-          dim: {
-            w: '40',
-            h: '50',
-          },
-          img: '',
         },
         fitness: {
           type: 'tile',
@@ -57,25 +57,26 @@ export default {
           details: {
             bottomText: 'Sleep Summary',
             tile: '/static/Images/home/tile/morning/fitbit.png',
+            logo: '/static/Images/home/icons/common/fitbit.png',
+            dim: {
+              w: '121',
+              h: '30',
+            },
+            img: '',
           },
-          logo: '/static/Images/home/icons/common/fitbit.png',
-          dim: {
-            w: '121',
-            h: '30',
-          },
-          img: '',
         },
         weather: {
           type: 'thumbnail1',
-          contentType: 'iot',
+          contentType: 'iot-weather',
           details: {
             measure: '75 - Sunny',
             icon: '/static/Images/home/thumbnail/morning/sunny.png',
-            place: 'Mountain View',
+            place: 'Mountain View, CA',
+            logo: '/static/Images/home/health/fitbit.png',
+            img: '',
           },
           template: 'thumbnail',
-          logo: '/static/Images/home/health/fitbit.png',
-          img: '',
+
         },
         npr: {
           type: 'thumbnail2',
@@ -84,13 +85,13 @@ export default {
           details: {
             bottomText: 'Play Morning$Playlist',
             icon: '',
+            logo: '/static/Images/home/icons/morning/npr.png',
+            img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
+            dim: {
+              w: '90',
+              h: '30',
+            },
           },
-          dim: {
-            w: '90',
-            h: '30',
-          },
-          logo: '/static/Images/home/icons/morning/npr.png',
-          img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
         },
         suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
@@ -107,11 +108,11 @@ export default {
             icon: '/static/Images/home/thumbnail/morning/temp.png',
             measure: '68',
             place: 'Living Room Temp',
+            logo: '/static/Images/home/health/fitbit.png',
+            img: '',
           },
-          contentType: 'iot',
+          contentType: 'iot-temp',
           template: 'thumbnail',
-          logo: '/static/Images/home/health/fitbit.png',
-          img: '',
         },
         'iot-light': {
           type: 'thumbnail2',
@@ -119,11 +120,11 @@ export default {
             icon: '/static/Images/home/thumbnail/morning/iot-light.png',
             measure: '2 Lights ON',
             place: 'Kitchen',
+            logo: '/static/Images/home/health/fitbit.png',
+            img: '',
           },
           contentType: 'iot',
           template: 'thumbnail',
-          logo: '/static/Images/home/health/fitbit.png',
-          img: '',
         },
         source: {
           type: 'tile',
@@ -132,28 +133,28 @@ export default {
           details: {
             bottomText: 'Game of Thrones',
             tile: '/static/Images/home/tile/morning/GOT.png',
+            dim: {
+              w: '75',
+              h: '31',
+            },
+            logo: '/static/Images/home/icons/morning/hbo.png',
+            img: '',
           },
-          dim: {
-            w: '75',
-            h: '31',
-          },
-          logo: '/static/Images/home/icons/morning/hbo.png',
-          img: '',
         },
         spotify: {
           type: 'poster',
+          template: 'poster',
           contentType: 'simple',
           details: {
             poster: '/static/Images/home/posters/morning/spotify.png',
             text1: 'Today\'s Trending Music',
+            logo: '/static/Images/home/icons/morning/spotify.png',
+            img: '/static/Images/home/page1/poster.png',
+            dim: {
+              w: '150',
+              h: '30',
+            },
           },
-          dim: {
-            w: '150',
-            h: '30',
-          },
-          template: 'poster',
-          logo: '/static/Images/home/icons/morning/spotify.png',
-          img: '/static/Images/home/page1/poster.png',
         },
         suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
@@ -176,14 +177,14 @@ export default {
             text2: {
               'Intensity:': '3',
             },
+            dim: {
+              w: '166',
+              h: '37',
+            },
+            logo: '/static/Images/home/icons/morning/DailyBurn.png',
+            img: '/static/Images/home/page1/poster.png',
           },
           template: 'poster',
-          dim: {
-            w: '166',
-            h: '37',
-          },
-          logo: '/static/Images/home/icons/morning/DailyBurn.png',
-          img: '/static/Images/home/page1/poster.png',
         },
         'fitbit-yoga': {
           type: 'tile',
@@ -192,13 +193,13 @@ export default {
           details: {
             bottomText: 'Yoga Challenge',
             tile: '/static/Images/home/tile/morning/yoga.png',
+            dim: {
+              w: '60',
+              h: '37',
+            },
+            logo: '/static/Images/home/icons/morning/Daily-Yoga.png',
+            img: '',
           },
-          dim: {
-            w: '60',
-            h: '37',
-          },
-          logo: '/static/Images/home/icons/morning/Daily-Yoga.png',
-          img: '',
         },
         sponsor: {
           type: 'thumbnail1',
@@ -207,13 +208,13 @@ export default {
           details: {
             icon: '',
             bottomText: 'Stephen Curry$Shooting Ball-$handling',
+            dim: {
+              w: '50',
+              h: '33',
+            },
+            logo: '/static/Images/home/icons/common/masterChef.png',
+            img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
           },
-          dim: {
-            w: '50',
-            h: '33',
-          },
-          logo: '/static/Images/home/icons/common/masterChef.png',
-          img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
         },
         source: {
           type: 'thumbnail2',
@@ -222,12 +223,12 @@ export default {
           details: {
             icon: '',
             bottomText: 'Concentration 10 Sessions',
-          },
-          logo: '/static/Images/home/icons/common/heapspace.png',
-          img: '/static/Images/home/thumbnail/morning/yogo.png',
-          dim: {
-            w: '160',
-            h: '30',
+            logo: '/static/Images/home/icons/common/heapspace.png',
+            img: '/static/Images/home/thumbnail/morning/yogo.png',
+            dim: {
+              w: '160',
+              h: '30',
+            },
           },
         },
         suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],

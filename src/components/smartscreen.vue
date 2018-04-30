@@ -9,7 +9,7 @@
     </transition-group>
     <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
     <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive" :style="{'z-index': (viewStack.length + 1)}" >
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion" :style="{'z-index': (viewStack.length + 1)}" >
           <transition name="slideshow">
             <div class="text-suggestion" :key="index">
               <span class="text"> Say</span>
@@ -70,6 +70,9 @@ export default {
     ...mapGetters('home', {
       homeSuggest: 'GET_SUGGESTIONS',
     }),
+    ...mapGetters([
+      'visibleComp',
+    ]),
     ...mapState([
       'isRemoteEnabled',
       'viewStack',
@@ -81,9 +84,12 @@ export default {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
-    ...mapMutations('source', {
+    ...mapActions('source', {
       updateVolume: 'UPDATE_VOLUME',
       toggleMute: 'TOGGLE_MUTE',
+    }),
+    ...mapMutations('bixby', {
+      updateBixby: 'UPDATE_BIXBY',
     }),
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
@@ -116,7 +122,7 @@ export default {
           break;
         case 'ONE':
           if (!this.isBixbyActive) {
-            this.switch_comp({ name: 'hbo' });
+            this.switch_comp({ name: 'spotify' });
           }
           break;
         case 'TWO':
@@ -182,7 +188,6 @@ export default {
   top: 0;
   width: 1920 * $s;
   height: 1080 * $s;
-  
   .video-source {
     position: absolute;
     width: 1920 * $s;

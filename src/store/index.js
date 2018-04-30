@@ -13,25 +13,31 @@ const store = new Vuex.Store({
     gConfig: config,
     info: {
       weather: null,
+      todays: null,
+      portland: null,
     },
     viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
     isBixbyActive: false,
-    bixbyState: '', // ['invoke', 'listen', 'think', 'wipeoff', 'reveal', 'standby1', 'standby2]
     socket: {
       connected: false,
       ip: '127.0.0.1',
       port: '2222',
     },
   },
+  getters: {
+    visibleComp(state) {
+      if (state.viewStack.length > 0) {
+        return state.gConfig.components[state.viewStack[state.viewStack.length - 1]];
+      }
+      return {};
+    },
+  },
   mutations: {
     UPDATE_REMOTE_MODE(state, payload) {
       state.isRemoteEnabled = payload;
-    },
-    UPDATE_BIXBY(state, payload) {
-      state.bixbyState = payload;
     },
     CONNECTED(state) {
       state.socketConnected = true;
@@ -39,9 +45,15 @@ const store = new Vuex.Store({
     DISCONNECTED(state) {
       state.socketConnected = false;
     },
+    SET_PORT_WEATHER(state, payload) {
+      state.info.portland = payload;
+    },
+    SET_TODAY_WEATHER(state, payload) {
+      state.info.todays = payload;
+    },
     SET_WEATHER(state, payload) {
-      console.log(payload);
       state.info.weather = payload;
+      state.info.todays = payload.condition;
     },
     REMOVE_IF_EXSIST(state, name) {
       for (let i = 0; i < state.viewStack.length; i += 1) {
@@ -50,64 +62,135 @@ const store = new Vuex.Store({
           break;
         }
       }
+      // remove other type;
+      const tConfig = state.gConfig.components;
+      for (let i = state.viewStack.length - 1; i !== -1; i -= 1) {
+        const stkComp = state.viewStack[i];
+        if (tConfig[stkComp].type === tConfig[name].type) {
+          state.viewStack.splice(i, 1);
+        }
+      }
     },
   },
   actions: {
-    LAUNCH_VOICE({ state, commit }) {
-      commit('UPDATE_BIXBY', 'invoke');
+    SAVE_CONTINUE({ state, commit }, cpName) {
+      if (cpName === 'spotify') {
+        state.source.musicplayer.details.save.key = 'spotify';
+        commit('home/SAVE_CONT_DATA', state.source.musicplayer.details.save);
+      } else if (cpName === 'hbo' || cpName === 'hulu') {
+        state.source.player.details.save.key = cpName;
+        state.source.player.details.save.elapsedTime = state.source.player.elapsedTime;
+        state.source.player.details.save.total = state.source.player.total;
+        commit('home/SAVE_CONT_DATA', state.source.player.details.save);
+      }
+    },
+    LAUNCH_VOICE({ state, commit, dispatch }) {
+      commit('bixby/UPDATE_BIXBY', 'invoke');
+      dispatch('REMOVE_COMPONENT_TYPE', { type: 'system' });
       state.isBixbyActive = true;
     },
     CLOSE_VOICE({ state, commit }) {
-      commit('UPDATE_BIXBY', '');
+      commit('bixby/UPDATE_BIXBY', 'initial');
       state.isBixbyActive = false;
     },
-    SWITCH_COMPONENT({ state, commit }, payload) {
+    SWITCH_COMPONENT({ state, commit, getters }, payload) {
       commit('REMOVE_IF_EXSIST', payload.name);
       if (payload.replace) {
-        Vue.set(state.viewStack, state.viewStack.length - 1, payload.name);
+        let idx = state.viewStack.length - 1;
+        if (idx < 0) idx = 0;
+        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+          // dont remove system if it exist at top
+          console.log(idx);
+          state.viewStack.splice(idx, 0, payload.name);
+        } else {
+          state.viewStack.splice(idx, 1, payload.name);
+        }
       } else {
-        state.viewStack.push(payload.name);
+        let idx = state.viewStack.length - 1;
+        if (idx < 0) idx = 0;
+        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+          // dont remove system if it exist at top
+          state.viewStack.splice(idx, 0, payload.name);
+        } else {
+          state.viewStack.push(payload.name);
+        }
       }
     },
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
-      switch(payload.category) {
-        case 'hbo':
-          state.source.source.currentSource = 'hbo';
-          while(state.source.source.hbo.subComp.length !== 0) {
-            state.source.source.hbo.subComp.pop();
+      console.log(payload.category);
+      switch (payload.category) {
+        case 'home': {
+          commit('home/select_nav', payload.subcategory);
+          if (state.viewStack[state.viewStack.length - 1] !== 'home') {
+            dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
           }
-          state.source.source.hbo.subComp.push(payload.subcategory);
-          dispatch('SWITCH_COMPONENT', { replace: false, name:'hbo' });
           break;
-        case 'hulu':
-          state.source.source.currentSource = 'hulu';
-          while(state.source.source.hbo.subComp.length !== 0) {
-            state.source.source.hbo.subComp.pop();
+        }
+        case 'hulu': {
+          const appSource = state.source.source;
+          appSource.currentSource = 'hulu';
+          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
+            appSource.hbo.subComp.pop();
           }
-          state.source.source.hbo.subComp.push(payload.subcategory);
-          dispatch('SWITCH_COMPONENT', { replace: false, name:'hulu' });
+          appSource.hbo.subComp.push(payload.subcategory);
+          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hulu' });
           break;
-          case 'volume':
-            if (payload.data === 'decrease') {
-              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });
-              commit('source/UPDATE_VOLUME', '--');            
-            } else if (payload.data === 'increase'){
-              commit('source/UPDATE_VOLUME', '++');
-              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });  
-            } else if (payload.data === 'mute'){
-              commit('source/TOGGLE_MUTE');
-              dispatch('SWITCH_COMPONENT', { replace: false, name:'volume' });
-            }
-            break;
-          case 'back': 
-            break;
+        }
+        case 'hbo': {
+          const appSource = state.source.source;
+          appSource.currentSource = 'hbo';
+          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
+            appSource.hbo.subComp.pop();
+          }
+          appSource.hbo.subComp.push(payload.subcategory);
+          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
+          break;
+        }
+        case 'spotify': {
+          dispatch('SWITCH_COMPONENT', { name: 'spotify' });
+          if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', payload);
+          else if(payload.loop) dispatch('source/SKIP_NEXT');
+          break;
+        }
+        case 'volume': {
+          dispatch('source/UPDATE_VOLUME', payload.data);
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
+          break;
+        }
+        case 'media':
+          // not launching anything for now, may be in future
+          if (state.source.player.active) {
+            state.source.player.playerState = payload.data;
+          } else if (state.source.musicplayer.active) {
+            state.source.musicplayer.playerState = payload.data;
+          }
+          break;
         default:
           break;
-          
       }
     },
-    REMOVE_COMPONENT({ state }) {
-      state.viewStack.pop();
+    REMOVE_COMPONENT_TYPE({ state }, payload) {
+      const name = payload.type;
+      const tConfig = state.gConfig.components;
+      for (let i = state.viewStack.length - 1; i !== -1; i -= 1) {
+        const stkComp = state.viewStack[i];
+        if (tConfig[stkComp].type === name) {
+          state.viewStack.splice(i, 1);
+        }
+      }
+    },
+    REMOVE_COMPONENT({ state, dispatch }, payload = null) {
+      if (payload) {
+        const idx = state.viewStack.indexOf(payload);
+        if (idx !== -1) state.viewStack.splice(idx, 1);
+      } else {
+        state.viewStack.pop();
+      }
+      if (state.viewStack.length === 0) {
+        dispatch('SWITCH_COMPONENT', { replace: false, name: 'screensaver' });
+      }
     },
   },
   modules: {

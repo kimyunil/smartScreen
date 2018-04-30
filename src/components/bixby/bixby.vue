@@ -1,6 +1,9 @@
 <template>
   <div class="bixby">
-    <div class="bixby-wrapper" :class="[bixbyState,utilClass]" :style="{'transform': `translateY(${translateY}vw)`}">
+    <div class="bixby-wrapper" :class="[bixbyState,utilClass]"
+      :style="{'transform': `translateY(${translateY}vw)`}"
+      @transitionend="transitionEndCB($event)"
+      >
       <div class="bixby-lottie">
         <weblottie
         v-if="defaultOptions.animationData !== undefined"
@@ -9,15 +12,17 @@
         ></weblottie>
       </div>
       <div class="bixby-speech-text" :class="{'hideText': !showSpeechText}">
-        <speech-text :sText="sText"></speech-text>
+        <speech-text :sText="speechText"></speech-text>
       </div>
       <div class="bixby-response-text" :class="{'hideText': !showResponseText}" v-if="response !== ''">
-        <response :response="response" :isSpeechEnabled="text!==''"></response>
+        <response :response="response" :isSpeechEnabled="speechText!==''"></response>
       </div>
     </div>
-    <div class="result-container" :class="{'show-result': isResult}" :style="[{'transform': `translateY(${resTrans}vw)`}, {'clip-path': clippath}]">
+    <div class="result-container" :class="{'show-result': resultTransition}"
+    :style="[{'transform': `translateY(${resTrans}vw)`}, {'clip-path': clippath}]"
+    >
       <div class="result-data">
-        <component v-if="result && result.data" :class="result.data.contentType" :is="result.data.template" :resultData="result" class="result-template"> </component>
+        <component v-if="localResult && localResult.data" :class="localResult.data.contentType" :is="localResult.data.template" :resultData="localResult" class="result-template"> </component>
       </div>
     </div>
   </div>
@@ -39,7 +44,6 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.translate = this.default;
-    console.log(document.getElementById('clipmotion_result'));
     if (!document.getElementById('clipmotion_result')) {
       const div = document.createElement('div');
       div.setAttribute('id', 'clipmotion_result');
@@ -62,45 +66,42 @@ export default {
       return ((this.resTranslate * 100) / window.innerWidth);
     },
     sText() {
-      return this.text.split(' ');
+      return this.speechText.split(' ');
     },
     ...mapState('animation', [
       'lottieanim',
     ]),
     ...mapState('bixby', [
       'result',
-    ]),
-    ...mapState([
       'bixbyState',
     ]),
   },
   methods: {
-    ...mapMutations({
-      updateBixby: 'UPDATE_BIXBY',
-    }),
     ...mapActions({
       closeVoice: 'CLOSE_VOICE',
     }),
     ...mapMutations('bixby', {
       resetResult: 'RESET_RESULT',
+      updateBixby: 'UPDATE_BIXBY',
     }),
     ...mapActions('bixby', {
-      set_result: 'SET_RESULT',
+      setResult: 'SET_RESULT',
     }),
     clipAnimation(anim) {
       window.anim = anim;
     },
     handleKeyDown(type) {
+      if (!this.active) return;
       switch (type) {
         case 'ONE':
           this.showSpeechText = true;
           this.$emit('toggle-result', false);
-          this.text = '';
+          this.speechText = '';
           this.updateBixby('invoke');
           break;
         case 'TWO':
           this.showSpeechText = true;
-          this.text = 'Show me funny Movies';
+          this.speechText = 'Show me funny Movies';
           this.updateBixby('listen');
           break;
         case 'THREE':
@@ -122,25 +123,19 @@ export default {
           this.wipeResult();
           break;
         case 'BACK':
-          this.closeBixby();
+          this.closeBixby(false);
           break;
         default:
           break;
       }
     },
-    closeBixby() {
-      this.closeVoice();
-      Messages.send('audio-input.stop');
-      this.loop = false;
-    },
     resetBixby() {
       this.resetResult();
       this.utilClass = '';
       this.isResult = false;
-      this.updateBixby('invoke');
       this.resTranslate = 0;
       this.clippath = '';
-      this.text = '';
+      this.speechText = '';
       this.response = '';
       this.defaultOptions.loop = false;
       if (this.clipAnim) {
@@ -150,23 +145,20 @@ export default {
     },
     handleAnimation(anim) {
       this.anim = anim;
-      this.anim.addEventListener('complete', this.onCompleteAnim);
-    },
-    showResult() {
-      this.showSpeechText = false;
-      this.showResponseText = true;
-      this.defaultOptions.loop = false;
-      this.translate = this.default;
-      this.updateBixby('wipeoff');
-      this.translate = 0;
-      this.isResult = false;
+      // this.anim.addEventListener('complete', this.transitionEndCB);
     },
     revealResult() {
-      this.utilClass = '';
-      this.showResponseText = true;
-      // this.set_result({ category: 'info', subcategory: 'lostintrans' });
-      this.response = this.result.data.response;
-      this.updateBixby('reveal');
+      console.log('this.result:::::::');
+      this.response = this.localResult.data.response;
+      this.revealId = setTimeout(() => {
+        const temp = this.$el.querySelector('.result-data').offsetHeight;
+        this.isResult = true;
+        this.resTranslate = (temp + 150) * -1;
+        this.translate = (temp + 150) * -1;
+        console.log('this.result:::::::', this.translate);
+        this.showResponseText = true;
+        this.updateBixby('reveal');
+      }, 10);
       // if (this.clipAnim === null) {
       //   this.clipAnim = lottie.loadAnimation({
       //     container: document.getElementById('clipmotion_result'), // the dom element
@@ -179,12 +171,6 @@ export default {
       // window.anim = this.clipAnim;
       // const clip = document.querySelector('#clipmotion_result svg g g').getAttribute('clip-path');
       // this.clippath = clip;
-      setTimeout(() => {
-        const temp = this.$el.querySelector('.result-data').offsetHeight;
-        this.isResult = true;
-        this.resTranslate = (temp + 150) * -1;
-        this.translate = (temp + 150) * -1;
-      }, 10);
     },
     noResultWipe() {
       this.revealResult();
@@ -202,21 +188,54 @@ export default {
       //   this.clipAnim.play(0);
       // }, 100);
     },
-    onCompleteAnim() {
+    listening() {
+      this.speechText = '';
+      this.showResponseText = true;
+    },
+    showResults(resultData) {
+      console.log('showResults:::::::::::');
+      this.resetResult();
+      if (resultData !== null) {
+        this.setResult(resultData);
+        this.utilClass = 'clear';
+      }
+      this.updateBixby('wipeoff');
+      this.showResponseText = false;
+      this.showSpeechText = false;
+      this.resultTransition = false;
+      this.resTranslate = 0;
+      this.translate = 0;
+    },
+    closeBixby(restart) {
+      Messages.send('audio-input.stop');
+      this.restartBixby = restart;
+      this.showResults(null);
+    },
+    transitionEndCB() {
       if (this.bixbyState === 'wipeoff') {
-        // alert();
-        this.text = '';
-        if (!this.isResult) {
-          this.noResultWipe();
+        this.speechText = '';
+        this.utilClass = '';
+        if (this.result !== null) {
+          this.localResult = this.result;
+          this.resultTransition = true;
+          this.revealResult();
+        } else if (this.restartBixby) {
+          this.updateBixby('invoke');
+          this.resetBixby();
+        } else {
+          this.updateBixby('initial');
+          this.resetBixby();
+          this.closeVoice();
         }
       }
     },
     changeAnimation() {
-      if (this.bixbyState !== '') {
-        if (this.bixbyState  === 'listen') {
+      if (this.bixbyState !== 'initial') {
+        if (this.bixbyState === 'listen') {
           this.defaultOptions.loop = false;
         }
         this.defaultOptions.animationData = undefined;
+        console.log(this.bixbyState);
         this.$nextTick(() => {
           console.log(this.bixbyState, this.lottieanim);
           this.$set(this.defaultOptions, 'animationData', this.lottieanim[this.bixbyState].data.animationData);
@@ -226,12 +245,15 @@ export default {
   },
   data() {
     return {
-      text: '',
+      speechText: '',
+      restartBixby: false,
+      resultTransition: false,
+      localResult: null,
+      revealId: null,
       response: '',
       clipAnim: null,
       showSpeechText: false,
       showResponseText: false,
-      isResult: false,
       translate: 0,
       utilClass: '',
       clippath: '',
@@ -246,9 +268,8 @@ export default {
   },
   watch: {
     bixbyState(value) {
-      console.log(console.log(value));
-      if (value !== '') {
-        console.log(value);
+      console.log(value);
+      if (value !== 'initial') {
         this.changeAnimation(value);
       }
     },

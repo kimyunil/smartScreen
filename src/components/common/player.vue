@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
@@ -17,6 +17,11 @@ export default {
     } else {
       this.autoplay = false;
     }
+  },
+  props: {
+    name: {
+      type: String,
+    },
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
@@ -29,6 +34,9 @@ export default {
     Messages.$off('button_down', this.handleKeyDown);
   },
   methods: {
+    ...mapActions({
+      saveContinue: 'SAVE_CONTINUE',
+    }),
     play() {
       if (this.playerEle) {
         this.playerEle.play();
@@ -52,6 +60,9 @@ export default {
         case 'LEFT':
           break;
         case 'BACK':
+          if (this.name === 'hbo' || this.name === 'hulu') {
+            this.saveContinue(this.name);
+          }
           this.$emit('exit', { from: 'player' });
           break;
         default:
@@ -71,13 +82,16 @@ export default {
         this.pause();
       }
     },
+    playerActive(val) {
+      if (!val) this.pause();
+    },
     muted(val) {
       if (!this.playerEle) return;
       if (val) {
         this.playerEle.muted = true;
       } else {
         this.playerEle.muted = false;
-        this.playerEle.volume = this.volume;
+        this.playerEle.volume = (this.volume * 1) / 16;
       }
     },
   },
@@ -91,6 +105,7 @@ export default {
     ...mapState('source', {
       player: state => state.player,
       volume: state => state.player.volume,
+      playerActive: state => state.player.active,
       muted: state => state.player.muted,
       playerState: state => state.player.playerState,
     }),

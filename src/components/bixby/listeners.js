@@ -1,18 +1,30 @@
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
   created() {
     Messages.$on('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$on('speech-to-text.transcription-update', this.sttUpdate);
+    Messages.$on('audio-input.started', this.initAudioRecording);
+    Messages.$on('audio-input.stopped', this.stopAudioRecording);
     Messages.$on('launch.bixby', this.bixbyaction);
-    Messages.$on('bixby.result', this.updateBixbyResult);
+    Messages.$on('bixby.result', this.actionResult);
   },
   destroyed() {
     Messages.$off('speech-to-text.transcription-complete', this.sttComplete);
     Messages.$off('speech-to-text.transcription-update', this.sttUpdate);
+    Messages.$off('audio-input.started', this.initAudioRecording);
+    Messages.$off('audio-input.stopped', this.stopAudioRecording);
     Messages.$off('launch.bixby', this.bixbyaction);
-    Messages.$off('bixby.result', this.updateBixbyResult);
+    Messages.$off('bixby.result', this.actionResult);
+  },
+  computed: {
+    ...mapState([
+      'isRemoteEnabled',
+      'viewStack',
+      'suggestions',
+      'isBixbyActive',
+    ]),
   },
   methods: {
     ...mapActions({
@@ -22,24 +34,24 @@ export default {
       launchVoice: 'LAUNCH_VOICE',
       closeVoice: 'CLOSE_VOICE',
     }),
-    ...mapState([
-      'isRemoteEnabled',
-      'viewStack',
-      'suggestions',
-      'isBixbyActive',
-    ]),
-    heyBixby() {
-      this.launchVoice();
-      Messages.send('audio-input.start');
+    ...mapMutations('source', {
+      setVolumeDim: 'SET_VOlUME_DIM',
+    }),
+    initAudioRecording() {
+      this.setVolumeDim(true);
+    },
+    stopAudioRecording() {
+      this.setVolumeDim(false);
     },
     sttUpdate(param) {
       if (this.bixbyState !== 'listen') {
         clearTimeout(this.timeout);
-        this.showSpeechText = true;
         // this.defaultOptions.loop = true;
         this.updateBixby('listen');
       }
-      this.text = param;
+      this.showSpeechText = true;
+      console.log(param);
+      this.speechText = param;
     },
     sttComplete(param) {
       if (this.bixbyState === 'listen') {
@@ -54,36 +66,34 @@ export default {
           Messages.send('audio-input.stop');
         }, 2000);
       }
-      this.text = param;
+      this.speechText = param;
     },
-    updateBixbyResult(payload) {
-      console.log(payload);
-      if (payload.type === 'launch') {
+    actionResult(payload) {
+      if (payload.type === 'action') {
+        if (this.isBixbyActive) {
+          this.showResults(payload.param);
+        }
+      } else if (payload.type === 'launch') {
+        if (this.isBixbyActive) {
+          this.closeBixby(false);
+        }
         this.launchComponent(payload.param);
-        return;
-      } else {
-        this.resetResult();
-        console.log(payload.param);
-        this.set_result(payload.param);
       }
-      // this.set_result(param);
-      this.showResult();
     },
     bixbyaction(param) {
       console.log('launchBixby', param);
       if (param.action === 'launch') {
         if (this.isBixbyActive) {
-          this.resetBixby();
-          this.closeVoice();
+          this.closeBixby(true);
+        } else {
+          this.launchVoice();
         }
-        this.heyBixby();
       } else if (param.action === 'listen') {
         Messages.send('audio-input.start');
         this.updateBixby('listen');
       } else if (param.action === 'close') {
         if (this.isBixbyActive) {
-          this.resetBixby();
-          this.closeVoice();
+          this.closeBixby(false);
         }
       }
     },

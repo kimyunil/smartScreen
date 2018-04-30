@@ -1,13 +1,13 @@
 <template>
   <div class="spotify">
     <div class="wrapper">
-      <div class="background" :style="{'background-image': `url(${musicplayer.art})`}">
+      <div class="background" :style="{'background-image': `url(${musicplayer.details.art})`}">
       </div>
       <div class="player">
         <div class="thumbnail-controls">
          <div class="playbck bkwd">
           </div>
-          <div class="thumbnail" :style="{'background-image': `url(${musicplayer.thumbnail})`}">
+          <div class="thumbnail" :style="{'background-image': `url(${musicplayer.details.thumbnail})`}">
             <div class="ctrl">
             </div>
           </div>
@@ -16,10 +16,10 @@
         </div>
         <div class="metadata">
           <div class="song">
-            {{musicplayer.song}}
+            {{musicplayer.details.song}}
           </div>
           <div class="artist">
-            {{musicplayer.artist}}
+            {{musicplayer.details.artist}}
           </div>
         </div>
         <div class="seekbar">
@@ -39,34 +39,68 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import moment from 'moment';
+
+import { mapState, mapActions } from 'vuex';
 
 export default {
+  name: 'spotify',
+  mounted() {
+    this.initiateTimer();
+    this.saveContinue('spotify');
+  },
+  destroyed() {
+    clearTimeout(this.timeoutId);
+    this.timeoutId = null;
+  },
+  data() {
+    return {
+      timeoutId: null,
+    };
+  },
+  methods: {
+    ...mapActions({
+      switch_comp: 'SWITCH_COMPONENT',
+      saveContinue: 'SAVE_CONTINUE',
+    }),
+    // ...mapActions('source', {
+    //   saveContinue: 'SAVE_CONTINUE',
+    // }),
+    initiateTimer() {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+      this.timeoutId = setTimeout(() => {
+        this.switch_comp({ replace: false, name: 'home' });
+      }, 5000);
+    },
+  },
   computed: {
-    ...mapState('source', [
-      'musicplayer',
-    ]),
+    ...mapState('source', {
+      musicplayer: 'musicplayer',
+      thumbnail: state => state.musicplayer.details.thumbnail,
+    }),
     progress() {
-      return (this.musicplayer.elapsedTime/this.musicplayer.total) * 100;
+      return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
     total() {
-      let minutes = parseInt(this.musicplayer.total / 60);
-      let sec = parseInt((this.musicplayer.total % 60));
-      
+      let minutes = parseInt(this.musicplayer.total / 60, 10);
+      let sec = parseInt((this.musicplayer.total % 60), 10);
       if (minutes < 10) minutes = `0${minutes}`;
       if (sec < 10) sec = `0${sec}`;
       return `${minutes}:${sec}`;
     },
     elapsed() {
-      let minutes = parseInt(this.musicplayer.elapsedTime / 60);
-      let sec = parseInt((this.musicplayer.elapsedTime % 60));
-      
+      let minutes = parseInt(this.musicplayer.elapsedTime / 60, 10);
+      let sec = parseInt((this.musicplayer.elapsedTime % 60), 10);
       if (minutes < 10) minutes = `0${minutes}`;
       if (sec < 10) sec = `0${sec}`;
       return `${minutes}:${sec}`;
     },
-  }, 
+  },
+  watch: {
+    thumbnail() {
+      this.initiateTimer();
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -1,10 +1,32 @@
 export default {
   components: {
     home: {
-      keyHandler: true,
+      type: 'source',
+      suggestion: true,
     },
     bixby: {
-      keyHandler: false,
+      type: 'system',
+      suggestion: false,
+    },
+    hbo: {
+      type: 'source',
+      suggestion: false,
+    },
+    volume: {
+      type: 'system',
+      suggestion: false,
+    },
+    screensaver: {
+      type: 'boot',
+      suggestion: true,
+    },
+    spotify: {
+      type: 'source',
+      suggestion: true,
+    },
+    hulu: {
+      type: 'source',
+      suggestion: false,
     },
   },
 };
