@@ -6,6 +6,7 @@ export default {
   state: {
     musicDB,
     moviesDB,
+    vTimeOut: null,
     selectedSourceURL: '/resources/ambient/Mountain/forest_long.mp4',
     metataData: {
       title: 'breaking bad',
@@ -36,6 +37,7 @@ export default {
     player: {
       volume: 5,
       isDimVol: false,
+      active: false,
       bckVol: 5,
       details: null,
       muted: false,
@@ -44,6 +46,7 @@ export default {
       url: '',
     },
     musicplayer: {
+      active: false,
       details: null,
       elapsedTime: 0,
       total: 0,
@@ -68,31 +71,20 @@ export default {
         state.player[key] = payload[key];
       }
     },
-    UPDATE_VOLUME(state, payload) {
-      if (state.player.isDimVol) return;
-      if (payload === '++') {
-        if (state.player.volume < state.player.maxVol) {
-          state.player.volume += 1;
-        }
-      } else if (payload === '--') {
-        if (state.player.volume > 0) {
-          state.player.volume -= 1;
-        }
-      } else if (payload === 'mute') {
-        state.player.muted = !state.player.muted;
-      }
-    },
     SET_MUSIC_ELAPSED(state, payload) {
       state.musicplayer.elapsedTime = payload;
+      if (state.musicplayer.details && state.musicplayer.details.save) {
+        state.musicplayer.details.save.elapsedTime = payload;
+      }
     },
     MUSIC_STATE_UPDATE(state, payload) {
       state.musicplayer.playerState = payload;
     },
     SET_MUSIC_DURATION(state, payload) {
       state.musicplayer.total = payload;
-    },
-    TOGGLE_MUTE(state) {
-      state.player.muted = !state.player.muted;
+      if (state.musicplayer.details && state.musicplayer.details.save) {
+        state.musicplayer.details.save.total = payload;
+      }
     },
     UPDATE_SOURCE_URL(state, payload) {
       state.selectedSourceURL = payload.url;
@@ -122,9 +114,17 @@ export default {
   actions: {
     LOAD_APP_PLAYER({ state, commit }, payload) {
       state.player.details = state.moviesDB[payload.content].default;
+      if (state.musicplayer.active) {
+        state.musicplayer.active = false;
+      }
+      state.player.active = true;
       commit('UPDATE_PLAYER', { url: state.player.details.url });
     },
     SET_MUSIC_PLAYER({ state }, payload) {
+      if (state.player.active) {
+        state.player.active = false;
+      }
+      state.musicplayer.active = true;
       switch (payload.artist) {
         case 'ariana':
           state.musicplayer.details = state.musicDB.ariana.default;
@@ -149,6 +149,31 @@ export default {
         default:
           break;
       }
+    },
+    UPDATE_VOLUME({ state, dispatch }, payload) {
+      if (state.player.isDimVol) return;
+      if (payload === '++') {
+        if (state.player.volume < state.player.maxVol) {
+          state.player.volume += 1;
+        }
+      } else if (payload === '--') {
+        if (state.player.volume > 0) {
+          state.player.volume -= 1;
+        }
+      } else if (payload === 'mute') {
+        state.player.muted = !state.player.muted;
+      }
+      clearTimeout(state.vTimeOut);
+      state.vTimeOut = setTimeout(() => {
+        dispatch('REMOVE_COMPONENT', 'volume', { root: true });
+      }, 5000);
+    },
+    TOGGLE_MUTE({ state, dispatch }) {
+      state.player.muted = !state.player.muted;
+      clearTimeout(state.vTimeOut);
+      state.vTimeOut = setTimeout(() => {
+        dispatch('REMOVE_COMPONENT', 'volume', { root: true });
+      }, 5000);
     },
   },
 };

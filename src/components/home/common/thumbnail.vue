@@ -1,58 +1,64 @@
 <template>
   <div class="thumbnail" :style="{'background-image': `url(${item.details.img})`}" :class="[item.contentType]">
-   <div class="icon-label" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]" v-if="item.contentType !== 'iot'"></div>
-      <template v-if="item.contentType === 'iot-weather'">
-     <div class="iot-container" v-if="weather === null">
-       <div class="icon">
-         <img :src="item.details.icon"/>
-      </div>
-       <div class="info">
-        <div class="measure">
-          {{item.details.measure}}<span>&deg;C</span>
+  <div class="icon-label" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]" v-if="item.contentType !== 'iot'"></div>
+    <template v-if="item.contentType === 'iot-weather'">
+      <div class="iot-container" v-if="weather === null">
+        <div class="icon">
+          <img :src="item.details.icon"/>
+        </div>
+        <div class="info">
+          <div class="measure">
+            {{item.details.measure}}<span>&deg;C</span>
+            </div>
+            <div class="place">
+            {{item.details.place}}
+            </div>
           </div>
-          <div class="place">
-          {{item.details.place}}
+      </div>
+      <div class="iot-container"  v-else>
+        <div class="icon">
+          <img :src="weather.img"/>
+        </div>
+        <div class="info">
+          <div class="measure">
+            {{weather.temp}}<span>&deg;C</span>
+            </div>
+            <div class="place">
+            {{item.details.place}}
           </div>
         </div>
-     </div>
-    <div class="iot-container"  v-else>
-       <div class="icon">
-         <img :src="weather.img"/>
       </div>
-       <div class="info">
-        <div class="measure">
-          {{weather.temp}}<span>&deg;C</span>
-          </div>
-          <div class="place">
-          {{item.details.place}}
-          </div>
+    </template>
+    <template v-else-if="item.contentType.indexOf('iot') !== -1">
+      <div class="iot-container">
+        <div class="icon">
+          <img :src="item.details.icon"/>
         </div>
-    </div>
-  </template>
-  <template v-else-if="item.contentType.indexOf('iot') !== -1">
-    <div class="iot-container">
-      <div class="icon">
-        <img :src="item.details.icon"/>
+        <div class="info">
+          <div class="measure">
+            {{item.details.measure}}<span v-if="item.contentType === 'iot-temp'">&deg;C</span>
+            </div>
+            <div class="place">
+            {{item.details.place}}
+            </div>
+          </div>
       </div>
-      <div class="info">
-        <div class="measure">
-          {{item.details.measure}}<span v-if="item.contentType === 'iot-temp'">&deg;C</span>
-          </div>
-          <div class="place">
-          {{item.details.place}}
-          </div>
+    </template>
+    <template v-if="item.details.bottomText">
+      <div class="bottom-footer" :class="[item.contentType]">
+        <div class="text simple">
+          <template v-for="text in item.details.bottomText.split('$')">
+          <div :key="text">{{text}}</div>
+          </template>
         </div>
-    </div>
-  </template>
-   <template v-if="item.details.bottomText">
-    <div class="bottom-footer" :class="[item.contentType]">
-      <div class="text simple">
-        <template v-for="text in item.details.bottomText.split('$')">
-        <div :key="text">{{text}}</div>
-        </template>
       </div>
-    </div>
-   </template>
+    </template>
+    <template v-if="item.key==='spotify'">
+      <div class="seekbar">
+        <div class="progress" :style="{'width': `${item.elapsedTime/item.total * 100}%`}">
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -151,6 +157,24 @@ export default {
     }
     &.cp-type-1 {
       margin-bottom: 70 * $s;
+    }
+  }
+  .seekbar {
+    background: red;
+    width: 87%;
+    height: 8 * $s;
+    margin:0 15 * $s;
+    position: absolute;
+    bottom: 20 * $s;
+    border-radius:20 * $s;
+    overflow: hidden;
+    background: rgba(255,255,255,0.1);
+    .progress {
+      position: absolute;
+      left: 0;
+      width: 20%;
+      height: 100%;
+      background: white;
     }
   }
   .icon-label {

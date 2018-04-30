@@ -82,6 +82,9 @@ export default {
         this.pause();
       }
     },
+    playerActive(val) {
+      if (!val) this.pause();
+    },
     muted(val) {
       if (!this.playerEle) return;
       if (val) {
@@ -102,6 +105,7 @@ export default {
     ...mapState('source', {
       player: state => state.player,
       volume: state => state.player.volume,
+      playerActive: state => state.player.active,
       muted: state => state.player.muted,
       playerState: state => state.player.playerState,
     }),

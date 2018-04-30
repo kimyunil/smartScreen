@@ -6,6 +6,8 @@ export default {
       save: {
         rmvApp: 'npr',
         index: 0,
+        elapsedTime: 0,
+        total: 0,
         pageIdx: 0,
         details: {
           bottomText: 'Michael Jackson',
@@ -26,6 +28,8 @@ export default {
         rmvApp: 'npr',
         index: 0,
         pageIdx: 0,
+        elapsedTime: 0,
+        total: 0,
         details: {
           bottomText: 'Ariana Grande',
           logo: '/static/Images/home/icons/common/masterChef.png',
@@ -34,7 +38,7 @@ export default {
       },
       art: '/static/Images/spotify/songs/art/art3.png',
       thumbnail: '/static/Images/spotify/songs/thumbnail/ariana.png',
-      url: '/resources/audio/MyMusic/major-lazer.mp3',
+      url: '/resources/audio/MyMusic/sample.mp3',
     },
   },
   coldplay: {
@@ -45,6 +49,8 @@ export default {
         rmvApp: 'npr',
         index: 0,
         pageIdx: 0,
+        elapsedTime: 0,
+        total: 0,
         details: {
           bottomText: 'Cold Play',
           logo: '/static/Images/home/icons/common/masterChef.png',
@@ -63,6 +69,8 @@ export default {
       save: {
         rmvApp: 'npr',
         index: 0,
+        elapsedTime: 0,
+        total: 0,
         pageIdx: 0,
         details: {
           bottomText: 'Michael Jackson',
@@ -82,6 +90,8 @@ export default {
       save: {
         rmvApp: 'npr',
         index: 0,
+        elapsedTime: 0,
+        total: 0,
         pageIdx: 0,
         details: {
           bottomText: 'Pharrell Williams',

@@ -23,6 +23,7 @@ export default {
     ...mapState('source', {
       musicplayer: state => state.musicplayer,
       volume: state => state.player.volume,
+      mplayerActive: state => state.musicplayer.active,
       muted: state => state.player.muted,
       playstate: state => state.musicplayer.playerState,
     }),
@@ -35,6 +36,9 @@ export default {
     volume(val) {
       if (!this.audioEle) return;
       this.audioEle.volume = (val * 1) / 16;
+    },
+    mplayerActive(val) {
+      if (!val) this.pause();
     },
     muted(val) {
       if (!this.audioEle) return;

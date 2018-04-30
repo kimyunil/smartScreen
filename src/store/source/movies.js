@@ -7,6 +7,8 @@ export default {
         rmvApp: 'fitness',
         index: 0,
         pageIdx: 0,
+        elapsedTime: 0,
+        total: 0,
         details: {
           dim: {
             w: '40',
@@ -29,6 +31,8 @@ export default {
       save: {
         rmvApp: 'fitness',
         index: 0,
+        elapsedTime: 0,
+        total: 0,
         pageIdx: 0,
         details: {
           dim: {

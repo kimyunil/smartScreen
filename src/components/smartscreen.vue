@@ -84,7 +84,7 @@ export default {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
-    ...mapMutations('source', {
+    ...mapActions('source', {
       updateVolume: 'UPDATE_VOLUME',
       toggleMute: 'TOGGLE_MUTE',
     }),

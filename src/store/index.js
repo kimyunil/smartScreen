@@ -79,6 +79,8 @@ const store = new Vuex.Store({
         commit('home/SAVE_CONT_DATA', state.source.musicplayer.details.save);
       } else if (cpName === 'hbo' || cpName === 'hulu') {
         state.source.player.details.save.key = cpName;
+        state.source.player.details.save.elapsedTime = state.source.player.elapsedTime;
+        state.source.player.details.save.total = state.source.player.total;
         commit('home/SAVE_CONT_DATA', state.source.player.details.save);
       }
     },
@@ -152,10 +154,18 @@ const store = new Vuex.Store({
           break;
         }
         case 'volume': {
-          commit('source/UPDATE_VOLUME', payload.data);
+          dispatch('source/UPDATE_VOLUME', payload.data);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
           break;
         }
+        case 'media':
+          // not launching anything for now, may be in future
+          if (state.source.player.active) {
+            state.source.player.playerState = payload.data;
+          } else if(state.source.musicplayer.active) {
+            state.source.musicplayer.playerState = payload.data;
+          }
+          break;
         default:
           break;
       }
@@ -170,8 +180,13 @@ const store = new Vuex.Store({
         }
       }
     },
-    REMOVE_COMPONENT({ state, dispatch }) {
-      state.viewStack.pop();
+    REMOVE_COMPONENT({ state, dispatch }, payload = null) {
+      if (payload) {
+        const idx = state.viewStack.indexOf(payload);
+        if (idx !== -1) state.viewStack.splice(idx, 1);
+      } else {
+        state.viewStack.pop();
+      }
       if (state.viewStack.length === 0) {
         dispatch('SWITCH_COMPONENT', { replace: false, name: 'screensaver' });
       }

@@ -96,11 +96,10 @@ export default {
       console.log(pageDetail);
       // add basic data from replaced app;
       const appSave = pageDetail[payload.rmvApp];
-      const nwApp = payload;
-      nwApp.type = appSave.type;
-      nwApp.template = appSave.template;
-      nwApp.contentType = appSave.contentType;
-      pageDetail[payload.key] = nwApp;
+      payload.type = appSave.type;
+      payload.template = appSave.template;
+      payload.contentType = appSave.contentType;
+      pageDetail[payload.key] = payload;
       // update content list
       const idx = pageDetail.content.indexOf(payload.rmvApp);
       if (idx === -1) {
