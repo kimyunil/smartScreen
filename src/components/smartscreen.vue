@@ -4,10 +4,10 @@
     </div>
     <transition-group name="fade" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
-        <component :active="topView === comps && !isBixbyActive" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+        <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
     </transition-group>
-    <bixby v-show="isBixbyActive" :active="isBixbyActive"/>
+    <bixby v-show="isBixbyActive && active" :active="isBixbyActive"/>
     <transition name="show">
         <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion" :style="{'z-index': (viewStack.length + 1)}" >
           <transition name="slideshow">
@@ -114,6 +114,7 @@ export default {
     returnCB() {
     },
     handleKeyDown(type) {
+      if (!this.active) return;
       // this.resetVoiceTimer();
       switch (type) {
         case 'VOICE':

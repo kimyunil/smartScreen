@@ -18,7 +18,7 @@ export default {
     coldplay: {
       template: 'list',
       contentType: 'music',
-      response: 'Here is your spotify playlist',
+      response: 'Here are some latest albums by Coldplay',
       list: ['cp1', 'cp2', 'cp3', 'cp4', 'cp5'],
       drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
       clipanim: {

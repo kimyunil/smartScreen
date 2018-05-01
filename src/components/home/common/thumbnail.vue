@@ -8,7 +8,7 @@
         </div>
         <div class="info">
           <div class="measure">
-            {{item.details.measure}}<span>&deg;C</span>
+            {{item.details.measure}}<span>&deg;</span>
             </div>
             <div class="place">
             {{item.details.place}}
@@ -21,7 +21,7 @@
         </div>
         <div class="info">
           <div class="measure">
-            {{weather.temp}}<span>&deg;C</span>
+            {{weather.temp}}<span>&deg;</span>
             </div>
             <div class="place">
             {{item.details.place}}
@@ -36,7 +36,7 @@
         </div>
         <div class="info">
           <div class="measure">
-            {{item.details.measure}}<span v-if="item.contentType === 'iot-temp'">&deg;C</span>
+            {{item.details.measure}}<span v-if="item.contentType === 'iot-temp'">&deg;</span>
             </div>
             <div class="place">
             {{item.details.place}}

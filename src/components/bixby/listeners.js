@@ -7,6 +7,8 @@ export default {
     Messages.$on('speech-to-text.transcription-update', this.sttUpdate);
     Messages.$on('audio-input.started', this.initAudioRecording);
     Messages.$on('audio-input.stopped', this.stopAudioRecording);
+    Messages.$on('text-to-speech.speech-end', this.stopAudioRecording);
+    Messages.$on('text-to-speech.speech-start', this.initAudioRecording);
     Messages.$on('launch.bixby', this.bixbyaction);
     Messages.$on('bixby.result', this.actionResult);
   },
@@ -17,6 +19,8 @@ export default {
     Messages.$off('audio-input.stopped', this.stopAudioRecording);
     Messages.$off('launch.bixby', this.bixbyaction);
     Messages.$off('bixby.result', this.actionResult);
+    Messages.$off('text-to-speech.speech-end', this.stopAudioRecording);
+    Messages.$off('text-to-speech.speech-start', this.initAudioRecording);
   },
   computed: {
     ...mapState([
@@ -95,6 +99,7 @@ export default {
         } else {
           this.launchVoice();
         }
+        Messages.send('audio-input.start');
       } else if (param.action === 'listen') {
         Messages.send('audio-input.start');
         this.updateBixby('listen');

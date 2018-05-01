@@ -152,9 +152,20 @@ const store = new Vuex.Store({
           appSource.currentSource = 'hbo';
           let cIdx = appSource.hbo.subComp.indexOf(payload.subcategory);
           if (cIdx === -1) cIdx = 0;
+          if (state.isBixbyActive && appSource.hbo.subComp[cIdx] === 'player') {
+            Messages.send('text-to-speech.say', 'playing Westword in HBO');
+          }
           appSource.hbo.idx = cIdx;
           if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
+          break;
+        }
+        case 'which-song': {
+          const music = state.source.musicplayer.details;
+          if (music) {
+            const syaText = `Playing ${music.song} by ${music.artist}`;
+            Messages.send('text-to-speech.say', syaText);
+          }
           break;
         }
         case 'spotify': {

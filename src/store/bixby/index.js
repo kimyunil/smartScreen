@@ -1,4 +1,5 @@
 import data from './data';
+import Messages from '../../services/Messages';
 
 export default {
   namespaced: true,
@@ -40,6 +41,10 @@ export default {
       const result = {};
       if (state.db.info[payload.subcategory]) {
         result.data = state.db.info[payload.subcategory];
+      }
+      Messages.send('text-to-speech.say', undefined);
+      if (result.data.tts) {
+        Messages.send('text-to-speech.say', result.data.tts);
       }
       state.result = result;
       console.log(result);
