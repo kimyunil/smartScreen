@@ -68,6 +68,9 @@ export default {
       'isRemoteEnabled',
       'isBixbyActive',
     ]),
+    ...mapState('home', [
+      'timeout',
+    ]),
     ...mapGetters('home', {
       catGrid: 'GET_CAT_GRID',
       pageSubCat: 'PAGE_SUB_CAT_HEALTH',
@@ -128,9 +131,10 @@ export default {
     startSlideShow() {
       this.transitionName = 'slideshow';
       this.slideshow = true;
+      console.log(this.timeout);
       this.intervalId = setInterval(() => {
         this.index = (((this.index) + 1) % this.grids.length);
-      }, 3000);
+      }, this.timeout);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
@@ -198,6 +202,15 @@ export default {
     grid,
   },
   watch: {
+    timeout() {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      this.$nextTick(() => {
+        if (!this.isRemoteEnabled) {
+          this.startSlideShow();
+        }
+      });
+    },
     isRemoteEnabled(val, old) {
       console.log(val, old);
       if (!val) this.startSlideShow();

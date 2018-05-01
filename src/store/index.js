@@ -87,7 +87,7 @@ const store = new Vuex.Store({
         state.source.musicplayer.details.save.key = 'spotify';
         commit('home/SAVE_CONT_DATA', state.source.musicplayer.details.save);
       } else if (cpName === 'hbo' || cpName === 'hulu') {
-        state.source.player.details.save.key = cpName;
+        state.source.player.details.save.key = 'app';
         state.source.player.details.save.elapsedTime = state.source.player.elapsedTime;
         state.source.player.details.save.total = state.source.player.total;
         commit('home/SAVE_CONT_DATA', state.source.player.details.save);
@@ -187,6 +187,11 @@ const store = new Vuex.Store({
             }, 20);
           }
           break;
+        case 'ss-timeout': {
+          state.home.timeout = payload.data;
+          console.log(payload.data);
+          break;
+        }
         default:
           break;
       }

@@ -156,6 +156,16 @@ export default {
             }
           }
           break;
+        case 'SELECT':
+          console.log(this.grids);
+          for (let i = 0; i < this.grids.length; i += 1) {
+            if (this.grids[i].type === this.currType) {
+              console.log(this.grids[i]);
+              this.$emit('select', this.grids[i]);
+              break;
+            }
+          }
+          break;
         default:
           break;
       }

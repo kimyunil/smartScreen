@@ -114,7 +114,7 @@ export default {
     returnCB() {
     },
     handleKeyDown(type) {
-      this.resetVoiceTimer();
+      // this.resetVoiceTimer();
       switch (type) {
         case 'VOICE':
           if (this.isBixbyActive) {

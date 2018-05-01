@@ -126,6 +126,11 @@ export default {
           details: {
             bottomText: 'WestWorld<br>S1Ep4Dissonance Theory',
             topLeftText: 'Continue Watching',
+            action: {
+              category: 'hbo',
+              subcategory: 'player',
+              content: 'got',
+            },
             tile: '/static/Images/home/tile/morning/GOT.png',
             logoType: 'rect-2',
             logo: '/static/Images/home/icons/morning/hbo.png',

@@ -9,9 +9,10 @@ export default {
         elapsedTime: 0,
         total: 0,
         details: {
-          dim: {
-            w: '40',
-            h: '50',
+          action: {
+            category: 'hbo',
+            subcategory: 'player',
+            content: 'got',
           },
           topLeftText: 'Continue Watching',
           bottomText: 'WestWorld<br>S1Ep4Dissonance Theory',
@@ -32,9 +33,10 @@ export default {
         total: 0,
         pageIdx: 1,
         details: {
-          dim: {
-            w: '40',
-            h: '50',
+          action: {
+            category: 'hulu',
+            subcategory: 'home',
+            content: 'handmaids',
           },
           topLeftText: 'Continue Watching',
           bottomText: 'HandMaid\'s Tail',

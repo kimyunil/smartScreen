@@ -18,7 +18,7 @@
       <transition name="fade">
         <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
           <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
-            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus"/>
+            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
           </div>
           <div class="recent-apps">
               <div class="apps-list">
@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import grid from './common/grid';
 import Messages from '../../services/Messages';
 
@@ -66,6 +66,9 @@ export default {
       'isRemoteEnabled',
       'isBixbyActive',
     ]),
+    ...mapState('home', [
+      'timeout',
+    ]),
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
       appsItems: 'GET_FORYOU_APPS',
@@ -80,7 +83,6 @@ export default {
     },
     grids() {
       const gridPages = this.cat_grid(0);
-      console.log(gridPages);
       return gridPages;
     },
     translateY() {
@@ -94,6 +96,20 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      launch: 'LAUNCH_COMPONENT',
+    }),
+    selectedGridItem(item) {
+      console.log(item);
+      if (item.details.action) {
+        this.launch(item.details.action);
+      }
+      // if (this.isRemoteEnabled) {
+      //   this.slideshow = false;
+      // } else {
+      //   this.slideshow = true;
+      // }
+    },
     shrinkTransitionCB() {
       // if (this.isRemoteEnabled) {
       //   this.slideshow = false;
@@ -135,11 +151,12 @@ export default {
     },
     startSlideShow() {
       this.slideshow = true;
+      console.log(this.timeout);
       clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
         this.transitionName = 'slideshow';
         this.index = (((this.index) + 1) % this.grids.length);
-      }, 10000);
+      }, this.timeout);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
@@ -200,6 +217,15 @@ export default {
     grid,
   },
   watch: {
+    timeout() {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      this.$nextTick(() => {
+        if (!this.isRemoteEnabled) {
+          this.startSlideShow();
+        }
+      });
+    },
     isRemoteEnabled(val, old) {
       console.log(val, old);
       if (!val) this.startSlideShow();

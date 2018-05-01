@@ -11,7 +11,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Black or White',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/michael.png',
         },
@@ -30,7 +33,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Man in the Mirror',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/MJ_thriller25.jpg',
         },
@@ -49,7 +55,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Scream',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/MJ_bad25.jpg',
         },
@@ -68,7 +77,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Smooth criminal',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/MJ_thriller25.jpg',
         },
@@ -87,7 +99,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Thriller',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/MJ_bad25.jpg',
         },
@@ -106,7 +121,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Beat it',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/michael.png',
         },
@@ -125,7 +143,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Billie Jean',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/MJ_bad25.jpg',
         },
@@ -147,7 +168,10 @@ export default {
         elapsedTime: 0,
         total: 0,
         details: {
-          bottomText: 'Ariana Grande',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'No Tears Left to Cry',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/ariana.png',
         },
@@ -161,7 +185,7 @@ export default {
     list: ['default'],
     default: {
       artist: 'Cold Play',
-      song: 'No Tears Left to Cry',
+      song: 'Strawberry Swing',
       save: {
         rmvApp: 'npr',
         index: 0,
@@ -169,7 +193,10 @@ export default {
         elapsedTime: 0,
         total: 0,
         details: {
-          bottomText: 'Cold Play',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Strawberry Swing',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/strawberry.png',
         },
@@ -191,7 +218,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Michael Jackson',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Blue bird',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/alexis_ffrench_bluebird.jpg',
         },
@@ -210,7 +240,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Classical Song',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Moonlight Sonata',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/michael.png',
         },
@@ -232,7 +265,10 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
-          bottomText: 'Pharrell Williams',
+          action: {
+            category: 'spotify',
+          },
+          bottomText: 'Happy',
           logo: '/static/Images/home/icons/common/masterChef.png',
           img: '/static/Images/spotify/songs/thumbnail/phareell.png',
         },

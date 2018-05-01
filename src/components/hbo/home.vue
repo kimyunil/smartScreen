@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
@@ -28,7 +28,9 @@ export default {
   methods: {
     ...mapMutations('source', {
       updateComponent: 'UPDATE_HBO_COMP',
-      setPlayer: 'UPDATE_PLAYER',
+    }),
+    ...mapActions('source', {
+      setPlayer: 'LOAD_APP_PLAYER',
     }),
     handleKeyDown(type) {
       if (!this.active) return;
@@ -40,7 +42,7 @@ export default {
         case 'DOWN':
           break;
         case 'SELECT':
-          this.setPlayer({ url: '/resources/videos/hbo/GOT.mp4' });
+          this.setPlayer({ content: 'got' });
           this.updateComponent('++');
           break;
         case 'BACK':

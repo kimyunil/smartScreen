@@ -40,7 +40,8 @@
 </template>
 <script>
 
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
+import Messages from '../../services/Messages';
 
 export default {
   name: 'spotify',
@@ -48,8 +49,10 @@ export default {
     this.initiateTimer();
     this.saveContinue('spotify');
     this.updateMP();
+    Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
+    Messages.$off('button_down', this.handleKeyDown);
     clearTimeout(this.timeoutId);
     this.timeoutId = null;
   },
@@ -59,12 +62,24 @@ export default {
     };
   },
   methods: {
+    handleKeyDown(type) {
+      console.log(this.active);
+      if (!this.active) return;
+      switch (type) {
+        case 'SELECT':
+          this.updateState(1 - this.playerState);
+          break;
+        default:
+          break;
+      }
+    },
     ...mapActions({
       switch_comp: 'SWITCH_COMPONENT',
       saveContinue: 'SAVE_CONTINUE',
     }),
     ...mapMutations('source', {
       updateMP: 'UPDATE_MP_STATE',
+      updateState: 'MUSIC_STATE_UPDATE',
     }),
     // ...mapActions('source', {
     //   saveContinue: 'SAVE_CONTINUE',
@@ -80,6 +95,7 @@ export default {
   computed: {
     ...mapState('source', {
       musicplayer: 'musicplayer',
+      playerState: state => state.musicplayer.playerState,
       thumbnail: state => state.musicplayer.details.thumbnail,
     }),
     progress() {

@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     data,
+    timeout: 5000,
     suggestions: ['Tell me more About Self Esteem', 'Go to Health and Wellness', 'Show me more...'],
   },
   props: {
