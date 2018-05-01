@@ -40,13 +40,14 @@
 </template>
 <script>
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'spotify',
   mounted() {
     this.initiateTimer();
     this.saveContinue('spotify');
+    this.updateMP();
   },
   destroyed() {
     clearTimeout(this.timeoutId);
@@ -61,6 +62,9 @@ export default {
     ...mapActions({
       switch_comp: 'SWITCH_COMPONENT',
       saveContinue: 'SAVE_CONTINUE',
+    }),
+    ...mapMutations('source', {
+      updateMP: 'UPDATE_MP_STATE',
     }),
     // ...mapActions('source', {
     //   saveContinue: 'SAVE_CONTINUE',

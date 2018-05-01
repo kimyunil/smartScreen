@@ -41,7 +41,7 @@ export default {
           break;
         case 'SELECT':
           this.setPlayer({ url: '/resources/videos/hbo/GOT.mp4' });
-          this.updateComponent('player');
+          this.updateComponent('++');
           break;
         case 'BACK':
           this.$emit('exit', { from: 'home' });

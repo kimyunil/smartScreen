@@ -2,7 +2,7 @@
   <div class="hbo-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="hbo.splash" @exit="exitCB"></splash>
-      <component v-else :is="topView" :active="!showSplash&&active" class="hbo-content" :name="'hbo'"  :details="hbo[hbo.subComp]" @exit="exitCB">
+      <component v-else :is="topView" :active="!showSplash&&active" class="hbo-content" :name="'hbo'"  :details="hbo[topView]" @exit="exitCB">
     </component>
     </transition>
   </div>
@@ -12,6 +12,7 @@ import { mapState, mapMutations } from 'vuex';
 import splash from '../common/splash';
 import player from '../common/player';
 import home from './home';
+import detail from './detail';
 import Messages from '../../services/Messages';
 
 export default {
@@ -34,10 +35,7 @@ export default {
       hbo: state => state.source.hbo,
     }),
     topView() {
-      if (this.hbo.subComp.length > 0) {
-        return this.hbo.subComp[this.hbo.subComp.length - 1];
-      }
-      return 'home';
+      return this.hbo.subComp[this.hbo.idx];
     },
   },
   data() {
@@ -53,8 +51,8 @@ export default {
     exitCB(param) {
       if (param.from === 'splash') {
         this.showSplash = false;
-      } else if (this.hbo.subComp.length > 1) {
-        this.returnHBOComp();
+      } else if (param.from !== 'home') {
+        this.updateComponent('++');
       } else {
         this.$emit('exit');
       }
@@ -81,6 +79,7 @@ export default {
     splash,
     home,
     player,
+    detail,
   },
 };
 </script>
@@ -98,9 +97,6 @@ export default {
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.4s ease;
-    &.bixby {
-      transition: none;
-    }
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;

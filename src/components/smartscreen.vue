@@ -95,6 +95,7 @@ export default {
       removeComponent: 'REMOVE_COMPONENT',
       switch_comp: 'SWITCH_COMPONENT',
       launchVoice: 'LAUNCH_VOICE',
+      resetVoiceTimer: 'RESET_VOICE_TIMER',
       closeVoice: 'CLOSE_VOICE',
     }),
     exitCB() {
@@ -113,6 +114,7 @@ export default {
     returnCB() {
     },
     handleKeyDown(type) {
+      this.resetVoiceTimer();
       switch (type) {
         case 'VOICE':
           if (this.isBixbyActive) {

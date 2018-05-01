@@ -2,7 +2,7 @@
   <div class="hulu-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="hulu.splash" @exit="exitCB"></splash>
-      <component v-else :is="topView" :active="!showSplash&&active" class="hulu-content" :name="'hulu'" :details="hulu[hulu.subComp]" @exit="exitCB">
+      <component v-else :is="topView" :active="!showSplash&&active" class="hulu-content" :name="'hulu'" :details="hulu[topView]" @exit="exitCB">
     </component>
     </transition>
   </div>
@@ -11,6 +11,8 @@
 import { mapState, mapMutations } from 'vuex';
 import splash from '../common/splash';
 import player from '../common/player';
+import detail from './detail';
+import home from './home';
 import Messages from '../../services/Messages';
 
 export default {
@@ -24,7 +26,7 @@ export default {
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
-    this.setPlayer({ url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4' });
+    // this.setPlayer({ url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4' });
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -34,10 +36,7 @@ export default {
       hulu: state => state.source.hulu,
     }),
     topView() {
-      if (this.hulu.subComp.length > 0) {
-        return this.hulu.subComp[this.hulu.subComp.length - 1];
-      }
-      return 'player';
+      return this.hulu.subComp[this.hulu.idx];
     },
   },
   data() {
@@ -48,14 +47,13 @@ export default {
   methods: {
     ...mapMutations('source', {
       updateComponent: 'UPDATE_HULU_COMP',
-      returnHuluComp: 'RETURN_HULU_COMP',
-      setPlayer: 'UPDATE_PLAYER',
     }),
     exitCB(param) {
+      console.log('player:::');
       if (param.from === 'splash') {
         this.showSplash = false;
-      } else if (this.hulu.subComp.length > 1) {
-        this.returnHuluComp();
+      } else if (param.from !== 'home') {
+        this.updateComponent('++');
       } else {
         this.$emit('exit');
       }
@@ -80,6 +78,8 @@ export default {
   },
   components: {
     splash,
+    home,
+    detail,
     player,
   },
 };

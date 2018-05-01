@@ -9,14 +9,14 @@ export default {
     fitbitSummary: {
       template: 'info',
       type: 'fitbit',
-      response: 'Here’s what I found for Lost in Translation',
-      img: '/static/Images/results/info/fitbitsum.png',
+      response: 'Here is your fit bit summary',
+      img: '/static/Images/results/info/fitbit_summary.png',
     },
     fitbitSleep: {
       template: 'info',
       type: 'fitbit',
       response: 'Here is your Sleep Quality from Fitbit',
-      img: '/static/Images/results/info/fitbitsleep.png',
+      img: '/static/Images/results/info/fitbit_sleep_quality.png',
     },
     everest: {
       template: 'info',
@@ -28,19 +28,19 @@ export default {
       template: 'info',
       type: 'weather',
       response: 'Here is your 7 days forecast in portland',
-      img: '/static/Images/results/info/weatherport.png',
+      img: '/static/Images/results/info/weather-portland.png',
     },
     weatherweekend: {
       template: 'info',
       type: 'weather',
       response: 'Here is your Saturday Forecast',
-      img: '/static/Images/results/info/weekweather.png',
+      img: '/static/Images/results/info/weather-weekend.png',
     },
     weathertoday: {
       template: 'info',
       type: 'weather',
       response: 'Here is today’s forecast',
-      img: '/static/Images/results/info/todayweather.png',
+      img: '/static/Images/results/info/weather-today.png',
     },
     measure: {
       template: 'info',

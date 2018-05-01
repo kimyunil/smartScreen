@@ -34,6 +34,9 @@ export default {
       launchVoice: 'LAUNCH_VOICE',
       closeVoice: 'CLOSE_VOICE',
     }),
+    ...mapMutations({
+      enableKeybrd: 'UPDATE_REMOTE_MODE',
+    }),
     ...mapMutations('source', {
       setVolumeDim: 'SET_VOlUME_DIM',
     }),
@@ -44,6 +47,7 @@ export default {
       this.setVolumeDim(false);
     },
     sttUpdate(param) {
+      this.enableKeybrd(false);
       if (this.bixbyState !== 'listen') {
         clearTimeout(this.timeout);
         // this.defaultOptions.loop = true;
@@ -54,6 +58,7 @@ export default {
       this.speechText = param;
     },
     sttComplete(param) {
+      this.enableKeybrd(false);
       if (this.bixbyState === 'listen') {
         clearTimeout(this.timeout);
         // give some time to user to update
@@ -69,6 +74,7 @@ export default {
       this.speechText = param;
     },
     actionResult(payload) {
+      this.enableKeybrd(false);
       if (payload.type === 'action') {
         if (this.isBixbyActive) {
           this.showResults(payload.param);
@@ -81,6 +87,7 @@ export default {
       }
     },
     bixbyaction(param) {
+      this.enableKeybrd(false);
       console.log('launchBixby', param);
       if (param.action === 'launch') {
         if (this.isBixbyActive) {

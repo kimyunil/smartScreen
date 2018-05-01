@@ -1,19 +1,15 @@
 <template>
   <div class="tile" :style="{'background-image': `url(${item.details.tile})`}">
-    <div class="icon" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]">
+    <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]">
     </div>
     <div class="header-text" >
-      <div class="sponsor" v-if="item.contentType === 'sponsored'">
-        Sponsored
-      </div>
-      <div class="time" v-if="item.contentType === 'time'">
-        <span>06hr</span>
-        <span>35m</span>
+      <div class="sponsor" v-if="item.details.topLeftText !== null">
+        <span v-html="item.details.topLeftText"></span>
       </div>
     </div>
     <div class="bottom-footer">
       <div class="sponsored" v-if="item.contentType === 'sponsored' || item.contentType === 'time'">
-        {{item.details.bottomText}}
+        <span v-html="item.details.bottomText"></span>
       </div>
     </div>
     <template v-if="item.key === 'hbo' || item.key === 'hulu'">
@@ -78,6 +74,7 @@ export default {
     bottom: 0px;
     left: 30 * $s;
     margin-bottom: 30 * $s;
+    width: calc(90% - #{ 30 * $s });
     .sponsored {
       font-family: Helvetica;
       font-size: 40 * $s;
@@ -106,11 +103,25 @@ export default {
   }
   .icon {
     position: absolute;
-    right: 5%;
-    bottom: 30 * $s;
-    background-position: center;
-    background-size: contain;
+    right: 0;
+    bottom: 0 * $s;
+    background-size: 100%;
     background-repeat: no-repeat;
+    background-position: center;
+    &.sqr {
+      width: 50 * $s;
+      height: 70 * $s;
+    }
+    &.rect {
+      width: 120 * $s;
+      height: 100 * $s;
+    }
+    &.rect-2 {
+      right: 5%;
+      bottom: 30 * $s;
+      width: 75 * $s;
+      height: 30 * $s;
+    }
   }
 }
 </style>

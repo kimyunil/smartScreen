@@ -5,6 +5,7 @@ import source from '@/store/source/';
 import bixby from '@/store/bixby/';
 import home from '@/store/home/';
 import config from './config';
+import Messages from '../services/Messages';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
       todays: null,
       portland: null,
     },
+    voiceTimerID: null,
     viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
@@ -73,6 +75,13 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    RESET_VOICE_TIMER({ state }) {
+      state.isRemoteEnabled = true;
+      clearTimeout(this.voiceTimerID);
+      this.voiceTimerID = setTimeout(() => {
+        // state.isRemoteEnabled = false;
+      }, 15000);
+    },
     SAVE_CONTINUE({ state, commit }, cpName) {
       if (cpName === 'spotify') {
         state.source.musicplayer.details.save.key = 'spotify';
@@ -87,11 +96,13 @@ const store = new Vuex.Store({
     LAUNCH_VOICE({ state, commit, dispatch }) {
       commit('bixby/UPDATE_BIXBY', 'invoke');
       dispatch('REMOVE_COMPONENT_TYPE', { type: 'system' });
+      state.isRemoteEnabled = false;
       state.isBixbyActive = true;
     },
     CLOSE_VOICE({ state, commit }) {
       commit('bixby/UPDATE_BIXBY', 'initial');
       state.isBixbyActive = false;
+      // state.isRemoteEnabled = true;
     },
     SWITCH_COMPONENT({ state, commit, getters }, payload) {
       commit('REMOVE_IF_EXSIST', payload.name);
@@ -129,29 +140,27 @@ const store = new Vuex.Store({
         case 'hulu': {
           const appSource = state.source.source;
           appSource.currentSource = 'hulu';
-          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
-            appSource.hbo.subComp.pop();
-          }
-          appSource.hbo.subComp.push(payload.subcategory);
-          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
+          let cIdx = appSource.hulu.subComp.indexOf(payload.subcategory);
+          if (cIdx === -1) cIdx = 0;
+          appSource.hulu.idx = cIdx;
+          if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'hulu' });
           break;
         }
         case 'hbo': {
           const appSource = state.source.source;
           appSource.currentSource = 'hbo';
-          for (let i = 0; i < appSource.hbo.subComp.length; i += 1) {
-            appSource.hbo.subComp.pop();
-          }
-          appSource.hbo.subComp.push(payload.subcategory);
-          if (payload.url) dispatch('source/LOAD_APP_PLAYER', payload);
+          let cIdx = appSource.hbo.subComp.indexOf(payload.subcategory);
+          if (cIdx === -1) cIdx = 0;
+          appSource.hbo.idx = cIdx;
+          if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
           break;
         }
         case 'spotify': {
           dispatch('SWITCH_COMPONENT', { name: 'spotify' });
           if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', payload);
-          else if(payload.loop) dispatch('source/SKIP_NEXT');
+          else if (payload.loop) dispatch('source/SKIP_NEXT');
           break;
         }
         case 'volume': {
@@ -159,12 +168,23 @@ const store = new Vuex.Store({
           dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
           break;
         }
+        case 'back': {
+          console.log('back::::::::::::::');
+          Messages.$emit('button_down', 'BACK');
+          break;
+        }
         case 'media':
           // not launching anything for now, may be in future
           if (state.source.player.active) {
-            state.source.player.playerState = payload.data;
+            state.source.player.playerState = -1;
+            setTimeout(() => {
+              state.source.player.playerState = payload.data;
+            }, 20);
           } else if (state.source.musicplayer.active) {
-            state.source.musicplayer.playerState = payload.data;
+            state.source.musicplayer.playerState = -1;
+            setTimeout(() => {
+              state.source.musicplayer.playerState = payload.data;
+            }, 20);
           }
           break;
         default:
@@ -188,8 +208,8 @@ const store = new Vuex.Store({
       } else {
         state.viewStack.pop();
       }
-      if (state.viewStack.length === 0) {
-        dispatch('SWITCH_COMPONENT', { replace: false, name: 'screensaver' });
+      if (state.viewStack.length === 1) {
+        dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
       }
     },
   },

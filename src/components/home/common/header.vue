@@ -137,7 +137,7 @@ export default {
         margin-right: 80 * $s;
       }
       &.selected {
-        background: grey;
+        background: rgba(0,0,0,1);
         color: white;
         box-shadow: 0 0 0;
       }

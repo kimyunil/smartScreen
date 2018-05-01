@@ -84,7 +84,8 @@ export default {
     select_nav(state, indx) {
       state.data.navs.selectedIdx = indx;
     },
-    SAVE_CONT_DATA(state, payload) {
+    SAVE_CONT_DATA(state, arg) {
+      const payload = arg;
       // fetch category ie. for you
       console.log(payload);
       const navItem = state.data.navs.items[payload.index];

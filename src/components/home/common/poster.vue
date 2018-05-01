@@ -1,12 +1,10 @@
 <template>
   <div class="poster" :style="{'background-image': `url(${item.details.poster})`}">
-   <div class="icon" :style="[{'background-image': `url(${item.details.logo})`},dim(item.details.dim)]"></div>
+   <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]"></div>
    <div class="bottom-footer">
      <template v-if="item.contentType==='simple'">
         <div class="text simple">
-          <template v-for="text in item.details.text1.split('$')">
-          <div :key="text">{{text}}</div>
-          </template>
+          <span v-html="item.details.text1"></span>
         </div>
       </template>
        <template v-if="item.contentType==='details'">
@@ -70,6 +68,7 @@ export default {
     position: absolute;
     bottom: 0px;
     left: 80 * $s;
+    width: calc(60% - #{ 80 * $s });
     margin-bottom: 30 * $s;
     .text {
       font-family: Helvetica;
@@ -88,11 +87,38 @@ export default {
   }
   .icon {
     position: absolute;
-    right: 6%;
+    right: 0;
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    bottom: 5%;
+    bottom: 0;
+    &.sqr {
+      width: 50 * $s;
+      height: 70 * $s;
+      right: 5%;
+      bottom: 30 * $s;
+    }
+    &.rect {
+      width: 120 * $s;
+      height: 100 * $s;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    &.rect-3 {
+      width: 120 * $s;
+      height: 100 * $s;
+      right: 5%;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    &.rect-2 {
+      right: 5%;
+      bottom: 30 * $s;
+      width: 75 * $s;
+      height: 30 * $s;
+    }
   }
 }
 </style>

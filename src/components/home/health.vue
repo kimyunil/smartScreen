@@ -7,24 +7,26 @@
     <template v-if="slideshow">
       <transition :name="transitionName">
         <div class="grid-templates" :key="index">
-            <grid :items="content" :itemType="'grid'" :focus="false" @movefocus="movefocus"/>
+          <lgrid v-if="pageType === 'lgrid'" :items="content" :itemType="'grid'" :focus="false" @movefocus="movefocus"/>
+          <grid :details="grids[index]" :focus="false" v-else/>
         </div>
       </transition>
     </template>
     <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
       <div class="grid-templates template">
-        <grid :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
+        <lgrid v-if="pageType === 'lgrid'" :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
+        <grid v-else :details="grids[index]" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
       </div>
       <template v-for="(subCat, index) in subCategories">
       <div class="grid-templates template subcategory-template"  :key="index">
         <div class="title">{{subCat.title}}</div>
-          <grid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
+          <lgrid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
       </div>
       </template>
       <div class="recent-apps template">
           <div class="title">Apps</div>
           <div class="apps-list">
-              <grid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
+              <lgrid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </div>
       </div>
@@ -45,7 +47,8 @@
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex';
-import grid from './common/lgrid';
+import lgrid from './common/lgrid';
+import grid from './common/grid';
 import Messages from '../../services/Messages';
 
 export default {
@@ -72,6 +75,9 @@ export default {
     }),
     subCategories() {
       return this.pageSubCat(this.index);
+    },
+    pageType() {
+      return this.grids[this.index].template;
     },
     content() {
       const array = [];
@@ -141,8 +147,7 @@ export default {
       }
     },
     movefocus(param) {
-      if (param.from === 'lgrid') {
-        console.log(this.pageIdx);
+      if (param.from === 'lgrid' || param.from === 'grid') {
         if (param.dir === 'up') {
           if (this.pageIdx === 0) {
             this.$emit('movefocus', { dir: 'up', from: 'content' });
@@ -189,6 +194,7 @@ export default {
     };
   },
   components: {
+    lgrid,
     grid,
   },
   watch: {

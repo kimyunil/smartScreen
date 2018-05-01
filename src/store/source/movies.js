@@ -1,12 +1,11 @@
 export default {
   got: {
     default: {
-      artist: 'Game of Thrones',
-      song: 'No Tears Left to Cry',
+      id: 'Game of Thrones',
       save: {
-        rmvApp: 'fitness',
+        rmvApp: 'source',
         index: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         elapsedTime: 0,
         total: 0,
         details: {
@@ -14,39 +13,36 @@ export default {
             w: '40',
             h: '50',
           },
-          bottomText: 'Game of Thrones',
-          logo: '/static/Images/home/icons/common/masterChef.png',
-          tile: '/static/Images/app/got.jpg',
+          topLeftText: 'Continue Watching',
+          bottomText: 'WestWorld<br>S1Ep4Dissonance Theory',
+          logo: '/static/Images/home/icons/morning/hbo.png',
+          tile: '/static/Images/app/01_Westworld.jpeg',
         },
       },
-      art: '/static/Images/spotify/songs/art/art3.png',
-      thumbnail: '/static/Images/spotify/songs/thumbnail/michael.png',
-      url: '/resources/videos/hbo/GOT.mp4',
+      url: '/resources/videos/continue01_Westworld.mp4',
     },
   },
-  maze: {
+  handmaids: {
     default: {
-      artist: 'Game of Thrones',
-      song: 'No Tears Left to Cry',
+      id: 'HandMaid\'s Tail',
       save: {
-        rmvApp: 'fitness',
+        rmvApp: 'source',
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           dim: {
             w: '40',
             h: '50',
           },
-          bottomText: 'Game of Thrones',
-          logo: '/static/Images/home/icons/common/masterChef.png',
-          tile: '/static/Images/app/got.jpg',
+          topLeftText: 'Continue Watching',
+          bottomText: 'HandMaid\'s Tail',
+          logo: '/static/Images/home/icons/evening/hulu.png',
+          tile: '/static/Images/app/02_The_Handmaids_Tale.jpg',
         },
       },
-      art: '/static/Images/spotify/songs/art/art3.png',
-      thumbnail: '/static/Images/spotify/songs/thumbnail/michael.png',
-      url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4',
+      url: '/resources/videos/continue04_handmaid.mp4',
     },
   },
 };

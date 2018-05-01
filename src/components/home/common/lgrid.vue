@@ -162,9 +162,12 @@ export default {
       .footer-text {
         position: absolute;
         left: 40 * $s;
+        width: calc(90% - #{ 40 * $s });
         font-size: 40 * $s;
         bottom: 100 * $s;
         color: white;
+        white-space: initial;
+        overflow: hidden;
         text-align: left;
         font-family: Helvetica;
       }

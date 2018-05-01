@@ -43,13 +43,12 @@ export default {
   }
   .bgImg {
     position: relative;
-    width: 100%;
-    background-position: top left;
-    background-size: contain;
+    width: calc(100% - #{80 * $s});
+    height: 100%;
+    top: 100 * $s;
     background-repeat: no-repeat;
     background-size: 100%;
     left: 80 * $s;
-    margin-top: 90 * $s;
     &.everest-img {
       background-position: left top;
       background-size: 1400 * $s 240 * $s;

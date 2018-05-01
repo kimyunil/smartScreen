@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import Messages from '../../services/Messages';
 
 export default {
@@ -28,14 +28,19 @@ export default {
     this.$nextTick(() => {
       this.playerEle = this.$el.querySelector('video');
     });
+    this.setPlayer({ active: true });
   },
   destroyed() {
     this.playerEle = null;
     Messages.$off('button_down', this.handleKeyDown);
+    this.setPlayer({ active: false });
   },
   methods: {
     ...mapActions({
       saveContinue: 'SAVE_CONTINUE',
+    }),
+    ...mapMutations('source', {
+      setPlayer: 'UPDATE_PLAYER',
     }),
     play() {
       if (this.playerEle) {
@@ -63,6 +68,7 @@ export default {
           if (this.name === 'hbo' || this.name === 'hulu') {
             this.saveContinue(this.name);
           }
+          this.setPlayer({ playerState: 1, active: false });
           this.$emit('exit', { from: 'player' });
           break;
         default:
@@ -76,9 +82,9 @@ export default {
       this.playerEle.volume = (val * 1) / 16;
     },
     playerState(val) {
-      if (val) {
+      if (val === 0) {
         this.play();
-      } else {
+      } else if (val === 1) {
         this.pause();
       }
     },

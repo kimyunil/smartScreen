@@ -60,10 +60,10 @@ export default {
   },
   computed: {
     translateY() {
-      return (((this.translate) * 100) / window.innerWidth);
+      return (((this.translate) * 100) / 1920);
     },
     resTrans() {
-      return ((this.resTranslate * 100) / window.innerWidth);
+      return ((this.resTranslate * 100) / 1920);
     },
     sText() {
       return this.speechText.split(' ');

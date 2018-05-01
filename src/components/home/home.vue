@@ -90,9 +90,9 @@ export default {
           }
           break;
         case 'DOWN':
-          if (this.isRemoteEnabled) {
-            this.showHeader = false;
-          }
+          // if (this.isRemoteEnabled) {
+          //   this.showHeader = false;
+          // }
           break;
         case 'LEFT':
           if (this.focus === 'apps') {

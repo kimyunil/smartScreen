@@ -16,21 +16,32 @@ export default {
       currentSource: 'hbo',
       hbo: {
         splashActive: true,
+        idx: 0,
         default: '/resources/videos/hbo/GOT.mp4',
-        subComp: ['home'], // home, player
+        subComp: ['home', 'player', 'detail'], // home, player, detail
         splash: {
           splashBG: '/static/Images/source/hbo.png',
         },
         home: {
           screenshot: '/static/Images/source/hbo-home.png',
         },
+        detail: {
+          screenshot: '/static/Images/source/hbo-details_westworld.png',
+        },
       },
       hulu: {
         splashActive: true,
+        idx: 0,
         default: '/resources/videos/HBO_Family/maze_runner_scorch.mp4',
-        subComp: ['player'], // home, player
+        subComp: ['home', 'player', 'detail'], // home, player, detail
         splash: {
           splashBG: '/static/Images/source/hulu.png',
+        },
+        home: {
+          screenshot: '/static/Images/source/hulu-home_handmaids.png',
+        },
+        detail: {
+          screenshot: '/static/Images/source/hulu-details_handmaids.png',
         },
       },
     },
@@ -46,6 +57,7 @@ export default {
       url: '',
     },
     musicplayer: {
+      playlistInfo: null,
       active: false,
       details: null,
       elapsedTime: 0,
@@ -77,6 +89,12 @@ export default {
         state.musicplayer.details.save.elapsedTime = payload;
       }
     },
+    UPDATE_MP_STATE(state) {
+      if (state.player.active) {
+        state.player.active = false;
+      }
+      state.musicplayer.active = true;
+    },
     MUSIC_STATE_UPDATE(state, payload) {
       state.musicplayer.playerState = payload;
     },
@@ -94,31 +112,38 @@ export default {
       state.source.hbo.subComp.pop();
     },
     UPDATE_HBO_COMP(state, payload) {
-      const idx = state.source.hbo.subComp.indexOf(payload);
-      if (idx !== -1) {
-        state.source.hbo.subComp.splice(idx, 1);
+      if (payload === '++') {
+        state.source.hbo.idx = (state.source.hbo.idx + 1) % (state.source.hbo.subComp.length);
       }
-      state.source.hbo.subComp.push(payload);
+    },
+    UPDATE_HULU_COMP(state, payload) {
+      if (payload === '++') {
+        state.source.hulu.idx = (state.source.hulu.idx + 1) % (state.source.hulu.subComp.length);
+      }
     },
     RETURN_HULU_COMP(state) {
       state.source.hulu.subComp.pop();
     },
-    UPDATE_HULU_COMP(state, payload) {
-      const idx = state.source.hulu.subComp.indexOf(payload);
-      if (idx !== -1) {
-        state.source.hulu.subComp.splice(idx, 1);
-      }
-      state.source.hulu.subComp.push(payload);
-    },
   },
   actions: {
     LOAD_APP_PLAYER({ state, commit }, payload) {
+      console.log(state.moviesDB[payload.content].default);
       state.player.details = state.moviesDB[payload.content].default;
       if (state.musicplayer.active) {
         state.musicplayer.active = false;
       }
       state.player.active = true;
+      state.player.playerState = 0;
       commit('UPDATE_PLAYER', { url: state.player.details.url });
+    },
+    SKIP_NEXT({ state }) {
+      const id = state.musicplayer.details.id;
+      const list = state.musicplayer.playlistInfo.list;
+      const idx = list.indexOf(id);
+      const next = (idx + 1) % list.length;
+      state.musicplayer.details = state.musicplayer.playlistInfo[list[next]];
+      console.log(list[next]);
+      state.musicplayer.details.id = list[next];
     },
     SET_MUSIC_PLAYER({ state }, payload) {
       if (state.player.active) {
@@ -128,22 +153,32 @@ export default {
       switch (payload.artist) {
         case 'ariana':
           state.musicplayer.details = state.musicDB.ariana.default;
+          state.musicplayer.details.id = 'default';
+          state.musicplayer.playlistInfo = state.musicDB.ariana;
           state.musicplayer.playerState = 0;
           break;
         case 'coldplay':
           state.musicplayer.details = state.musicDB.coldplay.default;
+          state.musicplayer.details.id = 'default';
+          state.musicplayer.playlistInfo = state.musicDB.coldplay;
           state.musicplayer.playerState = 0;
           break;
         case 'classical':
           state.musicplayer.details = state.musicDB.classical.default;
+          state.musicplayer.details.id = 'default';
+          state.musicplayer.playlistInfo = state.musicDB.classical;
           state.musicplayer.playerState = 0;
           break;
         case 'mj':
           state.musicplayer.details = state.musicDB.michael.default;
+          state.musicplayer.details.id = 'default';
+          state.musicplayer.playlistInfo = state.musicDB.michael;
           state.musicplayer.playerState = 0;
           break;
         case 'pharelle':
           state.musicplayer.details = state.musicDB.pharrell.default;
+          state.musicplayer.details.id = 'default';
+          state.musicplayer.playlistInfo = state.musicDB.pharrell;
           state.musicplayer.playerState = 0;
           break;
         default:
