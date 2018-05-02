@@ -29,7 +29,7 @@ export default {
       },
       movies: {
         title: 'MOVIES',
-        template: 'health',
+        template: 'movies',
         data: health,
       },
       music: {

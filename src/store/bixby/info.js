@@ -8,7 +8,7 @@ export default {
     },
     fitbitQuery: {
       tts: 'looks like you took 9,738 steps, you have 262 steps left to hit the goal ',
-      response: 'You took 9,738 step',
+      response: 'You took 9,738 steps',
       template: 'info',
       img: '/static/Images/results/info/lostInTrans.png',
     },

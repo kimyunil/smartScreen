@@ -19,6 +19,7 @@
 <script>
 import { mapGetters, mapState, mapMutations } from 'vuex';
 import foryou from './foryou';
+import movies from './movies';
 import health from './health';
 import homeHeader from './common/header';
 import Messages from '../../services/Messages';
@@ -128,6 +129,7 @@ export default {
   components: {
     homeHeader,
     foryou,
+    movies,
     health,
   },
   watch: {
@@ -215,6 +217,9 @@ export default {
       transition: transform 0.3s ease;
       left:0;
       &.health {
+        transform: translate(#{0 * $s}, #{110 * $s});
+      }
+      &.movies {
         transform: translate(#{0 * $s}, #{110 * $s});
       }
       &.shrink {

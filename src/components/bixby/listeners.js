@@ -60,6 +60,7 @@ export default {
       this.showSpeechText = true;
       console.log(param);
       this.speechText = param;
+      this.closeTimer();
     },
     sttComplete(param) {
       this.enableKeybrd(false);
@@ -75,10 +76,12 @@ export default {
           Messages.send('audio-input.stop');
         }, 2000);
       }
+      this.closeTimer();
       this.speechText = param;
     },
     actionResult(payload) {
       this.enableKeybrd(false);
+      this.closeTimer();
       if (payload.type === 'action') {
         if (this.isBixbyActive) {
           this.showResults(payload.param);

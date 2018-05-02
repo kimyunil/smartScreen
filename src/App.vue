@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 import smartscreen from './components/smartscreen';
 import Messages from './services/Messages';
 // import videosource from './components/common/videoSource';
@@ -30,17 +31,24 @@ export default {
   data() {
     return {
       page: -1,
-      setup: true,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
     };
   },
+  computed: {
+    ...mapState([
+      'setup',
+    ]),
+  },
   methods: {
+    ...mapActions({
+      setUpcomplete: 'COMPLETE_SETUP',
+    }),
     setupScreen(param) {
       console.log(param);
       if (param.page === 0) {
         this.page = 0;
       } else if (param.page === 7) {
-        this.setup = true;
+        this.setUpcomplete(true);
         this.page = 0;
       } else {
         this.page = 1;

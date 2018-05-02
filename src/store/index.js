@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     toggleSuggest: true,
     screenshot: '',
     sleep: true,
+    setup: false,
     info: {
       weather: null,
       todays: null,
@@ -93,6 +94,15 @@ const store = new Vuex.Store({
       this.voiceTimerID = setTimeout(() => {
         // state.isRemoteEnabled = false;
       }, 15000);
+    },
+    COMPLETE_SETUP({ state }, payload) {
+      state.setup = payload;
+      console.log('payload::::::::::::', payload);
+      if (payload) {
+        setTimeout(() => {
+          state.sleep = false;
+        }, 4000);
+      }
     },
     SAVE_CONTINUE({ state, commit }, cpName) {
       if (cpName === 'spotify') {
@@ -197,9 +207,16 @@ const store = new Vuex.Store({
           dispatch('SWITCH_COMPONENT', { name: 'fitbit' });
           break;
         }
+        case 'spotifyhome': {
+          dispatch('SWITCH_COMPONENT', { name: 'spotifyhome' });
+          break;
+        }
         case 'volume': {
+          console.log(payload.data);
           dispatch('source/UPDATE_VOLUME', payload.data);
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
+          setTimeout(() => {
+            dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
+          });
           break;
         }
         case 'back': {

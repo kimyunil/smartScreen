@@ -207,6 +207,7 @@ export default {
       this.translate = 0;
     },
     closeBixby(restart) {
+      clearTimeout(this.closeTimeout);
       Messages.send('audio-input.stop');
       this.restartBixby = restart;
       this.showResults(null);
@@ -228,6 +229,12 @@ export default {
           this.closeVoice();
         }
       }
+    },
+    closeTimer() {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = setTimeout(() => {
+        this.closeBixby(false);
+      }, 10000);
     },
     changeAnimation() {
       if (this.bixbyState !== 'initial') {
@@ -252,6 +259,7 @@ export default {
       revealId: null,
       response: '',
       clipAnim: null,
+      closeTimeout: null,
       showSpeechText: false,
       showResponseText: false,
       translate: 0,

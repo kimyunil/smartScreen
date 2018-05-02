@@ -12,6 +12,10 @@ export default {
       type: 'app',
       suggestion: false,
     },
+    spotifyhome: {
+      type: 'screenshot',
+      img: '/static/Images/screenshot/spotify.png',
+    },
     fitbit: {
       type: 'screenshot',
       img: '/static/Images/screenshot/fitbit.png',

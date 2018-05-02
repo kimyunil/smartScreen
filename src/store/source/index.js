@@ -186,17 +186,32 @@ export default {
       }
     },
     UPDATE_VOLUME({ state, dispatch }, payload) {
-      if (state.player.isDimVol) return;
-      if (payload === '++') {
-        if (state.player.volume < state.player.maxVol) {
-          state.player.volume += 1;
+      console.log(payload);
+      if (state.player.isDimVol) {
+        if (payload === '++') {
+          if (state.player.bckVol < state.player.maxVol) {
+            state.player.bckVol += 1;
+          }
+        } else if (payload === '--') {
+          if (state.player.bckVol > 0) {
+            console.log('lower::::');
+            state.player.bckVol -= 1;
+          }
+        } else if (payload === 'mute') {
+          state.player.muted = !state.player.muted;
         }
-      } else if (payload === '--') {
-        if (state.player.volume > 0) {
-          state.player.volume -= 1;
+      } else {
+        if (payload === '++') {
+          if (state.player.volume < state.player.maxVol) {
+            state.player.volume += 1;
+          }
+        } else if (payload === '--') {
+          if (state.player.volume > 0) {
+            state.player.volume -= 1;
+          }
+        } else if (payload === 'mute') {
+          state.player.muted = !state.player.muted;
         }
-      } else if (payload === 'mute') {
-        state.player.muted = !state.player.muted;
       }
       clearTimeout(state.vTimeOut);
       state.vTimeOut = setTimeout(() => {

@@ -4,9 +4,9 @@
     </div>
     <div class="v-tuner">
       <div class="indicator-box" v-if="!muted">
-        <template v-if="maxVolume !== volume">
+        <template v-if="maxVolume !== volumeCnt">
           <div class="wrapper">
-            <div class="indicator" :key="i" :class="{'filled': volume >= i}" v-for="i in maxVolume">
+            <div class="indicator" :key="i" :class="{'filled': volumeCnt >= i}" v-for="i in maxVolume">
             </div>
           </div>
         </template>
@@ -34,9 +34,17 @@ export default {
   computed: {
     ...mapState('source', {
       volume: state => state.player.volume,
+      isDim: state => state.player.isDimVol,
+      bckVol: state => state.player.bckVol,
       muted: state => state.player.muted,
       maxVolume: state => state.player.maxVol,
     }),
+    volumeCnt() {
+      if (this.isDim) {
+        return this.bckVol;
+      }
+      return this.volume;
+    },
     volumeImg() {
       if (this.muted) {
         return '/static/Images/system/mute.png';

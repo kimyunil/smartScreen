@@ -113,15 +113,14 @@ export default {
       if (this.sleep) {
         this.index = 0;
         this.slideshow = true;
-        setTimeout(() => {
-          this.updateFlag({ sleep: false });
-        }, 3000);
-        setTimeout(() => {
-          this.startSlideShow();
-        }, 6000);
+        // setTimeout(() => {
+        //   this.startSlideShow();
+        // }, 6000);
       } else {
-        this.stopSlideShow();
-        if (!this.isRemoteEnabled) {
+        if (this.isRemoteEnabled) {
+          this.stopSlideShow(true);
+          this.index = 1;
+        } else {
           this.index = 0;
           this.startSlideShow();
         }
@@ -132,11 +131,6 @@ export default {
       if (item.details.action) {
         this.launch(item.details.action);
       }
-      // if (this.isRemoteEnabled) {
-      //   this.slideshow = false;
-      // } else {
-      //   this.slideshow = true;
-      // }
     },
     shrinkTransitionCB() {
       // if (this.isRemoteEnabled) {
@@ -187,9 +181,9 @@ export default {
       }, this.timeout);
       // this.index = 3;
     },
-    stopSlideShow() {
+    stopSlideShow(from) {
       clearInterval(this.intervalId);
-      if (this.index === 0) {
+      if (this.index === 0 && from) {
         this.index = 1;
       }
       this.intervalId = null;
@@ -215,6 +209,7 @@ export default {
             this.$emit('movefocus', { dir: 'up', from: 'content' });
           }
         } else if (param.dir === 'down') {
+          console.log(this.pageIdx, this.grids.length);
           if (this.pageIdx < this.grids.length - 2) {
             this.pageIdx += 1;
             const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
@@ -260,6 +255,14 @@ export default {
         }
       });
     },
+    sleep(val) {
+      if (!val) {
+        setTimeout(() => {
+          console.log('slideshow');
+          this.startSlideShow();
+        }, 4000);
+      }
+    },
     index(val) {
       if (val === 0) {
         this.infoArtIdx = (this.infoArtIdx + 1) % this.grids[0].content.length;
@@ -271,7 +274,7 @@ export default {
     isRemoteEnabled(val, old) {
       console.log(val, old);
       if (!val) this.startSlideShow();
-      else this.stopSlideShow();
+      else this.stopSlideShow(true);
     },
   },
 };
