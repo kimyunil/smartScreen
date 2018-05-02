@@ -47,7 +47,7 @@ export default {
       console.log(param);
       if (param.page === 0) {
         this.page = 0;
-      } else if (param.page === 7) {
+      } else if (param.page === 6) {
         this.setUpcomplete(true);
         this.page = 0;
       } else {
