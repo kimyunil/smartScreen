@@ -107,9 +107,6 @@ export default {
     }),
     chkSlideShow() {
       this.toggleSuggetion(true);
-      if (this.index === 0) {
-        this.toggleSuggetion(false);
-      }
       if (this.sleep) {
         this.index = 0;
         this.slideshow = true;
@@ -119,9 +116,7 @@ export default {
       } else {
         if (this.isRemoteEnabled) {
           this.stopSlideShow(true);
-          this.index = 1;
         } else {
-          this.index = 0;
           this.startSlideShow();
         }
       }
@@ -183,9 +178,6 @@ export default {
     },
     stopSlideShow(from) {
       clearInterval(this.intervalId);
-      if (this.index === 0 && from) {
-        this.index = 1;
-      }
       this.intervalId = null;
       this.transitionName = '';
       this.slideshow = false;
@@ -210,7 +202,7 @@ export default {
           }
         } else if (param.dir === 'down') {
           console.log(this.pageIdx, this.grids.length);
-          if (this.pageIdx < this.grids.length - 2) {
+          if (this.pageIdx < this.grids.length - 1) {
             this.pageIdx += 1;
             const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
             this.scroll('down', top);
@@ -264,12 +256,12 @@ export default {
       }
     },
     index(val) {
-      if (val === 0) {
-        this.infoArtIdx = (this.infoArtIdx + 1) % this.grids[0].content.length;
-        this.toggleSuggetion(false);
-      } else {
-        this.toggleSuggetion(true);
-      }
+      // if (val === 0) {
+      //   this.infoArtIdx = (this.infoArtIdx + 1) % this.grids[0].content.length;
+      //   this.toggleSuggetion(false);
+      // } else {
+      //   this.toggleSuggetion(true);
+      // }
     },
     isRemoteEnabled(val, old) {
       console.log(val, old);

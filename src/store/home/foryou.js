@@ -26,7 +26,7 @@ export default {
     },
   },
   pages: {
-    pagination: ['page-4', 'page-1', 'page-2', 'page-3'],
+    pagination: ['page-1', 'page-2', 'page-3'],
     details: {
       'page-1': {
         title: 'page-1',
@@ -54,7 +54,7 @@ export default {
           details: {
             bottomText: 'Sleep Summary',
             tile: '/static/Images/home/tile/morning/fitbit.png',
-            logo: '/static/Images/home/icons/common/big_fitbit.png',
+            logo: '/static/Images/home/icons/common/fitbit.png',
             logoType: 'rect',
             img: '',
           },

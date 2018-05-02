@@ -52,6 +52,12 @@ export default {
     },
     sttUpdate(param) {
       this.enableKeybrd(false);
+      // this was to solve a bug when result is directed but still in listening mode
+      if (this.bixbyState == 'wipeoff') {
+        Messages.send('audio-input.stop');
+        return;
+      }
+
       if (this.bixbyState !== 'listen') {
         clearTimeout(this.timeout);
         // this.defaultOptions.loop = true;
@@ -69,12 +75,13 @@ export default {
         // give some time to user to update
         this.timeout = setTimeout(() => {
           if (this.bixbyState === 'listen') {
+            console.log('thinking:::::::::::::::::');
             this.showSpeechText = true;
             this.defaultOptions.loop = true;
             this.updateBixby('think');
           }
           Messages.send('audio-input.stop');
-        }, 2000);
+        }, 100);
       }
       this.closeTimer();
       this.speechText = param;
@@ -82,6 +89,8 @@ export default {
     actionResult(payload) {
       this.enableKeybrd(false);
       this.closeTimer();
+      clearTimeout(this.timeout);
+      Messages.send('audio-input.stop');
       if (payload.type === 'action') {
         if (this.isBixbyActive) {
           this.showResults(payload.param);
@@ -95,6 +104,7 @@ export default {
     },
     bixbyaction(param) {
       this.enableKeybrd(false);
+      clearTimeout(this.timeout);
       console.log('launchBixby', param);
       if (param.action === 'launch') {
         if (this.isBixbyActive) {
@@ -109,6 +119,8 @@ export default {
       } else if (param.action === 'close') {
         if (this.isBixbyActive) {
           this.closeBixby(false);
+        } else {
+          this.resetBixby();
         }
       }
     },

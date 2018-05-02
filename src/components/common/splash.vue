@@ -39,6 +39,7 @@ export default {
     height: 100%;
     left: 0;
     top: 0;
+    background-size: 100%;
   }
 }
 </style>

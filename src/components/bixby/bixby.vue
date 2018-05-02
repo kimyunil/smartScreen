@@ -153,9 +153,11 @@ export default {
       this.revealId = setTimeout(() => {
         const temp = this.$el.querySelector('.result-data').offsetHeight;
         this.isResult = true;
-        this.resTranslate = (temp + 150) * -1;
-        this.translate = (temp + 150) * -1;
-        console.log('this.result:::::::', this.translate);
+        const bixbyHeight = this.$el.querySelector('.bixby-lottie').offsetHeight;
+        const fact = parseInt(bixbyHeight / 2, 10);
+        this.resTranslate = (temp + fact) * -1;
+        this.translate = (temp + fact) * -1;
+        console.log('this.result:::::::', this.translate, fact, temp);
         this.showResponseText = true;
         this.updateBixby('reveal');
       }, 10);
@@ -193,6 +195,7 @@ export default {
       this.showResponseText = true;
     },
     showResults(resultData) {
+      Messages.send('audio-input.stop');
       console.log('showResults:::::::::::');
       this.resetResult();
       if (resultData !== null) {

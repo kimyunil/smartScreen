@@ -87,7 +87,7 @@ export default {
       .item-wrapper {
         position: relative;
         width: 269 * $s;
-        height: 269 * $s;
+        height: 269 * $s; //269 - 150 sticking to bixby
         background-size: 100% 100%;
         img {
           height: 100%;
@@ -96,8 +96,8 @@ export default {
     }
   }
   .drivers {
-    position: relative;
-    height: 140 * $s;
+    // position: relative;
+    // height: 140 * $s;
   }
  }
 

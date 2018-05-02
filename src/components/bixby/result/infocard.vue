@@ -37,15 +37,15 @@ export default {
 .info {
   position: relative;
   width: 100%;
-  height: 100 * $s;
+  height: 80 * $s;
   &.lostmovie {
      height: 590 * $s;
   }
   &.weather {
-    height: 540 * $s;
+    height: 390 * $s;
   }
   &.fitbit {
-    height: 540 * $s;
+    height: 390 * $s;
   }
   .bgImg {
     position: relative;

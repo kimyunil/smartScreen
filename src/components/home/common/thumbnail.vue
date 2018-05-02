@@ -145,9 +145,9 @@ export default {
   .bottom-footer {
     position: absolute;
     bottom: 0px;
-    left: 30 * $s;
-    margin-bottom: 30 * $s;
-    width: calc(90% - #{ 30 * $s });
+    left: 20 * $s;
+    margin-bottom: 40 * $s;
+    width: calc(100% - #{ 30 * $s });
    .text {
       font-family: Helvetica;
       font-size: 36 * $s;

@@ -69,7 +69,7 @@ export default {
     bottom: 0px;
     left: 80 * $s;
     width: calc(60% - #{ 80 * $s });
-    margin-bottom: 30 * $s;
+    margin-bottom: 40 * $s;
     .text {
       font-family: Helvetica;
       font-size: 36 * $s;

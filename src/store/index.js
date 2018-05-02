@@ -220,8 +220,15 @@ const store = new Vuex.Store({
           break;
         }
         case 'back': {
-          console.log('back::::::::::::::');
-          Messages.$emit('button_down', 'BACK');
+          if (state.isBixbyActive) {
+            Messages.$emit('button_down', 'BACK');
+            setTimeout(() => {
+              console.log('Goback');
+              Messages.$emit('button_down', 'BACK');
+            }, 600);
+          } else {
+            Messages.$emit('button_down', 'BACK');
+          }
           break;
         }
         case 'media':
