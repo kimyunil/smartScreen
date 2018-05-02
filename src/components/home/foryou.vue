@@ -9,7 +9,8 @@
         <div class="grid-templates grid-templates-slideshow" v-show="slideshow">
           <transition :name="transitionName">
             <div class="slideshow-wrapper" :key="index">
-              <grid :details="grids[index]" :focus="false"/>
+              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :focus="false"/>
+              <artinfo v-show="grids[index].template === 'ignore'" :img="grids[index][grids[index].content[infoArtIdx]].img"/>
             </div>
           </transition>
         </div>
@@ -18,7 +19,7 @@
       <transition name="fade">
         <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
           <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
-            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
+            <grid v-if="page.template !== 'ignore'" :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
           </div>
           <div class="recent-apps">
               <div class="apps-list">
@@ -31,7 +32,7 @@
       </transition>
     </div>
     <!-- <transition name="show"> -->
-      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
+      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive && toggleSuggest">
         <div class="pagination-dots">
           <div class="dots"
             v-for="(i, idx) in grids"
@@ -45,12 +46,17 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 import grid from './common/grid';
+import artinfo from './common/artInfo';
 import Messages from '../../services/Messages';
 
 export default {
   mounted() {
+    this.toggleSuggetion(true);
+    if (this.index === 0) {
+      this.toggleSuggetion(false);
+    }
     this.stopSlideShow();
     if (!this.isRemoteEnabled) {
       this.startSlideShow();
@@ -59,11 +65,13 @@ export default {
   },
   destroyed() {
     this.stopSlideShow();
+    this.toggleSuggetion(true);
     Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {
     ...mapState([
       'isRemoteEnabled',
+      'toggleSuggest',
       'isBixbyActive',
     ]),
     ...mapState('home', [
@@ -98,6 +106,9 @@ export default {
   methods: {
     ...mapActions({
       launch: 'LAUNCH_COMPONENT',
+    }),
+    ...mapMutations({
+      toggleSuggetion: 'TOGGLE_SUGGESTION',
     }),
     selectedGridItem(item) {
       console.log(item);
@@ -157,9 +168,13 @@ export default {
         this.transitionName = 'slideshow';
         this.index = (((this.index) + 1) % this.grids.length);
       }, this.timeout);
+      // this.index = 3;
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
+      if (this.index === 0) {
+        this.index = 1;
+      }
       this.intervalId = null;
       this.transitionName = '';
       this.slideshow = false;
@@ -205,6 +220,7 @@ export default {
     return {
       transitionName: 'slideshow',
       intervalId: null,
+      infoArtIdx: 0,
       focus: 'grid',
       pageIdx: 0,
       index: 0,
@@ -215,6 +231,7 @@ export default {
   },
   components: {
     grid,
+    artinfo,
   },
   watch: {
     timeout() {
@@ -225,6 +242,14 @@ export default {
           this.startSlideShow();
         }
       });
+    },
+    index(val) {
+      if (val === 0) {
+        this.infoArtIdx = (this.infoArtIdx + 1) % this.grids[0].content.length;
+        this.toggleSuggetion(false);
+      } else {
+        this.toggleSuggetion(true);
+      }
     },
     isRemoteEnabled(val, old) {
       console.log(val, old);
@@ -242,9 +267,8 @@ export default {
   height: 100%;
   .grid-container {
     position: absolute;
-    width: 1900 * $s;
-    margin: 10 * $s;
-    height: 940 * $s;
+    width: 1920 * $s;
+    height: 1080 * $s;
     // height: 807 * $s;
     // overflow: hidden;
     left:0;
@@ -303,6 +327,12 @@ export default {
          position: absolute;
          width: 100%;
          height: 100%;
+        .grid-wrapper {
+          height: 940 * $s;
+          margin: 10 * $s;
+          width: 1900 * $s;
+          transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+        }
         &.slideshow-enter {
           opacity: 0;
         }

@@ -1,5 +1,17 @@
 export default {
   info: {
+    music: {
+      tts: 'Playing your favorite Song',
+      response: 'Playing your Favourite Song',
+      template: 'info',
+      img: '/static/Images/results/info/lostInTrans.png',
+    },
+    fitbitQuery: {
+      tts: 'looks like you took 9,738 steps, you have 262 steps left to hit the goal ',
+      response: 'You took 9,738 step',
+      template: 'info',
+      img: '/static/Images/results/info/lostInTrans.png',
+    },
     lostintrans: {
       template: 'info',
       type: 'lostmovie',
@@ -9,7 +21,6 @@ export default {
     fitbitSummary: {
       template: 'info',
       type: 'fitbit',
-      tts: 'looks like you took 9,738 steps, you have 262 steps left to hit the goal ',
       response: 'Here is your fit bit summary',
       img: '/static/Images/results/info/fitbit_summary.png',
     },
@@ -36,7 +47,7 @@ export default {
     weatherweekend: {
       template: 'info',
       type: 'weather',
-      response: 'Here is your Saturday Forecast',
+      response: 'Here is your Forecast of this Week',
       tts: 'expect partial cloudy skies in Mountain view this weekend.daytime temperature will hover around 65 degree, with overnight lows around 50.',
       img: '/static/Images/results/info/weather-weekend.png',
     },

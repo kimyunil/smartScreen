@@ -46,7 +46,7 @@ import Messages from '../../services/Messages';
 export default {
   name: 'spotify',
   mounted() {
-    this.initiateTimer();
+    // this.initiateTimer();
     this.saveContinue('spotify');
     this.updateMP();
     Messages.$on('button_down', this.handleKeyDown);
@@ -68,6 +68,9 @@ export default {
       switch (type) {
         case 'SELECT':
           this.updateState(1 - this.playerState);
+          break;
+        case 'BACK':
+          this.switch_comp({ replace: false, name: 'home' });
           break;
         default:
           break;

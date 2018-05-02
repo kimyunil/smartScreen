@@ -8,6 +8,14 @@ export default {
       type: 'system',
       suggestion: false,
     },
+    screenshot: {
+      type: 'app',
+      suggestion: false,
+    },
+    fitbit: {
+      type: 'screenshot',
+      img: '/static/Images/screenshot/fitbit.png',
+    },
     hbo: {
       type: 'source',
       suggestion: false,

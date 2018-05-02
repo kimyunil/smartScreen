@@ -54,14 +54,45 @@ export default {
     },
   },
   actions: {
-    SET_RESULT({ commit }, payload) {
+    SET_RESULT({ commit, dispatch }, payload) {
       if (payload.category === 'movies') {
         commit('GET_MOVIES', payload);
       } else if (payload.category === 'music') {
         commit('GET_MUSIC', payload);
       } else if (payload.category === 'info') {
         commit('GET_INFO', payload);
+      } else if (payload.category === 'query') {
+        dispatch('GET_QUERY', payload);
       }
+    },
+    GET_QUERY({ state, rootState }, payload) {
+      console.log(state, rootState, payload);
+      const result = {};
+      if (payload.subcategory === 'music') {
+        if (state.db.info[payload.subcategory]) {
+          result.data = state.db.info[payload.subcategory];
+        }
+        const music = rootState.source.musicplayer.details;
+        let sayIt = 'Currently No Song is being played';
+        if (music) {
+          sayIt = `Playing ${music.song} by ${music.artist}`;
+        }
+        result.data.response = sayIt;
+        result.data.tts = sayIt;
+        Messages.send('text-to-speech.say', undefined);
+        if (result.data.tts) {
+          Messages.send('text-to-speech.say', sayIt);
+        }
+      } else if (payload.subcategory === 'fitbitQuery') {
+        if (state.db.info[payload.subcategory]) {
+          result.data = state.db.info[payload.subcategory];
+        }
+        Messages.send('text-to-speech.say', undefined);
+        if (result.data.tts) {
+          Messages.send('text-to-speech.say', result.data.tts);
+        }
+      }
+      state.result = result;
     },
   },
 };

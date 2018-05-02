@@ -12,6 +12,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     gConfig: config,
+    toggleSuggest: true,
+    screenshot: '',
     info: {
       weather: null,
       todays: null,
@@ -46,6 +48,9 @@ const store = new Vuex.Store({
     },
     DISCONNECTED(state) {
       state.socketConnected = false;
+    },
+    TOGGLE_SUGGESTION(state, payload) {
+      state.toggleSuggest = payload;
     },
     SET_PORT_WEATHER(state, payload) {
       state.info.portland = payload;
@@ -105,25 +110,32 @@ const store = new Vuex.Store({
       // state.isRemoteEnabled = true;
     },
     SWITCH_COMPONENT({ state, commit, getters }, payload) {
-      commit('REMOVE_IF_EXSIST', payload.name);
+      let compoName = payload.name;
+      const compDetail = state.gConfig.components[compoName];
+      if (compDetail.type === 'screenshot') {
+        state.screenshot = compDetail.img;
+        compoName = 'screenshot';
+      } else {
+        commit('REMOVE_IF_EXSIST', compoName);
+      }
       if (payload.replace) {
         let idx = state.viewStack.length - 1;
         if (idx < 0) idx = 0;
-        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+        if (getters.visibleComp.type === 'system' && compDetail.type !== 'system') {
           // dont remove system if it exist at top
           console.log(idx);
-          state.viewStack.splice(idx, 0, payload.name);
+          state.viewStack.splice(idx, 0, compoName);
         } else {
-          state.viewStack.splice(idx, 1, payload.name);
+          state.viewStack.splice(idx, 1, compoName);
         }
       } else {
         let idx = state.viewStack.length - 1;
         if (idx < 0) idx = 0;
-        if (getters.visibleComp.type === 'system' && state.gConfig.components[payload.name].type !== 'system') {
+        if (getters.visibleComp.type === 'system' && compDetail.type !== 'system') {
           // dont remove system if it exist at top
-          state.viewStack.splice(idx, 0, payload.name);
+          state.viewStack.splice(idx, 0, compoName);
         } else {
-          state.viewStack.push(payload.name);
+          state.viewStack.push(compoName);
         }
       }
     },
@@ -172,6 +184,10 @@ const store = new Vuex.Store({
           dispatch('SWITCH_COMPONENT', { name: 'spotify' });
           if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', payload);
           else if (payload.loop) dispatch('source/SKIP_NEXT');
+          break;
+        }
+        case 'fitbit': {
+          dispatch('SWITCH_COMPONENT', { name: 'fitbit' });
           break;
         }
         case 'volume': {

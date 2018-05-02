@@ -26,7 +26,7 @@ export default {
     },
   },
   pages: {
-    pagination: ['page-1', 'page-2', 'page-3'],
+    pagination: ['page-4', 'page-1', 'page-2', 'page-3'],
     details: {
       'page-1': {
         title: 'page-1',
@@ -226,6 +226,21 @@ export default {
             logoType: 'rect',
             img: '/static/Images/home/thumbnail/morning/yogo.png',
           },
+        },
+        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
+      },
+      'page-4': {
+        title: 'page-4',
+        template: 'ignore',
+        content: ['map', 'fitness', 'match'],
+        map: {
+          img: '/static/Images/home/foryou/info1.png',
+        },
+        fitness: {
+          img: '/static/Images/home/foryou/info2.png',
+        },
+        match: {
+          img: '/static/Images/home/foryou/info3.png',
         },
         suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },

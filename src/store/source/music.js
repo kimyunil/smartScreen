@@ -9,7 +9,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -31,7 +31,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -53,7 +53,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -75,7 +75,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -97,7 +97,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -119,7 +119,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -141,7 +141,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -164,7 +164,7 @@ export default {
       save: {
         rmvApp: 'npr',
         index: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         elapsedTime: 0,
         total: 0,
         details: {
@@ -189,7 +189,7 @@ export default {
       save: {
         rmvApp: 'npr',
         index: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         elapsedTime: 0,
         total: 0,
         details: {
@@ -216,7 +216,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -238,7 +238,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',
@@ -263,7 +263,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 0,
+        pageIdx: 1,
         details: {
           action: {
             category: 'spotify',

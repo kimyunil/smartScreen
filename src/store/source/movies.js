@@ -5,7 +5,7 @@ export default {
       save: {
         rmvApp: 'source',
         index: 0,
-        pageIdx: 1,
+        pageIdx: 2,
         elapsedTime: 0,
         total: 0,
         details: {
@@ -31,7 +31,7 @@ export default {
         index: 0,
         elapsedTime: 0,
         total: 0,
-        pageIdx: 1,
+        pageIdx: 2,
         details: {
           action: {
             category: 'hulu',

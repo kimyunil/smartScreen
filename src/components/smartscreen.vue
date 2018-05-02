@@ -9,7 +9,7 @@
     </transition-group>
     <bixby v-show="isBixbyActive && active" :active="isBixbyActive"/>
     <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion" :style="{'z-index': (viewStack.length + 1)}" >
+        <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion && toggleSuggest" :style="{'z-index': (viewStack.length + 1)}" >
           <transition name="slideshow">
             <div class="text-suggestion" :key="index">
               <span class="text"> Say</span>
@@ -27,6 +27,7 @@ import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import bixby from './bixby/bixby';
 import home from './home/home';
 import screensaver from './screensaver/screensaver';
+import screenshot from './screenshot/screenshot';
 import musicPlayer from './common/musicplayer';
 import spotify from './spotify/spotify';
 import hbo from './hbo/hbo';
@@ -75,6 +76,7 @@ export default {
     ]),
     ...mapState([
       'isRemoteEnabled',
+      'toggleSuggest',
       'viewStack',
       'suggestions',
       'isBixbyActive',
@@ -172,6 +174,7 @@ export default {
     spotify,
     screensaver,
     musicPlayer,
+    screenshot,
     // result,
   },
   watch: {
@@ -231,6 +234,10 @@ export default {
     .bixby-suggestions {
       position: absolute;
       bottom: 0;
+      background-image: url('/static/Images/system/Default.png');
+      background-size: 40 * $s 40 * $s;
+      background-repeat: no-repeat;
+      background-position: 80 * $s center;
       height: 135 * $s;
       width: 100%;
       display: flex;

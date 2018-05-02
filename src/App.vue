@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       page: -1,
-      setup: true,
+      setup: false,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
     };
   },
@@ -39,7 +39,7 @@ export default {
       console.log(param);
       if (param.page === 0) {
         this.page = 0;
-      } else if (param.page === 8) {
+      } else if (param.page === 7) {
         this.setup = true;
         this.page = 0;
       } else {
