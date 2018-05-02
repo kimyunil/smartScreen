@@ -10,7 +10,7 @@
           <transition :name="transitionName">
             <div class="slideshow-wrapper" :key="index">
               <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :focus="false"/>
-              <artinfo v-show="grids[index].template === 'ignore'" :img="grids[index][grids[index].content[infoArtIdx]].img"/>
+              <artinfo ref="infoart" v-show="grids[index].template === 'ignore'" :img="grids[index][grids[index].content[infoArtIdx]].img"/>
             </div>
           </transition>
         </div>
@@ -18,8 +18,8 @@
       </transition>
       <transition name="fade">
         <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
-          <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" :key="page.title">
-            <grid v-if="page.template !== 'ignore'" :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
+          <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" v-if="page.template !== 'ignore'" :key="page.title">
+            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
           </div>
           <div class="recent-apps">
               <div class="apps-list">
@@ -53,14 +53,7 @@ import Messages from '../../services/Messages';
 
 export default {
   mounted() {
-    this.toggleSuggetion(true);
-    if (this.index === 0) {
-      this.toggleSuggetion(false);
-    }
-    this.stopSlideShow();
-    if (!this.isRemoteEnabled) {
-      this.startSlideShow();
-    }
+    this.chkSlideShow();
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
@@ -72,6 +65,7 @@ export default {
     ...mapState([
       'isRemoteEnabled',
       'toggleSuggest',
+      'sleep',
       'isBixbyActive',
     ]),
     ...mapState('home', [
@@ -109,7 +103,30 @@ export default {
     }),
     ...mapMutations({
       toggleSuggetion: 'TOGGLE_SUGGESTION',
+      updateFlag: 'UPDATE_SYS_FLAG',
     }),
+    chkSlideShow() {
+      this.toggleSuggetion(true);
+      if (this.index === 0) {
+        this.toggleSuggetion(false);
+      }
+      if (this.sleep) {
+        this.index = 0;
+        this.slideshow = true;
+        setTimeout(() => {
+          this.updateFlag({ sleep: false });
+        }, 3000);
+        setTimeout(() => {
+          this.startSlideShow();
+        }, 6000);
+      } else {
+        this.stopSlideShow();
+        if (!this.isRemoteEnabled) {
+          this.index = 0;
+          this.startSlideShow();
+        }
+      }
+    },
     selectedGridItem(item) {
       console.log(item);
       if (item.details.action) {
@@ -198,7 +215,7 @@ export default {
             this.$emit('movefocus', { dir: 'up', from: 'content' });
           }
         } else if (param.dir === 'down') {
-          if (this.pageIdx < this.grids.length - 1) {
+          if (this.pageIdx < this.grids.length - 2) {
             this.pageIdx += 1;
             const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
             this.scroll('down', top);

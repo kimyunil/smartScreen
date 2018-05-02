@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       page: -1,
-      setup: false,
+      setup: true,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
     };
   },

@@ -9,7 +9,7 @@
     </div>
     <div class="infocard">
     </div>
-    <div class="img-container" :style='{"background-image": `url(${img})`}'>
+    <div class="img-container" :class="{'hide': sleep}" :style='{"background-image": `url(${img})`}'>
     </div>
   </div>
 </template>
@@ -32,15 +32,22 @@ export default {
   destroyed() {
     clearTimeout(this.interval);
   },
+  methods: {
+    hideInfo(toggle) {
+      this.hide = toggle;
+    },
+  },
   data() {
     return {
       interval: null,
       time: 0,
+      hide: false,
     };
   },
   computed: {
     ...mapState([
       'info',
+      'sleep',
     ]),
   },
 };
@@ -92,6 +99,11 @@ export default {
     background-size: 800 * $s 525 * $s;
     background-repeat: no-repeat;
     background-position: center center;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+    &.hide {
+      transform: translateX(#{1030 * $s});
+    }
   }
 }
 </style>

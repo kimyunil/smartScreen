@@ -14,13 +14,14 @@ const store = new Vuex.Store({
     gConfig: config,
     toggleSuggest: true,
     screenshot: '',
+    sleep: true,
     info: {
       weather: null,
       todays: null,
       portland: null,
     },
     voiceTimerID: null,
-    viewStack: ['screensaver'],
+    viewStack: ['home'],
     socketConnected: false,
     isRemoteEnabled: false,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
@@ -40,6 +41,12 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
+    UPDATE_SYS_FLAG(state, payload) {
+      const keys = Object.keys(payload);
+      for (let i = 0; i < keys.length; i += 1) {
+        state[keys[i]] = payload[keys[i]];
+      }
+    },
     UPDATE_REMOTE_MODE(state, payload) {
       state.isRemoteEnabled = payload;
     },
@@ -240,7 +247,7 @@ const store = new Vuex.Store({
       } else {
         state.viewStack.pop();
       }
-      if (state.viewStack.length === 1) {
+      if (state.viewStack.length === 0) {
         dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
       }
     },
