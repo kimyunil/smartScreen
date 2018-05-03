@@ -1,6 +1,6 @@
 <template>
   <div class="smart-screen">
-    <div class="backdrop" :class="{'blur': viewStack.length >= 1}">
+    <div class="backdrop" :class="{'blur': topView !== 'screensaver'}">
     </div>
     <transition-group name="fade" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">

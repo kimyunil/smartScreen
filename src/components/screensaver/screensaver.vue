@@ -174,17 +174,17 @@ export default {
       if (!this.active) return;
       switch (type) {
         case 'POWER':
-          this.switch_comp({ name: 'home' });
-          // if (!this.powerEnabled) {
-          //   this.powerEnabled = true;
-          //   this.timeOut = setTimeout(() => {
-          //     this.powerEnabled = false;
-          //   }, 10000);
-          // } else if (this.powerEnabled) {
-          //   // switch Component
-          //   this.reset();
-          //   this.switch_comp({ name: 'home' });
-          // }
+          // this.switch_comp({ name: 'home' });
+          if (!this.powerEnabled) {
+            this.powerEnabled = true;
+            this.timeOut = setTimeout(() => {
+              this.powerEnabled = false;
+            }, 10000);
+          } else if (this.powerEnabled) {
+            // switch Component
+            this.reset();
+            this.switch_comp({ name: 'home' });
+          }
           break;
         default:
           break;
@@ -196,7 +196,7 @@ export default {
       interval: null,
       timeOut: null,
       weather: null,
-      powerEnabled: true,
+      powerEnabled: false,
       time: '',
     };
   },

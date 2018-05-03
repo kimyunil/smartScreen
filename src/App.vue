@@ -2,7 +2,7 @@
   <div id="app">
     <smartscreen v-show="setup" :active="setup"/>
     <!-- <videosource/> -->
-    <div class="screenshot" v-show="!setup">
+    <div class="screenshot" v-show="!setup || localsetup">
       <div class="page" v-if="page !== -1" :style="{'background-image': `url('${screens[page]}')`}">
         <div class="screen" v-show="page === 0" :style="{'background-image': `url('${screens[0]}')`}"></div>
         <div class="screen" v-show="page === 1" :style="{'background-image': `url('${screens[1]}')`}"></div>
@@ -23,7 +23,9 @@ export default {
   name: 'App',
   mounted() {
     Messages.$on('smartscreen.setup', this.setupScreen);
-    // Messages.send('text-to-speech.say', 'Sorry, I didn\'t get that');
+    if (window.sessionStorage.getItem('oobe') !== null) {
+      this.setUpcomplete(true);
+    }
   },
   destroyed() {
     Messages.$off('smartscreen.setup', this.setupScreen);
@@ -31,6 +33,7 @@ export default {
   data() {
     return {
       page: -1,
+      localsetup: false,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
     };
   },
@@ -42,12 +45,16 @@ export default {
   methods: {
     ...mapActions({
       setUpcomplete: 'COMPLETE_SETUP',
+      switch_comp: 'SWITCH_COMPONENT',
     }),
     setupScreen(param) {
       console.log(param);
       if (param.page === 0) {
         this.page = 0;
       } else if (param.page === 6) {
+        window.sessionStorage.setItem('oobe', 'true');
+        // document.cookie = "oobe=true";
+        this.switch_comp({ replace: true, name: 'home' });
         this.setUpcomplete(true);
         this.page = 0;
       } else {

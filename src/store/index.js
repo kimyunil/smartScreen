@@ -22,7 +22,7 @@ const store = new Vuex.Store({
       portland: null,
     },
     voiceTimerID: null,
-    viewStack: ['home'],
+    viewStack: ['screensaver'],
     socketConnected: false,
     isRemoteEnabled: false,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],

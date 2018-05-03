@@ -1,5 +1,5 @@
 import foryou from './foryou';
-
+import movies from './movies';
 import health from './health';
 
 export default {
@@ -30,7 +30,7 @@ export default {
       movies: {
         title: 'MOVIES',
         template: 'movies',
-        data: health,
+        data: movies,
       },
       music: {
         title: 'MUSIC',

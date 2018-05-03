@@ -131,7 +131,7 @@ export default {
               subcategory: 'player',
               content: 'got',
             },
-            tile: '/static/Images/home/tile/morning/GOT.png',
+            tile: '/static/Images/app/01_Westworld.jpeg',
             logoType: 'rect-2',
             logo: '/static/Images/home/icons/morning/hbo.png',
             img: '',
