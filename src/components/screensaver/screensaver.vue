@@ -183,7 +183,7 @@ export default {
           } else if (this.powerEnabled) {
             // switch Component
             this.reset();
-            this.switch_comp({ name: 'home' });
+            this.switch_comp({ replace: true, name: 'home' });
           }
           break;
         default:

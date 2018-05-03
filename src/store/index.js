@@ -12,7 +12,6 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     gConfig: config,
-    toggleSuggest: true,
     screenshot: '',
     sleep: true,
     setup: false,
@@ -130,7 +129,7 @@ const store = new Vuex.Store({
       let compoName = payload.name;
       const compDetail = state.gConfig.components[compoName];
       if (compDetail.type === 'screenshot') {
-        state.screenshot = compDetail.img;
+        state.screenshot = compDetail;
         compoName = 'screenshot';
       } else {
         commit('REMOVE_IF_EXSIST', compoName);

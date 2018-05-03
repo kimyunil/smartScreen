@@ -18,6 +18,10 @@ export default {
     },
     fitbit: {
       type: 'screenshot',
+      sayWod: 'Try saying',
+      suggestion: true,
+      theme: 'light',
+      drivers: ["Hey Bixby, let’s do yoga challenge"],
       img: '/static/Images/screenshot/fitbit.png',
     },
     hbo: {
@@ -34,6 +38,9 @@ export default {
     },
     spotify: {
       type: 'source',
+      theme: 'light',
+      sayWod: 'Try saying',
+      drivers: ["Hey Bixby, let’s do yoga challenge"],
       suggestion: true,
     },
     hulu: {

@@ -1,6 +1,8 @@
 export default {
   pages: {
     pagination: ['page-1', 'page-2', 'page-3'],
+    focusIdx: 0,
+
     subCategories: {
       yoga: {
         heading: '7 Min Yoga',
@@ -61,7 +63,7 @@ export default {
     details: {
       'page-1': {
         title: 'page-1',
-        img: '/static/Images/home/movies/movies.png',
+        img: '/static/Images/home/movies/movies2.png',
         template: 'lgrid',
         content: ['content1', 'content2', 'content3'],
         content1: {
@@ -100,11 +102,12 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance', 'gotofit'],
         },
+        suggestions: ['Hey Bixby, play Wonder Woman'],
       },
       'page-2': {
         title: 'page-2',
         template: 'lgrid',
-        img: '/static/Images/home/movies/movies2.png',
+        img: '/static/Images/home/movies/movies3.png',
         content: ['content2', 'content1', 'content3'],
         content2: {
           bottomText: '',
@@ -142,12 +145,13 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
+        suggestions: ['Hey Bixby, show me action movies'],
       },
       'page-3': {
         title: 'page-3',
         type: 'grid',
         content: ['fitbit-gym', 'fitbit-yoga', 'sponsor', 'source'],
-        img: '/static/Images/home/movies/movies3.png',
+        img: '/static/Images/home/movies/movies.png',
         nav: [
           ['tile', 'tile', 'poster'],
           ['thumbnail2', 'thumbnail1', 'poster'],
@@ -209,50 +213,8 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
-      },
-      'page-4': {
-        title: 'page-3',
-        template: 'lgrid',
-        content: ['content3', 'content1', 'content3'],
-        content1: {
-          type: 'content',
-          bottomText: '',
-          thumbnail: 'static/Images/home/health/grid/thumb3.png',
-          img: 'static/Images/home/icons/common/big_fitbit.png',
-          logoType: 'rect',
-          dim: '962*807',
-          f_dim: '840*720',
-        },
-        content2: {
-          type: 'content',
-          bottomText: '4 Easy Ways To Boost Self-esteem',
-          thumbnail: 'static/Images/home/health/grid/thumb2.png',
-          img: 'static/Images/home/icons/common/small_cody.png',
-          logoType: 'rect',
-          dim: '442*807',
-          f_dim: '480*720',
-        },
-        content3: {
-          type: 'content',
-          bottomText: 'Motivational Workout Videos',
-          thumbnail: 'static/Images/home/health/grid/thumb1.png',
-          img: 'static/Images/home/icons/common/big_headspace.png',
-          logoType: 'rect',
-          dim: '442*807',
-          f_dim: '480*720',
-        },
-        sublist: ['workout', 'fitbitcardio'],
-        workout: {
-          title: 'BODYWEIGHT WORKOUT',
-          items: ['yoga', 'lifting', 'running', 'dailyyoga'],
-        },
-        fitbitcardio: {
-          title: 'EASY CARDIO DANCE  FROM FITBIT',
-          items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance', 'gotofit'],
-        },
+        suggestions: ['Hey Bixby, go Home'],
       },
     },
   },
-  suggestions: ['Tell me more About Fitness', 'Tell me more about Self Esteem', 'Show me npr...', 'Go to Health'],
 };

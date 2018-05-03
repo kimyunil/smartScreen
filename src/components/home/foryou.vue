@@ -32,7 +32,7 @@
       </transition>
     </div>
     <!-- <transition name="show"> -->
-      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive && toggleSuggest">
+      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
         <div class="pagination-dots">
           <div class="dots"
             v-for="(i, idx) in grids"
@@ -64,7 +64,6 @@ export default {
   computed: {
     ...mapState([
       'isRemoteEnabled',
-      'toggleSuggest',
       'sleep',
       'isBixbyActive',
     ]),
@@ -73,6 +72,7 @@ export default {
     ]),
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
+      suggest: 'GET_SUGGESTIONS',
       appsItems: 'GET_FORYOU_APPS',
     }),
     getGrids() {
@@ -104,6 +104,9 @@ export default {
     ...mapMutations({
       toggleSuggetion: 'TOGGLE_SUGGESTION',
       updateFlag: 'UPDATE_SYS_FLAG',
+    }),
+    ...mapMutations('home', {
+      updatePageIdx: 'UPDATE_PAGE_IDX',
     }),
     chkSlideShow() {
       this.toggleSuggetion(true);
@@ -256,12 +259,7 @@ export default {
       }
     },
     index(val) {
-      // if (val === 0) {
-      //   this.infoArtIdx = (this.infoArtIdx + 1) % this.grids[0].content.length;
-      //   this.toggleSuggetion(false);
-      // } else {
-      //   this.toggleSuggetion(true);
-      // }
+      this.updatePageIdx(val);
     },
     isRemoteEnabled(val, old) {
       console.log(val, old);

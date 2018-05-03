@@ -4,20 +4,10 @@
     </div>
     <transition-group name="fade" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
-        <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
+        <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="comps" :key="(comps === 'screenshot' ? `screen-${comps}`: comps)" @exit="exitCB" @return="returnCB"></component>
       </template>
     </transition-group>
     <bixby v-show="isBixbyActive && active" :active="isBixbyActive"/>
-    <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled && visibleComp.suggestion && toggleSuggest" :style="{'z-index': (viewStack.length + 1)}" >
-          <transition name="slideshow">
-            <div class="text-suggestion" :key="index">
-              <span class="text"> Say</span>
-              <span class="suggestions">" Hey Bixby, <span>{{bSuggestions[index]}}</span>"</span>
-            </div>
-          </transition>
-        </div>
-    </transition>
     <music-player></music-player>
   </div>
 </template>
@@ -56,12 +46,6 @@ export default {
       obj.autoplay = true;
       return obj;
     },
-    bSuggestions() {
-      if (this.topView === 'home') {
-        return this.homeSuggest;
-      }
-      return this.suggestions;
-    },
     topView() {
       return this.viewStack[this.viewStack.length - 1];
     },
@@ -76,7 +60,6 @@ export default {
     ]),
     ...mapState([
       'isRemoteEnabled',
-      'toggleSuggest',
       'viewStack',
       'suggestions',
       'isBixbyActive',
@@ -104,10 +87,10 @@ export default {
       this.removeComponent();
     },
     startSlideShow() {
-      clearInterval(this.intervalId);
-      this.intervalId = setInterval(() => {
-        this.index = (((this.index) + 1) % this.bSuggestions.length);
-      }, 5000);
+      // clearInterval(this.intervalId);
+      // this.intervalId = setInterval(() => {
+      //   this.index = (((this.index) + 1) % this.bSuggestions.length);
+      // }, 5000);
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
@@ -230,72 +213,6 @@ export default {
     }
     // background-image: url('/static/bgbg.png');
     background-size: 100%;
-  }
-    .bixby-suggestions {
-      position: absolute;
-      bottom: 0;
-      background-image: url('/static/Images/system/Default.png');
-      background-size: 40 * $s 40 * $s;
-      background-repeat: no-repeat;
-      background-position: 80 * $s center;
-      height: 135 * $s;
-      width: 100%;
-      display: flex;
-    align-items: center;
-    .text-suggestion {
-      position: absolute;
-      top: 35%;
-      left: 132 * $s;
-      // top: -3 * $s;
-      font-size: 32 * $s;
-        &.slideshow-enter {
-          opacity: 0;
-        }
-        &.slideshow-leave-to {
-          opacity: 0;
-        }
-        &.slideshow-enter-active{
-          transition: opacity 0.3s ease;
-        }
-        &.slideshow-leave-active {
-          transition: opacity 0.3s ease;
-        }
-      .text {
-        font-family: SamsungOneUI300;
-      }
-      .suggestions {
-        font-size: 31 * $s;
-        font-family: SamsungOneUI700;
-      }
-    }
-    .pagination-dots {
-      position: absolute;
-      right: 70 * $s;
-      display: flex;
-      width: 84 * $s;
-      justify-content: space-between;
-      .dots {
-        height: 10* $s;
-        width: 10* $s;
-        border-radius: 50%;
-        background-color: rgba(0,0,0,0.2);
-        &.selected {
-          background-color: rgba(0,0,0,1)
-        }
-      }
-    }
-    &.show-enter {
-      opacity: 0;
-    }
-    &.show-leave-to {
-      opacity: 0;
-    }
-    &.show-enter-active{
-      transition: height 0.3s ease, opacity 0.3s ease;
-    }
-    &.show-leave-active {
-      transition: height 0.3s ease, opacity 0.3s ease;
-    }
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.4s linear;

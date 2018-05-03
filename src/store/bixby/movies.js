@@ -6,6 +6,7 @@ export default {
       template: 'list',
       contentType: 'movies',
       response: 'Here are some top rated funny movies',
+      suggestions: ["Hey Bixby, show me more", "Hey Bixby, dismiss"],
       list: ['funny1', 'funny2', 'funny3', 'funny4', 'funny5', 'funny6'],
       drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
       clipanim: {
@@ -19,6 +20,7 @@ export default {
       template: 'list',
       contentType: 'movies',
       response: 'Here\'s what I found for Ghostbusters',
+      suggestions: ["Hey Bixby, show me more", "Hey Bixby, dismiss"],
       list: ['gbust1', 'gbust2', 'gbust3', 'gbust4', 'gbust5', 'gbust6'],
       drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
       clipanim: {
@@ -32,6 +34,7 @@ export default {
       template: 'list',
       contentType: 'movies',
       response: 'Here are the most popular Star Wars movies',
+      suggestions: ["Hey Bixby, show me more", "Hey Bixby, dismiss"],
       list: ['strwr1', 'strwr2', 'strwr3', 'strwr4', 'strwr5', 'strwr6'],
       drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
       clipanim: {
@@ -45,6 +48,7 @@ export default {
       template: 'list',
       contentType: 'movies',
       response: 'Here are some top rated funny movies',
+      suggestions: ["Hey Bixby, show me more", "Hey Bixby, dismiss"],
       list: ['action1', 'action2', 'action3', 'action4', 'action5', 'action6'],
       drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
       clipanim: {

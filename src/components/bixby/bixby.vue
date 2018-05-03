@@ -236,7 +236,7 @@ export default {
     closeTimer() {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = setTimeout(() => {
-        this.closeBixby(false);
+        // this.closeBixby(false);
       }, 10000);
     },
     changeAnimation() {
@@ -357,7 +357,7 @@ export default {
     height: 100%;
     top: (540 + 150) * $s;
     // background: red;
-    overflow: hidden;
+    // overflow: hidden;
     transition: transform 0.5s cubic-bezier(.33,0,.83,1);
     // background: url('/static/bg 2.png');
     background-size: 100%;

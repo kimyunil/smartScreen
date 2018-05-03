@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <div class="backdrop blur">
+    </div>
     <div class="dashboard">
       <transition name="show">
       <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}" v-show="isRemoteEnabled || nav_selected != 0">
@@ -13,6 +15,7 @@
           <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
       </div>
+      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" ></drivers>
     </div>
   </div>
 </template>
@@ -21,6 +24,7 @@ import { mapGetters, mapState, mapMutations } from 'vuex';
 import foryou from './foryou';
 import movies from './movies';
 import health from './health';
+import drivers from '../common/drivers';
 import homeHeader from './common/header';
 import Messages from '../../services/Messages';
 
@@ -31,6 +35,7 @@ export default {
       'isRemoteEnabled',
     ]),
     ...mapGetters('home', {
+      suggest: 'GET_SUGGESTIONS',
       navItems: 'GET_NAVS',
       grid_info: 'GET_CAT_GRID',
       nav_selected: 'GET_SELECTED_NAV',
@@ -50,6 +55,8 @@ export default {
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    console.log('Suggestion:::::::::::::::::');
+    console.log(this.suggest);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -130,6 +137,7 @@ export default {
     homeHeader,
     foryou,
     movies,
+    drivers,
     health,
   },
   watch: {
@@ -150,13 +158,28 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('/static/Images/home/home_bg.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
+  .backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/Images/background.png');
+    &.blur {
+      filter: blur(50px);
+      -webkit-filter: blur(50px);
+    }
+      // background-image: url('/static/bgbg.png');
+      background-size: 100%;
+    }
   .dashboard {
     position: absolute;
     width: 100%;
     height: 100%;
+    background-image: url('/static/Images/home/home_bg.png');
     .header-cont {
       position: absolute;
       height: 230 * $s;

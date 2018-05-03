@@ -36,17 +36,20 @@
         </div>
       </div>
     </div>
+    <drivers :theme="musicplayer.details.save.driverTheme" :drivers="drivers" :sayWord="'Try Saying'" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
 
 import { mapActions, mapState, mapMutations } from 'vuex';
+import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 
 export default {
   name: 'spotify',
   mounted() {
     // this.initiateTimer();
+    console.log(this.musicplayer.details);
     this.saveContinue('spotify');
     this.updateMP();
     Messages.$on('button_down', this.handleKeyDown);
@@ -58,6 +61,7 @@ export default {
   },
   data() {
     return {
+      drivers: ["Hey Bixby, previous", "Hey Bixby, next"],
       timeoutId: null,
     };
   },
@@ -101,6 +105,9 @@ export default {
       playerState: state => state.musicplayer.playerState,
       thumbnail: state => state.musicplayer.details.thumbnail,
     }),
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
     progress() {
       return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
@@ -124,6 +131,9 @@ export default {
       this.initiateTimer();
     },
   },
+  components: {
+    drivers,
+  }
 };
 </script>
 <style lang="scss" scoped>

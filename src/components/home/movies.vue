@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import lgrid from './common/lgrid';
 import grid from './common/grid';
 import Messages from '../../services/Messages';
@@ -106,6 +106,9 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('home', {
+      updatePageIdx: 'UPDATE_PAGE_IDX',
+    }),
     shrinkTransitionCB() {
       if (this.isRemoteEnabled) {
         this.slideshow = false;
@@ -117,6 +120,7 @@ export default {
       if (!this.active) return;
       switch (type) {
         case 'UP':
+          this.$emit('movefocus', { dir: 'up', from: 'content' });
           break;
         case 'RIGHT':
           break;
@@ -210,6 +214,9 @@ export default {
           this.startSlideShow();
         }
       });
+    },
+    index(val) {
+      this.updatePageIdx(val);
     },
     isRemoteEnabled(val, old) {
       console.log(val, old);

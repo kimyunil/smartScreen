@@ -11,10 +11,13 @@
         </div>
       </div>
       <div class="drivers">
+        <drivers :theme="'dark'" :sayWord = "'Try Saying'" :drivers="resultData.data.suggestions" :toggle="true"></drivers>
       </div>
     </div>
 </template>
 <script>
+import drivers from '../../common/drivers';
+
 export default {
   mounted() {
   },
@@ -23,6 +26,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  components: {
+    drivers,
   },
 };
 </script>
@@ -33,7 +39,7 @@ export default {
     width: 100%;
     bottom: 0;
     height: auto;
-    overflow: hidden;
+    // overflow: hidden;
   .h-list {
     position: relative;
     width: 100%;
@@ -96,8 +102,8 @@ export default {
     }
   }
   .drivers {
-    // position: relative;
-    // height: 140 * $s;
+    position: relative;
+    height: 140 * $s;
   }
  }
 

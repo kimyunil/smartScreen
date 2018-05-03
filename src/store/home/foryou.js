@@ -1,5 +1,4 @@
 export default {
-  suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
   apps: {
     items: ['netflix', 'hulu', 'spotify', 'fitbit', 'masterclass'],
     details: {
@@ -27,9 +26,11 @@ export default {
   },
   pages: {
     pagination: ['page-1', 'page-2', 'page-3'],
+    focusIdx: 0,
     details: {
       'page-1': {
         title: 'page-1',
+        suggestions: ['Hey Bixby, play Morning Playlist'],
         nav: [
           ['poster', 'tile', 'tile'],
           ['poster', 'thumbnail1', 'thumbnail2'],
@@ -84,10 +85,10 @@ export default {
             img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
           },
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
       'page-2': {
         title: 'page-2',
+        suggestions: ['Hey Bixby, play Westworld'],
         content: ['iot-temp', 'iot-light', 'source', 'spotify'],
         nav: [
           ['thumbnail1', 'thumbnail2', 'poster'],
@@ -149,10 +150,10 @@ export default {
             logoType: 'rect-3',
           },
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
       'page-3': {
         title: 'page-3',
+        suggestions: ['Hey Bixby, Lets do Total Sculpt'],
         content: ['fitbit-excercise', 'fitbit-gym', 'sponsor', 'source'],
         nav: [
           ['tile', 'tile', 'poster'],
@@ -227,7 +228,6 @@ export default {
             img: '/static/Images/home/thumbnail/morning/yogo.png',
           },
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
       'page-4': {
         title: 'page-4',
@@ -242,7 +242,6 @@ export default {
         match: {
           img: '/static/Images/home/foryou/info3.png',
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
       },
     },
   },

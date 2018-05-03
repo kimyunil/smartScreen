@@ -1,11 +1,12 @@
 <template>
-  <div class="screenshot" :style="{'background-image': `url('${screenshot}')`}">
-
+  <div class="screenshot" :style="{'background-image': `url('${screenshot.img}')`}">
+  <drivers :theme="screenshot.theme" :drivers="screenshot.drivers" :sayWord="screenshot.sayWord" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import Messages from '../../services/Messages';
+import drivers from '../common/drivers';
 
 export default {
   name: 'screenshot',
@@ -18,6 +19,7 @@ export default {
   computed: {
     ...mapState([
       'screenshot',
+      'isRemoteEnabled',
     ]),
   },
   methods: {
@@ -31,6 +33,9 @@ export default {
           break;
       }
     },
+  },
+  components: {
+    drivers,
   },
 };
 </script>

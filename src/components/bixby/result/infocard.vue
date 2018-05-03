@@ -20,15 +20,24 @@
     <div class="weather-img bgImg" :style="{'background-image': `url(${resultData.data.img})`}">
     </div>
   </template>
+  <drivers :theme="'dark'" :sayWord = "'Try Saying'" :drivers="resultData.data.suggestions" :toggle="true"></drivers>
 </div>
 </template>
 <script>
+import drivers from '../../common/drivers';
+
 export default {
+  mounted() {
+    console.log(this.resultData.suggestions)
+  },
   props: {
     resultData: {
       type: Object,
       require: true,
     },
+  },
+  components: {
+    drivers,
   },
 };
 </script>
@@ -37,15 +46,15 @@ export default {
 .info {
   position: relative;
   width: 100%;
-  height: 80 * $s;
+  height: 150 * $s;
   &.lostmovie {
-     height: 590 * $s;
+     height: 640 * $s;
   }
   &.weather {
-    height: 390 * $s;
+    height: 540 * $s;
   }
   &.fitbit {
-    height: 390 * $s;
+    height: 540 * $s;
   }
   .bgImg {
     position: relative;

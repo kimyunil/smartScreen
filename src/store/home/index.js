@@ -5,7 +5,6 @@ export default {
   state: {
     data,
     timeout: 5000,
-    suggestions: ['Tell me more About Self Esteem', 'Go to Health and Wellness', 'Show me more...'],
   },
   props: {
     active: {
@@ -14,6 +13,15 @@ export default {
     },
   },
   getters: {
+    GET_SUGGESTIONS(state) {
+      console.log('manas::::::::::::::::::::');
+      console.log(state);
+      const navItem = state.data.navs.items[state.data.navs.selectedIdx];
+      const category = state.data.navs.details[navItem].data.pages;
+      const pageKey = category.pagination[category.focusIdx];
+      console.log(category.details[pageKey].suggestions);
+      return category.details[pageKey].suggestions;
+    },
     GET_CAT_GRID: state => (index) => {
       const navItem = state.data.navs.items[index];
       const category = state.data.navs.details[navItem];
@@ -24,11 +32,6 @@ export default {
         pages[i] = localData.pages.details[key];
       }
       return pages;
-    },
-    GET_SUGGESTIONS(state) {
-      const navItem = state.data.navs.items[state.data.navs.selectedIdx];
-      const category = state.data.navs.details[navItem].data;
-      return category.suggestions;
     },
     PAGE_SUB_CAT_HEALTH: state => (index) => {
       const healthPages = state.data.navs.details.health.data.pages;
@@ -84,6 +87,12 @@ export default {
   mutations: {
     select_nav(state, indx) {
       state.data.navs.selectedIdx = indx;
+    },
+    UPDATE_PAGE_IDX(state, idx) {
+      const navItem = state.data.navs.items[state.data.navs.selectedIdx];
+      const category = state.data.navs.details[navItem].data.pages;
+      category.focusIdx = idx;
+      console.log(idx);
     },
     SAVE_CONT_DATA(state, arg) {
       const payload = arg;

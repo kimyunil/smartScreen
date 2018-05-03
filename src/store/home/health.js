@@ -28,11 +28,11 @@ export default {
       },
     },
   },
-  suggestions: ['Tell me more About Fitness', 'Tell me more about Self Esteem', 'Show me npr...', 'Go to Health'],
   subCategory: {
   },
   pages: {
     pagination: ['page-1', 'page-2', 'page-3'],
+    focusIdx: 0,
     subCategories: {
       yoga: {
         heading: '7 Min Yoga',
@@ -131,6 +131,7 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance', 'gotofit'],
         },
+        suggestions: ['Hey Bixby, go to Fitbit'],
       },
       'page-2': {
         title: 'page-2',
@@ -172,6 +173,7 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
+        suggestions: ['Hey Bixby, let’s do Cardio Dance Basics 1'],
       },
       'page-3': {
         title: 'page-3',
@@ -238,7 +240,7 @@ export default {
           title: 'EASY CARDIO DANCE  FROM FITBIT',
           items: ['dance', 'workoutdance', 'cardiodancebasic', 'cardiodance'],
         },
-        suggestions: ['Tell me more About Fitness', 'Go to Weather', 'Show me npr...', 'Go to Health'],
+        suggestions: ['Hey Bixby, go Home'],
       },
       'page-4': {
         title: 'page-3',
