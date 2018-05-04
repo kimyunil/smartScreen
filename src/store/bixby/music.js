@@ -7,7 +7,7 @@ export default {
       contentType: 'music',
       response: 'Here is your spotify playlist',
       list: ['plys1', 'plys2', 'plys3', 'plys4', 'plys5'],
-      drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
+      suggestions: ['Hey Bixby, show me more', 'Hey Bixby, Dismiss'],
       clipanim: {
         renderer: 'svg',
         loop: false,
@@ -20,7 +20,7 @@ export default {
       contentType: 'music',
       response: 'Here are some latest albums by Coldplay',
       list: ['cp1', 'cp2', 'cp3', 'cp4', 'cp5'],
-      drivers: ['Try saying "Hey Bixby, show me more"', 'Try saying "Hey Bixby, Dismiss"'],
+      suggestions: ['Hey Bixby, show me more', 'Hey Bixby, Dismiss'],
       clipanim: {
         renderer: 'svg',
         loop: false,

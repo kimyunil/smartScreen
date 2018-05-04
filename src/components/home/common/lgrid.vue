@@ -3,7 +3,7 @@
     <div class="list" :style="{'transform': `translateX(${this.translateX}px)`}">
       <template v-if="itemType === 'grid'">
         <div class="grid-item item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
-          <img class="icon" :src="item.img"/>
+          <div class="icon" :class="[item.logoType]" :style="[{'background-image': `url(${item.img})`}]"></div>
           <div class="bg-thumb" :src="item.thumbnail" :style="[{'background-image': `url(${item.thumbnail})`}, setWidth(item)]">
           </div>
           <div class="footer-text">
@@ -156,8 +156,16 @@ export default {
       .icon {
         position: absolute;
         z-index: 2;
-        right: 40 * $s;
-        bottom: 40 * $s;
+        right:20 * $s;
+        width: 120 * $s;
+        height: 120 * $s;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        bottom: 0 * $s;
+        &.big {
+          width: 200 * $s;
+          height: 120 * $s;          
+        }
       }
       .footer-text {
         position: absolute;

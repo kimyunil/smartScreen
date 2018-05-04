@@ -188,7 +188,7 @@ export default {
       'page-3': {
         title: 'page-3',
         suggestions: ['Hey Bixby, play Classical Playlist'],
-        content: ['youtube', 'hbo', 'spotify', 'gym'],
+        content: ['youtube', 'mac', 'spotify', 'gym'],
         nav: [
           ['poster', 'tile', 'tile'],
           ['poster', 'thumbnail1', 'thumbnail2'],
@@ -222,7 +222,7 @@ export default {
             img: '',
           },
         },
-        hbo: {
+        mac: {
           type: 'tile',
           template: 'tile',
           contentType: 'sponsored',
@@ -256,7 +256,7 @@ export default {
             icon: '',
             bottomText: '<span class="bold-text">Weighlifting</span><br><span>Concentration</span>',
             logo: 'static/Images/home/icons/morning/cody.png',
-            logoType: 'rect',
+            logoType: 'text-big',
             img: '/static/Images/home/thumbnail/morning/gym.png',
           },
         },

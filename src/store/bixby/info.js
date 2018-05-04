@@ -69,7 +69,7 @@ export default {
       template: 'info',
       suggestions: ['Hey Bixby, dismiss'],
       type: 'measure',
-      tts: '1 cup is equal to 8 fluid once',
+      tts: '1 cup is equal to 8 fluid ounces',
       response: '1 cup is equal to 8 fluid ounces',
       img: '/static/Images/results/info/measure.png',
     },

@@ -20,7 +20,7 @@
       </div>
     </template>
   </div>
-    <template v-if="item.details.video">
+    <template v-if="item.details.video && vidAutoplay">
         <transition name="fade">
         <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}" v-show="!videImgTrans"></div>
         </transition>
@@ -34,9 +34,10 @@
       <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}"></div>
     </template>
   </div>
-
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     item: {
@@ -64,6 +65,9 @@ export default {
     videImgTrans() {
       return this.item.details.video && this.videoActive;
     },
+    ...mapState({
+      vidAutoplay: state => state.vidAutoplay,
+    }),
   },
   watch: {
     videoActive(val) {

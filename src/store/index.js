@@ -13,6 +13,7 @@ const store = new Vuex.Store({
   state: {
     gConfig: config,
     screenshot: '',
+    vidAutoplay: false,
     sleep: true,
     setup: false,
     transition: 'slide',
@@ -47,6 +48,9 @@ const store = new Vuex.Store({
       for (let i = 0; i < keys.length; i += 1) {
         state[keys[i]] = payload[keys[i]];
       }
+    },
+    TOGGLE_VIDEO_AUTO(state) {
+      state.vidAutoplay = !state.vidAutoplay;
     },
     UPDATE_REMOTE_MODE(state, payload) {
       state.isRemoteEnabled = payload;

@@ -236,7 +236,7 @@ export default {
     closeTimer() {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = setTimeout(() => {
-        // this.closeBixby(false);
+        this.closeBixby(false);
       }, 10000);
     },
     changeAnimation() {

@@ -64,7 +64,7 @@
         </div>
       </template>
     </div>
-    <template v-if="item.details.video">
+    <template v-if="item.details.video && vidAutoplay">
       <transition name="fade">
         <div class="thumb" :style="{'background-image': `url(${item.details.img})`}" v-show="!videImgTrans"></div>
        </transition>
@@ -75,7 +75,7 @@
       </transition>
     </template>
     <template v-else>
-      <div class="thumb" :style="{'background-image': `url(${item.details.img})`}" v-if="!videImgTrans"></div>
+      <div class="thumb" :style="{'background-image': `url(${item.details.img})`}"></div>
     </template>
   </div>
 </template>
@@ -99,6 +99,7 @@ export default {
     },
     ...mapState({
       weather: state => state.info.todays,
+      vidAutoplay: state => state.vidAutoplay,
     }),
   },
   methods: {
@@ -235,7 +236,10 @@ export default {
       }
    }
     &.big {
-       margin-bottom: 60 * $s;
+       margin-bottom: 80 * $s;
+    }
+    &.text-big {
+      margin-bottom: 80 * $s;
     }
   }
   .seekbar {
@@ -261,7 +265,7 @@ export default {
     right: 0%;
     bottom: 0 * $s;
     background-position: center;
-    background-size: contain;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 120 * $s;
     height: 120 * $s;
