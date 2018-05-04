@@ -9,8 +9,7 @@
         <div class="grid-templates grid-templates-slideshow" v-show="slideshow">
           <transition :name="transitionName">
             <div class="slideshow-wrapper" :key="index">
-              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :focus="false"/>
-              <artinfo ref="infoart" v-show="grids[index].template === 'ignore'" :img="grids[index][grids[index].content[infoArtIdx]].img"/>
+              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :videoActive="videoEnabled" :focus="false"/>
             </div>
           </transition>
         </div>
@@ -19,7 +18,7 @@
       <transition name="fade">
         <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
           <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" v-if="page.template !== 'ignore'" :key="page.title">
-            <grid :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
+            <grid :videoActive="true" :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
           </div>
           <div class="recent-apps">
               <div class="apps-list">
@@ -169,20 +168,33 @@ export default {
           break;
       }
     },
+    autoplayeVieo() {
+      clearTimeout(this.videoTime);
+      this.videoTime = setTimeout(() => {
+        console.log(this.videoEnabled);
+        this.videoEnabled = true;
+      }, 3000);
+    },
     startSlideShow() {
       this.slideshow = true;
-      console.log(this.timeout);
+      this.autoplayeVieo();
       clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
         this.transitionName = 'slideshow';
-        this.index = (((this.index) + 1) % this.grids.length);
-      }, this.timeout);
+        this.videoEnabled = false;
+        this.$nextTick(() => {
+          this.index = (((this.index) + 1) % this.grids.length);
+          this.autoplayeVieo();
+        });
+        }, this.timeout);
       // this.index = 3;
     },
-    stopSlideShow(from) {
+    stopSlideShow() {
       clearInterval(this.intervalId);
       this.intervalId = null;
       this.transitionName = '';
+      this.videoEnabled = true;
+      clearTimeout(this.videoTime);
       this.slideshow = false;
     },
     scroll(dir, delta) {
@@ -226,8 +238,10 @@ export default {
   data() {
     return {
       transitionName: 'slideshow',
+      videoTime: null,
       intervalId: null,
       infoArtIdx: 0,
+      videoEnabled: false,
       focus: 'grid',
       pageIdx: 0,
       index: 0,

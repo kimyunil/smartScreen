@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     data,
-    timeout: 5000,
+    timeout: 10000,
   },
   props: {
     active: {

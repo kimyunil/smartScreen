@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     screenshot: '',
     sleep: true,
     setup: false,
+    transition: 'slide',
     info: {
       weather: null,
       todays: null,
@@ -128,6 +129,12 @@ const store = new Vuex.Store({
     SWITCH_COMPONENT({ state, commit, getters }, payload) {
       let compoName = payload.name;
       const compDetail = state.gConfig.components[compoName];
+      if (payload.transition) {
+        state.transition = payload.transition;
+      } else {
+        state.transition = 'fade'; // default;
+      }
+      console.log(payload.transition);
       if (compDetail.type === 'screenshot') {
         state.screenshot = compDetail;
         compoName = 'screenshot';

@@ -28,7 +28,7 @@ import drivers from '../../common/drivers';
 
 export default {
   mounted() {
-    console.log(this.resultData.suggestions)
+    console.log(this.resultData.suggestions);
   },
   props: {
     resultData: {

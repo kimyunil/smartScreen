@@ -7,7 +7,7 @@
         :key="gridItem.key"
       >
         <div class="item-wrapper">
-          <component :is="gridItem.template" :item="gridItem"></component>
+          <component :videoActive="videoActive" :is="gridItem.template" :item="gridItem"></component>
         </div>
       </div>
     </div>
@@ -24,6 +24,10 @@ export default {
     details: {
       type: Object,
       required: true,
+    },
+    videoActive: {
+      type: Boolean,
+      default: false,
     },
     focus: {
       type: Boolean,
@@ -224,11 +228,11 @@ export default {
       "tile tile poster";
     }
     &.page-3 {
-       grid-template-columns:21.25% 21.25% 57.5%; //total is 100%
+      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
-      "tile tile poster"
-      "thumbnail2 thumbnail1 poster";
+      "poster tile tile"
+      "poster thumbnail1 thumbnail2";
     }
   }
 

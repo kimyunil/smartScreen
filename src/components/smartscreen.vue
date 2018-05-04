@@ -2,7 +2,7 @@
   <div class="smart-screen">
     <div class="backdrop" :class="{'blur': topView !== 'screensaver'}">
     </div>
-    <transition-group name="fade" tag="div" class="component">
+    <transition-group :name="transition" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="comps" :key="(comps === 'screenshot' ? `screen-${comps}`: comps)" @exit="exitCB" @return="returnCB"></component>
       </template>
@@ -60,6 +60,7 @@ export default {
     ]),
     ...mapState([
       'isRemoteEnabled',
+      'transition',
       'viewStack',
       'suggestions',
       'isBixbyActive',
@@ -221,6 +222,16 @@ export default {
     }
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+  .slide-enter-active, .slide-leave-active {
+    transition: transform 1.2s ease, opacity 0.4s ease;
+  }
+  .slide-leave-to {
+    opacity: 0;
+  }
+  .slide-enter {
+    transform: translateX(#{200 * $s});
     opacity: 0;
   }
 }

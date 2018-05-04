@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      drivers: ["Hey Bixby, previous", "Hey Bixby, next"],
+      drivers: ['Hey Bixby, previous', 'Hey Bixby, next'],
       timeoutId: null,
     };
   },
@@ -133,7 +133,7 @@ export default {
   },
   components: {
     drivers,
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

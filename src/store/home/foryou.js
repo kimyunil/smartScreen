@@ -30,34 +30,55 @@ export default {
     details: {
       'page-1': {
         title: 'page-1',
-        suggestions: ['Hey Bixby, play Morning Playlist'],
+        suggestions: ['Hey Bixby, continue watching the Handmaid’s Tale'],
         nav: [
           ['poster', 'tile', 'tile'],
           ['poster', 'thumbnail1', 'thumbnail2'],
         ],
-        content: ['news', 'fitness', 'weather', 'npr'],
+        content: ['news', 'hulu', 'sponsor', 'npr'],
         news: {
           type: 'poster',
           template: 'poster',
           contentType: 'simple',
           details: {
+            video: '/resources/videos/smartscreen/facebook.mp4',
             poster: '/static/Images/home/posters/morning/news.png',
-            text1: 'Mark Zuckerberg apologizes, promises reform as senators grill him over Facebook’s failings',
+            text1: '<span class="bold-text">Mark Zuckerberg</span><br> <span class="light-text">apologizes, promises reform as senators grill him over Facebook’s failings</span>',
             logo: '/static/Images/home/icons/morning/news.png',
             logoType: 'sqr',
             img: '',
           },
         },
-        fitness: {
+        hulu: {
           type: 'tile',
           template: 'tile',
           contentType: 'simple',
           details: {
-            bottomText: 'Sleep Summary',
-            tile: '/static/Images/home/tile/morning/fitbit.png',
-            logo: '/static/Images/home/icons/common/fitbit.png',
+            action: {
+              category: 'hulu',
+              subcategory: 'home',
+              content: 'handmaids',
+            },
+            topLeftText: '<span class="bold-top-text">Continue Watching</span>',
+            bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S1 Ep2 Borth Day</span>',
+            tile: '/static/Images/home/tile/morning/maid.png',
+            logo: '/static/Images/home/icons/common/hulu.png',
             logoType: 'rect',
             img: '',
+          },
+        },
+        sponsor: {
+          type: 'thumbnail1',
+          template: 'thumbnail',
+          contentType: 'cp',
+          details: {
+            icon: '',
+            video: '/resources/videos/smartscreen/curry.mp4',
+            topLeftText: '<span class="bold-top-text">sponsored</span>',
+            bottomText: '<span class="bold-text">Stephen Curry</span><br> <span class="light-text">Shooting, Ball-</br>handling</span>',
+            logoType: 'sqr-2',
+            logo: '/static/Images/home/icons/common/masterChef.png',
+            img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
           },
         },
         weather: {
@@ -78,18 +99,17 @@ export default {
           template: 'thumbnail',
           contentType: 'cp',
           details: {
-            bottomText: 'Play Morning Playlist',
+            bottomText: '<span class="light-text"> Play </span> <span class="bold-text">Morning </br> Playlist</span>',
             icon: '',
-            logo: '/static/Images/home/icons/morning/big_npr.png',
-            logoType: 'rect',
+            logo: '/static/Images/home/icons/morning/npr.png',
             img: '/static/Images/home/thumbnail/morning/npr_thumbnail.png',
           },
         },
       },
       'page-2': {
         title: 'page-2',
-        suggestions: ['Hey Bixby, play Westworld'],
-        content: ['iot-temp', 'iot-light', 'source', 'spotify'],
+        suggestions: ['Hey Bixby, go to Fitbit'],
+        content: ['iot-temp', 'iot-light', 'source', 'fitbit-excercise'],
         nav: [
           ['thumbnail1', 'thumbnail2', 'poster'],
           ['tile', 'tile', 'poster'],
@@ -125,7 +145,8 @@ export default {
           template: 'tile',
           contentType: 'sponsored',
           details: {
-            bottomText: 'WestWorld<br>S1Ep4Dissonance Theory',
+            video: '/resources/videos/smartscreen/Westworld_HBO.mp4',
+            bottomText: '<span class="bold-text">Westworld</span><br> <span class="light-text">2 Series</span>',
             topLeftText: 'Continue Watching',
             action: {
               category: 'hbo',
@@ -133,10 +154,23 @@ export default {
               content: 'got',
             },
             tile: '/static/Images/app/01_Westworld.jpeg',
-            logoType: 'rect-2',
+            logoType: 'big',
             logo: '/static/Images/home/icons/morning/hbo.png',
             img: '',
           },
+        },
+        'fitbit-excercise': {
+          type: 'poster',
+          contentType: 'details',
+          details: {
+            video: '/resources/videos/smartscreen/Total_Sculpt_920.mp4',
+            poster: '/static/Images/home/posters/morning/exercise.png',
+            text1: '<span class="bold-text">Total Sculp: 2.0</span><br> <span class="light-text">Cardio & Hit</br></br>Intensity: 3</span>',
+            logo: '/static/Images/home/icons/common/fitbit.png',
+            logoType: 'big',
+            img: '/static/Images/home/page1/poster.png',
+          },
+          template: 'poster',
         },
         spotify: {
           type: 'poster',
@@ -153,25 +187,21 @@ export default {
       },
       'page-3': {
         title: 'page-3',
-        suggestions: ['Hey Bixby, Lets do Total Sculpt'],
-        content: ['fitbit-excercise', 'fitbit-gym', 'sponsor', 'source'],
+        suggestions: ['Hey Bixby, play Classical Playlist'],
+        content: ['youtube', 'hbo', 'spotify', 'gym'],
         nav: [
-          ['tile', 'tile', 'poster'],
-          ['thumbnail2', 'thumbnail1', 'poster'],
+          ['poster', 'tile', 'tile'],
+          ['poster', 'thumbnail1', 'thumbnail2'],
         ],
-        'fitbit-excercise': {
+        youtube: {
           type: 'poster',
           contentType: 'details',
           details: {
-            poster: '/static/Images/home/posters/morning/exercise.png',
-            text1: {
-              'Total Sculp:': '2.0',
-              'Cardio & Hit': '',
-            },
-            text2: {
-              'Intensity:': '3',
-            },
-            logo: '/static/Images/home/icons/morning/DailyBurn.png',
+            video: '/resources/videos/smartscreen/game.mp4',
+            poster: '/static/Images/home/posters/morning/youtube.png',
+            text1: '<span class="bold-text">Kingsone Dragonx</span><span class="light-text"> vs Afreeca Freecs </br>Game4</span>',
+            logo: '/static/Images/home/icons/morning/youtube.png',
+            extraImg: '/static/Images/home/icons/morning/score.png',
             logoType: 'rect-3',
             img: '/static/Images/home/page1/poster.png',
           },
@@ -192,40 +222,42 @@ export default {
             img: '',
           },
         },
-        'fitbit-gym': {
+        hbo: {
           type: 'tile',
           template: 'tile',
           contentType: 'sponsored',
           details: {
-            bottomText: 'Weightlifting 101 </br> Concetration',
-            tile: '/static/Images/home/tile/morning/gym.png',
-            logo: 'static/Images/home/icons/common/small_cody.png',
-            logoType: 'rect',
+            bottomText: '<span class="bold-text">Lady Macbeth</span><br> <span class="light-text">26 | R</span>',
+            topLeftText: '',
+            video: '/resources/videos/smartscreen/macbeth.mp4',
+            tile: '/static/Images/home/tile/morning/macbeth.png',
+            logoType: 'big',
+            logo: '/static/Images/home/icons/morning/hbo.png',
             img: '',
           },
         },
-        sponsor: {
+        spotify: {
           type: 'thumbnail1',
           template: 'thumbnail',
           contentType: 'cp',
           details: {
             icon: '',
-            bottomText: 'Stephen Curry Shooting Ball- handling',
-            logoType: 'sqr-2',
-            logo: '/static/Images/home/icons/common/masterChef.png',
-            img: '/static/Images/home/thumbnail/morning/M_thumbnail.png',
+            bottomText: '<span class="bold-text">Classical <br> Playlist</span>',
+            logoType: 'big',
+            logo: '/static/Images/home/icons/morning/spotify.png',
+            img: '/static/Images/home/thumbnail/morning/spotify.png',
           },
         },
-        source: {
+        gym: {
           type: 'thumbnail2',
           template: 'thumbnail',
           contentType: 'cp-type-1',
           details: {
             icon: '',
-            bottomText: 'Concentration 10 Sessions',
-            logo: 'static/Images/home/icons/common/big_headspace.png',
+            bottomText: '<span class="bold-text">Weighlifting</span><br><span>Concentration</span>',
+            logo: 'static/Images/home/icons/morning/cody.png',
             logoType: 'rect',
-            img: '/static/Images/home/thumbnail/morning/yogo.png',
+            img: '/static/Images/home/thumbnail/morning/gym.png',
           },
         },
       },
