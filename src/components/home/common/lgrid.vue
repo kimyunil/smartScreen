@@ -164,7 +164,7 @@ export default {
         bottom: 0 * $s;
         &.big {
           width: 200 * $s;
-          height: 120 * $s;          
+          height: 120 * $s;
         }
       }
       .footer-text {

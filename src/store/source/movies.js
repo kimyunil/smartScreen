@@ -21,7 +21,7 @@ export default {
           logoType: 'big',
           logo: '/static/Images/home/icons/morning/hbo.png',
           img: '',
-        }
+        },
       },
       url: '/resources/videos/continue01_Westworld.mp4',
     },

@@ -112,15 +112,10 @@ export default {
       if (this.sleep) {
         this.index = 0;
         this.slideshow = true;
-        // setTimeout(() => {
-        //   this.startSlideShow();
-        // }, 6000);
+      } else if (this.isRemoteEnabled) {
+        this.stopSlideShow(true);
       } else {
-        if (this.isRemoteEnabled) {
-          this.stopSlideShow(true);
-        } else {
-          this.startSlideShow();
-        }
+        this.startSlideShow();
       }
     },
     selectedGridItem(item) {
@@ -186,7 +181,7 @@ export default {
           this.index = (((this.index) + 1) % this.grids.length);
           this.autoplayeVieo();
         });
-        }, this.timeout);
+      }, this.timeout);
       // this.index = 3;
     },
     stopSlideShow() {

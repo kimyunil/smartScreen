@@ -74,7 +74,6 @@ export default {
           this.updateState(1 - this.playerState);
           break;
         case 'BACK':
-          alert();
           this.switch_comp({ replace: false, name: 'home' });
           break;
         default:

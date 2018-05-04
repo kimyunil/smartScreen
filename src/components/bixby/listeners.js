@@ -53,7 +53,7 @@ export default {
     sttUpdate(param) {
       this.enableKeybrd(false);
       // this was to solve a bug when result is directed but still in listening mode
-      if (this.bixbyState == 'wipeoff') {
+      if (this.bixbyState === 'wipeoff') {
         Messages.send('audio-input.stop');
         return;
       }

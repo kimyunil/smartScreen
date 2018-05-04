@@ -20,7 +20,7 @@ export default {
     },
     sayWord: {
       type: String,
-      default: 'Say'
+      default: 'Say',
     },
     toggle: {
       type: Boolean,
@@ -114,7 +114,7 @@ export default {
   }
   &.dark {
     color: white;
-     .speakerIcon { 
+     .speakerIcon {
       background-image: url('/static/Images/system/voice_white.png')!important;
     }
   }

@@ -200,18 +200,16 @@ export default {
         } else if (payload === 'mute') {
           state.player.muted = !state.player.muted;
         }
-      } else {
-        if (payload === '++') {
-          if (state.player.volume < state.player.maxVol) {
-            state.player.volume += 1;
-          }
-        } else if (payload === '--') {
-          if (state.player.volume > 0) {
-            state.player.volume -= 1;
-          }
-        } else if (payload === 'mute') {
-          state.player.muted = !state.player.muted;
+      } else if (payload === '++') {
+        if (state.player.volume < state.player.maxVol) {
+          state.player.volume += 1;
         }
+      } else if (payload === '--') {
+        if (state.player.volume > 0) {
+          state.player.volume -= 1;
+        }
+      } else if (payload === 'mute') {
+        state.player.muted = !state.player.muted;
       }
       clearTimeout(state.vTimeOut);
       state.vTimeOut = setTimeout(() => {
