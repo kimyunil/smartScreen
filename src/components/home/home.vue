@@ -3,8 +3,8 @@
     <div class="backdrop blur">
     </div>
     <div class="dashboard">
-      <transition name="show">
-      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}" v-show="isRemoteEnabled || nav_selected != 0">
+      <transition :name="headerTransition">
+      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}"  v-show="isRemoteEnabled || nav_selected != 0">
           <div class="wrapper">
           <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
           </div>
@@ -40,6 +40,10 @@ export default {
       grid_info: 'GET_CAT_GRID',
       nav_selected: 'GET_SELECTED_NAV',
     }),
+    headerTransition() {
+      if (this.isRemoteEnabled) return 'show';
+      return 'none';
+    },
     contentFocus() {
       if (this.active && (this.focus === 'content') && this.isRemoteEnabled) {
         return true;
@@ -55,8 +59,6 @@ export default {
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
-    console.log('Suggestion:::::::::::::::::');
-    console.log(this.suggest);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -142,7 +144,9 @@ export default {
   },
   watch: {
     nav_selected(old, nw) {
-      if (old > nw) {
+      if (!this.isRemoteEnabled) {
+        this.direction = '';
+      } else if (old > nw) {
         this.direction = 'left';
       } else {
         this.direction = 'right';

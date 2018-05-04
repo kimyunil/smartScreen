@@ -1,8 +1,8 @@
 <template>
   <transition name="show" appear>
     <div class="header">
-      <div class="nav_list" :style="{'transform': `translateX(${translate}vw)`}">
-          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && nav_selected === index)}, {'hide': (nav_selected !== index) && !isRemoteEnabled && !focus}, {'idle': nav_selected === index && nav_selected !== 0 && !isRemoteEnabled && !focus},{'selected': nav_selected === index}]">
+      <div class="nav_list" :class="{'noTransition': (!this.isRemoteEnabled)}" :style="{'transform': `translateX(${translate}vw)`}">
+          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="[{'focus': (focus && nav_selected === index)}, {'hide': (nav_selected !== index || index === 0) && !isRemoteEnabled}, {'idle': nav_selected === index && nav_selected !== 0 && !isRemoteEnabled && !focus},{'selected': nav_selected === index}]">
           {{item.title}}
           </div>
       </div>
@@ -118,6 +118,9 @@ export default {
     height: 80 * $s;
     left: 140 * $s;
     transition: transform 0.3s ease;
+    &.noTransition {
+      transition: none 0.3s ease;
+    }
     .nav-button {
       position: relative;
       margin-right: 50 * $s;
@@ -153,6 +156,7 @@ export default {
       }
       &.hide {
         opacity: 0;
+        transition: none;
       }
     }
   }

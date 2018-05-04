@@ -11,7 +11,7 @@ export default {
         details: {
           video: '/resources/videos/smartscreen/Westworld_HBO.mp4',
           bottomText: '<span class="bold-text">Westworld</span><br> <span class="light-text">4 Series</span>',
-          topLeftText: 'Continue Watching',
+          topLeftText: '',
           action: {
             category: 'hbo',
             subcategory: 'player',

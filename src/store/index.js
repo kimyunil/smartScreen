@@ -192,7 +192,7 @@ const store = new Vuex.Store({
           let cIdx = appSource.hbo.subComp.indexOf(payload.subcategory);
           if (cIdx === -1) cIdx = 0;
           if (state.isBixbyActive && appSource.hbo.subComp[cIdx] === 'player') {
-            Messages.send('text-to-speech.say', 'playing Westword in HBO');
+            // Messages.send('text-to-speech.say', 'playing Westword in HBO');
           }
           appSource.hbo.idx = cIdx;
           if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);

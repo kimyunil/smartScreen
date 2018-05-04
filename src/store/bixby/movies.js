@@ -47,7 +47,7 @@ export default {
     action: {
       template: 'list',
       contentType: 'movies',
-      response: 'Here are some top rated funny movies',
+      response: 'Here are some top rated actions movies',
       suggestions: ['Hey Bixby, show me more', 'Hey Bixby, dismiss'],
       list: ['action1', 'action2', 'action3', 'action4', 'action5', 'action6'],
       drivers: ['Hey Bixby, show me more', 'Hey Bixby, Dismiss'],

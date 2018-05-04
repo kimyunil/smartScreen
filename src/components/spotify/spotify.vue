@@ -129,7 +129,7 @@ export default {
   },
   watch: {
     thumbnail() {
-      this.initiateTimer();
+      // this.initiateTimer();
     },
   },
   components: {
