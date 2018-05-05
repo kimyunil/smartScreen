@@ -3,11 +3,11 @@
     <smartscreen v-show="setup" :active="setup"/>
     <!-- <videosource/> -->
     <div class="screenshot" v-show="!setup || localsetup">
-      <div class="page" v-if="page !== -1" :style="{'background-image': `url('${screens[page]}')`}">
+      <div class="page" :style="{'background-image': `url('${screens[page]}')`}">
         <div class="screen" v-show="page === 0" :style="{'background-image': `url('${screens[0]}')`}"></div>
         <div class="screen" v-show="page === 1" :style="{'background-image': `url('${screens[1]}')`}"></div>
       </div>
-      <div class="power" v-else></div>
+      <!-- <div class="power" v-else></div> -->
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
   mounted() {
     globalListener.init();
     Messages.$on('smartscreen.setup', this.setupScreen);
+    Messages.send('smartscreen.setupscreen', { from: 'smartscree'});
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
     }
@@ -35,7 +36,7 @@ export default {
   },
   data() {
     return {
-      page: -1,
+      page: 0,
       localsetup: false,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
     };
@@ -54,7 +55,7 @@ export default {
       console.log(param);
       if (param.page === 0) {
         this.page = 0;
-      } else if (param.page === 6) {
+      } else if (param.page === 9) {
         window.sessionStorage.setItem('oobe', 'true');
         // document.cookie = "oobe=true";
         this.switch_comp({ replace: true, name: 'home' });
@@ -95,7 +96,8 @@ export default {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: black;
+      // background: black;
+      background: transparent;
     }
     .page {
       position: absolute;
