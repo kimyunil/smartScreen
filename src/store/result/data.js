@@ -28,7 +28,7 @@ export default {
         ghost1: {
           img: './static/Images/results/ghost/ghost.png',
           suggestions: ['Hey Bixby, dismiss'],
-          sayWord: 'Try saying',  
+          sayWord: 'Try saying',
         },
       },
     },

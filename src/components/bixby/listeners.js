@@ -54,7 +54,6 @@ export default {
       this.enableKeybrd(false);
       // this was to solve a bug when result is directed but still in listening mode
       if (this.bixbyState === 'wipeoff') {
-        Messages.send('audio-input.stop');
         return;
       }
 
@@ -80,16 +79,13 @@ export default {
             this.defaultOptions.loop = true;
             this.updateBixby('think');
           }
-          Messages.send('audio-input.stop');
-        }, 100);
+        }, 1200);
       }
       this.closeTimer();
       this.speechText = param;
     },
     actionResult(payload) {
-      if(this.bixbyState === 'wipeoff') {
-        this.updateBixby('initial');
-      }
+      this.updateBixby('initial');
       this.enableKeybrd(false);
       this.closeTimer();
       clearTimeout(this.timeout);

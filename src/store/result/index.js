@@ -13,9 +13,9 @@ export default {
   },
   mutations: {
     UPDATE_SLIDE_IDX(state, index) {
-      if (index > state.resultData.slides.length) index %= state.resultData.slides.length;
-      console.log(index);
-      state.resultData.idx = index;
+      let t = index;
+      if (index > state.resultData.slides.length) t %= state.resultData.slides.length;
+      state.resultData.idx = t;
     },
     SET_RESULT(state, payload) {
       const movieDB = state.data.movies[payload.subcategory];
