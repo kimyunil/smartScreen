@@ -16,18 +16,21 @@
 import { mapState, mapActions } from 'vuex';
 import smartscreen from './components/smartscreen';
 import Messages from './services/Messages';
+import globalListener from './listeners/index';
 // import videosource from './components/common/videoSource';
 
 
 export default {
   name: 'App',
   mounted() {
+    globalListener.init();
     Messages.$on('smartscreen.setup', this.setupScreen);
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
     }
   },
   destroyed() {
+    globalListener.destroyed();
     Messages.$off('smartscreen.setup', this.setupScreen);
   },
   data() {

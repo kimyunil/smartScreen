@@ -80,7 +80,7 @@ export default {
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
-        case 'NOTIFICATION':
+        case 'EXTRA':
           this.updateMode(!this.isRemoteEnabled);
           break;
         case 'UP':

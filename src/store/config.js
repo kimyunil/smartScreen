@@ -12,8 +12,15 @@ export default {
       type: 'app',
       suggestion: false,
     },
+    result: {
+      type: 'app',
+    },
     spotifyhome: {
       type: 'screenshot',
+      suggestion: true,
+      sayWod: 'Try saying',
+      theme: 'dark',
+      drivers: ['Hey Bixby, play Strawberry Swing'],
       img: '/static/Images/screenshot/spotify.png',
     },
     fitbit: {

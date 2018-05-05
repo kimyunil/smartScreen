@@ -23,6 +23,7 @@ import spotify from './spotify/spotify';
 import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
 import volume from './system/volume';
+import result from './result/result';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -81,6 +82,7 @@ export default {
     }),
     ...mapActions({
       removeComponent: 'REMOVE_COMPONENT',
+      toggleMedia: 'TOGGLE_MEDIA',
       switch_comp: 'SWITCH_COMPONENT',
       launchVoice: 'LAUNCH_VOICE',
       resetVoiceTimer: 'RESET_VOICE_TIMER',
@@ -102,6 +104,7 @@ export default {
     returnCB() {
     },
     handleKeyDown(type) {
+      console.log('Handle Key dowb', type);
       if (!this.active) return;
       // this.resetVoiceTimer();
       switch (type) {
@@ -114,10 +117,8 @@ export default {
         case 'ONE':
           this.toggleVideo();
           break;
-        case 'TWO':
-          if (!this.isBixbyActive) {
-            this.switch_comp({ name: 'hulu' });
-          }
+        case 'PLAY':
+          this.toggleMedia();
           break;
         case 'VOLUME_UP':
           this.switch_comp({ name: 'volume' });
@@ -155,6 +156,7 @@ export default {
     hulu,
     home,
     volume,
+    result,
     spotify,
     screensaver,
     musicPlayer,

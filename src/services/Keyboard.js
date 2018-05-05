@@ -102,6 +102,7 @@ export default new Vue({
   },
   methods: {
     handleKeys(event) {
+      console.log('keyboard event:', event);
       Object.keys(KEY_CODES).forEach(name => {
         if (event.keyCode === KEY_CODES[name]) {
           // check to see if this key is not allowed to repeat
@@ -127,7 +128,7 @@ export default new Vue({
             // console.log('keyup');
             this.$emit(name);
             if (this.longPressOnce) {
-              this.$emit('*', JSON.stringify({ type: 'button_lpress_up', data: name, payload: event.detail }));
+              this.$emit('*', JSON.stringify({ type: 'button_lpress-up', data: name, payload: event.detail }));
             } else {
               this.$emit('*', JSON.stringify({ type: 'button_spress', data: name, payload: event.detail }));
             }
@@ -157,10 +158,10 @@ export default new Vue({
     },
     longpressCallback(name) {
       if (!this.longPressOnce) {
-        this.$emit('*', JSON.stringify({ type: 'button_lpress_once', data: name, payload: this.cachedEvent.detail }));
+        this.$emit('*', JSON.stringify({ type: 'button-lpress-once', data: name, payload: this.cachedEvent.detail }));
         this.longPressOnce = true;
       }
-      this.$emit('*', JSON.stringify({ type: 'button_lpress_down', data: name, payload: this.cachedEvent.detail }));
+      this.$emit('*', JSON.stringify({ type: 'button-lpress-down', data: name, payload: this.cachedEvent.detail }));
       this.timeoutLongpress = setTimeout(() => this.longpressCallback(name), this.repeatInterval);
     },
     setConfig(uid, config) {

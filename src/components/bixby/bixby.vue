@@ -43,6 +43,7 @@ export default {
   mixins: [listeners],
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    // setting the default height
     this.translate = this.default;
     if (!document.getElementById('clipmotion_result')) {
       const div = document.createElement('div');
@@ -59,11 +60,14 @@ export default {
     Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {
+    default() {
+      return (-240 * window.innerWidth) / 1920;
+    },
     translateY() {
-      return (((this.translate) * 100) / 1920);
+      return (((this.translate) * 100) / window.innerWidth);
     },
     resTrans() {
-      return ((this.resTranslate * 100) / 1920);
+      return ((this.resTranslate * 100) / window.innerWidth);
     },
     sText() {
       return this.speechText.split(' ');
@@ -269,7 +273,6 @@ export default {
       utilClass: '',
       clippath: '',
       resTranslate: 0,
-      default: -220,
       timeout: null,
       defaultOptions: {
         animationData: undefined,
@@ -309,7 +312,8 @@ export default {
     position: absolute;
     .bixby-lottie {
       position: relative;
-      height: auto;
+      height: 300 * $s;
+
       width: 100%;
       // background: red;
     }

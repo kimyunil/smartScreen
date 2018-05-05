@@ -1,5 +1,5 @@
 <template>
-  <div class="screensaver" :class="{'enabled': powerEnabled, 'blur': !active}">
+  <div class="screensaver" :class="{'enabled': sleep, 'blur': !active}">
     <div class="backdrop">
     </div>
       <div class="time">
@@ -25,11 +25,6 @@ export default {
     }, 1000);
     Messages.$on('horizon-weather.forecast', this.handleForecast);
     Messages.$on('horizon-news.get-articles-result', this.getArticle);
-    // Messages.send('horizon-news.get-articles', {
-    //   sources: ['bbc-news'],
-    //   shuffle: true,
-    //   maxSourceResults: 5,
-    // });
     Messages.send('horizon-weather.get-forecast', {
       place: 'Mountain View',
     });
@@ -40,6 +35,7 @@ export default {
   computed: {
     ...mapState([
       'info',
+      'sleep',
     ]),
   },
   destroyed() {
@@ -57,6 +53,7 @@ export default {
       set_weather: 'SET_WEATHER',
       todayWeather: 'SET_TODAY_WEATHER',
       set_port_weather: 'SET_PORT_WEATHER',
+      toggleSleep: 'UPDATE_SYS_FLAG',
     }),
     setTodaysWeather(condition) {
       const wToday = {};
@@ -168,19 +165,19 @@ export default {
     reset() {
       clearTimeout(this.interval);
       clearTimeout(this.timeOut);
-      this.powerEnabled = false;
+      this.toggleSleep({ sleep: false });
     },
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
         case 'POWER':
           // this.switch_comp({ name: 'home' });
-          if (!this.powerEnabled) {
-            this.powerEnabled = true;
+          if (!this.sleep) {
+            this.toggleSleep({ sleep: true });
             this.timeOut = setTimeout(() => {
-              this.powerEnabled = false;
+              this.toggleSleep({ sleep: false });
             }, 10000);
-          } else if (this.powerEnabled) {
+          } else if (this.sleep) {
             // switch Component
             this.reset();
             this.switch_comp({ replace: true, name: 'home', transition: 'slide' });
@@ -196,7 +193,6 @@ export default {
       interval: null,
       timeOut: null,
       weather: null,
-      powerEnabled: false,
       time: '',
     };
   },

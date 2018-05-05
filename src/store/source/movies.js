@@ -42,7 +42,7 @@ export default {
             content: 'handmaids',
           },
           topLeftText: '<span class="bold-top-text">Continue Watching</span>',
-          bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S2 Ep2 Borth Day</span>',
+          bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S2 Ep2 Bisrth Day</span>',
           tile: '/static/Images/home/tile/morning/maid.png',
           logo: '/static/Images/home/icons/common/hulu.png',
           logoType: 'rect',

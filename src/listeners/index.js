@@ -4,6 +4,7 @@ import GlobalListener from './GlobalListener';
 export default {
   modules: [GlobalListener],
   init() {
+    console.log('++++++++++++++++++++');
     this.modules.forEach((listener) => {
       listener.init();
     });

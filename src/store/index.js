@@ -4,6 +4,7 @@ import animation from '@/store/animations/';
 import source from '@/store/source/';
 import bixby from '@/store/bixby/';
 import home from '@/store/home/';
+import result from '@/store/result/';
 import config from './config';
 import Messages from '../services/Messages';
 
@@ -14,7 +15,7 @@ const store = new Vuex.Store({
     gConfig: config,
     screenshot: '',
     vidAutoplay: false,
-    sleep: true,
+    sleep: false,
     setup: false,
     transition: 'slide',
     info: {
@@ -130,6 +131,21 @@ const store = new Vuex.Store({
       state.isBixbyActive = false;
       // state.isRemoteEnabled = true;
     },
+    TOGGLE_MEDIA({ state }) {
+      if (state.source.player.active) {
+        const oldState = state.source.player.playerState;
+        state.source.player.playerState = -1;
+        setTimeout(() => {
+          state.source.player.playerState = 1 - oldState;
+        }, 20);
+      } else if (state.source.musicplayer.active) {
+        const oldState = state.source.musicplayer.playerState;
+        state.source.musicplayer.playerState = -1;
+        setTimeout(() => {
+          state.source.musicplayer.playerState = 1 - oldState;
+        }, 20);
+      }
+    },
     SWITCH_COMPONENT({ state, commit, getters }, payload) {
       let compoName = payload.name;
       const compDetail = state.gConfig.components[compoName];
@@ -166,14 +182,41 @@ const store = new Vuex.Store({
         }
       }
     },
+    CONFIG_UPDATE({ state, dispatch }, payload) {
+      switch (payload.subcategory) {
+        case 'wakeup':
+          if (state.viewStack.length >= 1 && state.viewStack[state.viewStack.length - 1] === 'screensaver') {
+            if (!state.sleep) {
+              state.sleep = true;
+            } else {
+              dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
+            }
+          }
+          break;
+        case 'enableVideo':
+        case 'disableVideo':
+          state.vidAutoplay = payload.value;
+          break;
+        case 'disableRemote':
+        case 'enableRemote':
+          state.isRemoteEnabled = payload.value;
+          break;
+        default:
+          break;
+      }
+    },
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
-      console.log(payload.category);
       switch (payload.category) {
         case 'home': {
           commit('home/select_nav', payload.subcategory);
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {
             dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
           }
+          break;
+        }
+        case 'config': {
+          dispatch('CONFIG_UPDATE', payload);
+          console.log(payload.subcategory);
           break;
         }
         case 'hulu': {
@@ -227,6 +270,11 @@ const store = new Vuex.Store({
           setTimeout(() => {
             dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
           });
+          break;
+        }
+        case 'movies': {
+          commit('result/SET_RESULT', payload);
+          dispatch('SWITCH_COMPONENT', { name: 'result' });
           break;
         }
         case 'back': {
@@ -291,6 +339,7 @@ const store = new Vuex.Store({
     source,
     bixby,
     home,
+    result,
   },
 });
 export default store;

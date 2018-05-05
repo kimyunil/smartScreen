@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
-import store from '../vuex/store';
+import store from '../store';
 import Messages from '../services/Messages';
 
 export default new Vue({
@@ -10,11 +9,6 @@ export default new Vue({
       data: '',
       type: '',
     };
-  },
-  computed: {
-    ...mapState([
-      'power',
-    ]),
   },
   methods: {
     init() {

@@ -30,7 +30,7 @@ export default {
     details: {
       'page-1': {
         title: 'page-1',
-        suggestions: ['Hey Bixby, continue watching the Handmaid’s Tale'],
+        suggestions: ['Hey Bixby, continue watching The Handmaid’s Tale'],
         nav: [
           ['poster', 'tile', 'tile'],
           ['poster', 'thumbnail1', 'thumbnail2'],
@@ -60,7 +60,7 @@ export default {
               content: 'handmaids',
             },
             topLeftText: '<span class="bold-top-text">Continue Watching</span>',
-            bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S1 Ep2 Borth Day</span>',
+            bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S1 Ep2 Birth Day</span>',
             tile: '/static/Images/home/tile/morning/maid.png',
             logo: '/static/Images/home/icons/common/hulu.png',
             logoType: 'rect',
@@ -187,7 +187,7 @@ export default {
       },
       'page-3': {
         title: 'page-3',
-        suggestions: ['Hey Bixby, play Classical Playlist'],
+        suggestions: ['Hey Bixby, play my Classical Playlist'],
         content: ['youtube', 'mac', 'spotify', 'gym'],
         nav: [
           ['poster', 'tile', 'tile'],

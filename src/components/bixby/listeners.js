@@ -87,6 +87,9 @@ export default {
       this.speechText = param;
     },
     actionResult(payload) {
+      if(this.bixbyState === 'wipeoff') {
+        this.updateBixby('initial');
+      }
       this.enableKeybrd(false);
       this.closeTimer();
       clearTimeout(this.timeout);

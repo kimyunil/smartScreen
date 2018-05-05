@@ -153,6 +153,7 @@ export default {
     position: relative;
     width: 250 * $s;
     margin-bottom: 40 * $s;
+    background-size: 100% 100%;
     height: 50 * $s;
     bottom: 0 * $s;
   }

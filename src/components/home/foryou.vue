@@ -109,10 +109,7 @@ export default {
     }),
     chkSlideShow() {
       this.toggleSuggetion(true);
-      if (this.sleep) {
-        this.index = 0;
-        this.slideshow = true;
-      } else if (this.isRemoteEnabled) {
+      if (this.isRemoteEnabled) {
         this.stopSlideShow(true);
       } else {
         this.startSlideShow();
@@ -258,14 +255,6 @@ export default {
           this.startSlideShow();
         }
       });
-    },
-    sleep(val) {
-      if (!val) {
-        setTimeout(() => {
-          console.log('slideshow');
-          this.startSlideShow();
-        }, 4000);
-      }
     },
     index(val) {
       this.updatePageIdx(val);
