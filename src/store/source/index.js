@@ -76,7 +76,7 @@ export default {
           state.player.isDimVol = payload;
           state.player.volume = state.player.bckVol;
         }
-      } else if(!state.player.isDimVol) {
+      } else if (!state.player.isDimVol) {
         if (payload) {
           state.player.isDimVol = payload;
           state.player.bckVol = state.player.volume;

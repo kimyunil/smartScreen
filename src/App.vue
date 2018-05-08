@@ -25,6 +25,7 @@ export default {
   mounted() {
     globalListener.init();
     Messages.$on('smartscreen.setup', this.setupScreen);
+    Messages.$on('button_down', this.handleButton);
     Messages.send('smartscreen.setupscreen', { from: 'smartscreen' });
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
@@ -36,6 +37,7 @@ export default {
   },
   data() {
     return {
+      setupInProcess: true,
       page: 0,
       localsetup: false,
       screens: ['/static/Images/tv setup 01.png', '/static/Images/tv setup 02.png'],
@@ -56,13 +58,26 @@ export default {
       if (param.page === 'home') {
         this.page = 0;
       } else if (param.page === 'page8') {
+        this.setupInProcess = true;
+      } else if (param.page === 9) {
         window.sessionStorage.setItem('oobe', 'true');
         // document.cookie = "oobe=true";
         this.switch_comp({ replace: true, name: 'home' });
         this.setUpcomplete(true);
         this.page = 0;
+        this.setupInProcess = true;
       } else {
         this.page = 1;
+        this.setupInProcess = true;
+      }
+    },
+    handleButton(param) {
+      console.log('param key: ', param);
+      if (param === 'PLAY' && this.setupInProcess) {
+        this.setupInProcess = false;
+        this.switch_comp({ replace: true, name: 'home' });
+        this.setUpcomplete(true);
+        this.page = 0;
       }
     },
   },
