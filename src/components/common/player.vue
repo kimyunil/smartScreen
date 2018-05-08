@@ -12,6 +12,7 @@ import Messages from '../../services/Messages';
 export default {
   name: 'videoSource',
   created() {
+    console.log(this.playerState);
     if (this.playerState === 0) {
       this.autoplay = true;
     } else {

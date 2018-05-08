@@ -147,7 +147,7 @@ const store = new Vuex.Store({
       }
     },
     SWITCH_COMPONENT({ state, commit, getters }, payload) {
-      let compoName = payload.name;
+      const compoName = payload.name;
       const compDetail = state.gConfig.components[compoName];
       if (payload.transition) {
         state.transition = payload.transition;

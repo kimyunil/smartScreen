@@ -53,9 +53,9 @@ export default {
     }),
     setupScreen(param) {
       console.log(param);
-      if (param.page === 0) {
+      if (param.page === 'home') {
         this.page = 0;
-      } else if (param.page === 9) {
+      } else if (param.page === 'page8') {
         window.sessionStorage.setItem('oobe', 'true');
         // document.cookie = "oobe=true";
         this.switch_comp({ replace: true, name: 'home' });
