@@ -8,10 +8,12 @@
          <div class="playbck bkwd">
           </div>
           <div class="thumbnail" :style="{'background-image': `url(${musicplayer.details.thumbnail})`}">
-            <div class="ctrl pause" v-if="playerState === 0 && !fade">
-            </div>
-            <div class="ctrl play" v-if="playerState === 1">
-            </div>
+            <transition name="fade">
+              <div class="ctrl pause" v-if="playerState === 0 && !fade">
+              </div>
+              <div class="ctrl play" v-if="playerState === 1">
+              </div>
+            </transition>
           </div>
            <div class="playbck ffw">
           </div>
@@ -113,10 +115,6 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
-    playBckIcon() {
-      if (this.playerState === 0) return 'pause';
-      return 'play';
-    },
     progress() {
       return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
@@ -203,7 +201,6 @@ export default {
                 }
                 &.play {
                   background-image: url('/static/Images/spotify/play.png');
-                  background-color: white;
                 }
               }
             }
@@ -276,6 +273,12 @@ export default {
             }
           }
         }
+    }
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 0.5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
   }
 </style>
