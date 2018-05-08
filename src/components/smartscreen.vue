@@ -4,7 +4,7 @@
     </div>
     <transition-group :name="transition" tag="div" class="component">
       <template v-for="(comps, index) in viewStack">
-        <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="comps" :key="(comps === 'screenshot' ? `screen-${screenshot.img}`: comps)" @exit="exitCB" @return="returnCB"></component>
+        <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="gConfig.components[comps].vType === 'screenshot' ? 'screenshot': comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
     </transition-group>
     <bixby v-show="isBixbyActive && active" :active="isBixbyActive"/>
@@ -61,6 +61,7 @@ export default {
     ]),
     ...mapState([
       'isRemoteEnabled',
+      'gConfig',
       'transition',
       'screenshot',
       'viewStack',

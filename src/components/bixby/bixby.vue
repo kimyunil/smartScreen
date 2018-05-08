@@ -200,6 +200,7 @@ export default {
     },
     showResults(resultData) {
       Messages.send('audio-input.stop');
+      console.log(resultData);
       console.log('showResults:::::::::::');
       this.resetResult();
       if (resultData !== null) {
@@ -240,7 +241,9 @@ export default {
     closeTimer() {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = setTimeout(() => {
-        this.closeBixby(false);
+        if (this.isBixbyActive) {
+          this.closeBixby(false);
+        }
       }, 10000);
     },
     changeAnimation() {

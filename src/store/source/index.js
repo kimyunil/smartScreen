@@ -49,10 +49,12 @@ export default {
       volume: 5,
       isDimVol: false,
       active: false,
-      bckVol: 5,
+      bckVol: 2,
       details: null,
       muted: false,
       maxVol: 16,
+      elapsedTime: 0,
+      total: 0,
       playerState: 0, // 0-play 1-pause
       url: '',
     },
@@ -68,12 +70,18 @@ export default {
   },
   mutations: {
     SET_VOlUME_DIM(state, payload) {
-      state.player.isDimVol = payload;
-      if (payload) {
-        state.player.bckVol = state.player.volume;
-        state.player.volume = 2;
-      } else {
-        state.player.volume = state.player.bckVol;
+      // state.player.isDimVol = payload;
+      if (state.player.isDimVol) {
+        if (!payload) {
+          state.player.isDimVol = payload;
+          state.player.volume = state.player.bckVol;
+        }
+      } else if (!state.player.isDimVol) {
+        if (payload) {
+          state.player.isDimVol = payload;
+          state.player.bckVol = state.player.volume;
+          state.player.volume = 2;
+        }
       }
     },
     UPDATE_PLAYER(state, payload) {
@@ -215,6 +223,7 @@ export default {
       state.vTimeOut = setTimeout(() => {
         dispatch('REMOVE_COMPONENT', 'volume', { root: true });
       }, 5000);
+      console.log(state.player.volume);
     },
     TOGGLE_MUTE({ state, dispatch }) {
       state.player.muted = !state.player.muted;

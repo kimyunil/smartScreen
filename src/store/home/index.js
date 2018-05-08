@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     data,
-    timeout: 10000,
+    timeout: 30000,
   },
   props: {
     active: {
@@ -14,8 +14,6 @@ export default {
   },
   getters: {
     GET_SUGGESTIONS(state) {
-      console.log('manas::::::::::::::::::::');
-      console.log(state);
       const navItem = state.data.navs.items[state.data.navs.selectedIdx];
       const category = state.data.navs.details[navItem].data.pages;
       const pageKey = category.pagination[category.focusIdx];

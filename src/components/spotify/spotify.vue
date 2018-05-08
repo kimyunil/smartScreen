@@ -8,8 +8,12 @@
          <div class="playbck bkwd">
           </div>
           <div class="thumbnail" :style="{'background-image': `url(${musicplayer.details.thumbnail})`}">
-            <div class="ctrl">
-            </div>
+            <transition name="fade">
+              <div class="ctrl pause" v-if="playerState === 0 && !fade">
+              </div>
+              <div class="ctrl play" v-if="playerState === 1">
+              </div>
+            </transition>
           </div>
            <div class="playbck ffw">
           </div>
@@ -48,7 +52,7 @@ import Messages from '../../services/Messages';
 export default {
   name: 'spotify',
   mounted() {
-    // this.initiateTimer();
+    this.initiateTimer();
     console.log(this.musicplayer.details);
     this.saveContinue('spotify');
     this.updateMP();
@@ -63,6 +67,7 @@ export default {
     return {
       drivers: ['Hey Bixby, previous', 'Hey Bixby, next'],
       timeoutId: null,
+      fade: false,
     };
   },
   methods: {
@@ -94,8 +99,10 @@ export default {
     initiateTimer() {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
+      console.log(this.fade);
+      this.fade = false;
       this.timeoutId = setTimeout(() => {
-        this.switch_comp({ replace: false, name: 'home' });
+        this.fade = true;
       }, 5000);
     },
   },
@@ -127,7 +134,8 @@ export default {
     },
   },
   watch: {
-    thumbnail() {
+    playerState() {
+      this.initiateTimer();
       // this.initiateTimer();
     },
   },
@@ -188,6 +196,12 @@ export default {
                 height: 138 * $s;
                 background-image: url('/static/Images/spotify/pause.png');
                 background-size: 100% 100%;
+                &.pause {
+                   background-image: url('/static/Images/spotify/pause.png');
+                }
+                &.play {
+                  background-image: url('/static/Images/spotify/play.png');
+                }
               }
             }
             .playbck {
@@ -259,6 +273,12 @@ export default {
             }
           }
         }
+    }
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 0.5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
   }
 </style>

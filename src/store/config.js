@@ -9,14 +9,14 @@ export default {
       suggestion: false,
     },
     screenshot: {
-      type: 'app',
       suggestion: false,
     },
     result: {
       type: 'app',
     },
     spotifyhome: {
-      type: 'screenshot',
+      vType: 'screenshot',
+      type: 'app',
       suggestion: true,
       sayWod: 'Try saying',
       theme: 'dark',
@@ -24,7 +24,8 @@ export default {
       img: '/static/Images/screenshot/spotify.png',
     },
     fitbit: {
-      type: 'screenshot',
+      vType: 'screenshot',
+      type: 'app',
       sayWod: 'Try saying',
       suggestion: true,
       theme: 'light',
@@ -32,7 +33,7 @@ export default {
       img: '/static/Images/screenshot/fitbit.png',
     },
     hbo: {
-      type: 'source',
+      type: 'app',
       suggestion: false,
     },
     volume: {
@@ -51,7 +52,7 @@ export default {
       suggestion: true,
     },
     hulu: {
-      type: 'source',
+      type: 'app',
       suggestion: false,
     },
   },

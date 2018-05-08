@@ -55,8 +55,9 @@ export default {
     }),
     setupScreen(param) {
       console.log(param);
-      if (param.page === 0) {
+      if (param.page === 'home') {
         this.page = 0;
+      } else if (param.page === 'page8') {
         this.setupInProcess = true;
       } else if (param.page === 9) {
         window.sessionStorage.setItem('oobe', 'true');
