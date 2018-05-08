@@ -64,7 +64,7 @@ export default {
         this.switch_comp({ replace: true, name: 'home' });
         this.setUpcomplete(true);
         this.page = 0;
-        this.setupInProcess = true;
+        this.setupInProcess = false;
       } else {
         this.page = 1;
         this.setupInProcess = true;
@@ -73,10 +73,16 @@ export default {
     handleButton(param) {
       console.log('param key: ', param);
       if (param === 'PLAY' && this.setupInProcess) {
+        window.sessionStorage.setItem('oobe', 'true');
         this.setupInProcess = false;
         this.switch_comp({ replace: true, name: 'home' });
         this.setUpcomplete(true);
         this.page = 0;
+      }
+      if (param === 'NINE') {
+        if (window.sessionStorage.getItem('oobe') !== null) {
+          window.sessionStorage.getItem('oobe');
+        }
       }
     },
   },
