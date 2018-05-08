@@ -53,7 +53,7 @@ export default {
     weatherweekend: {
       template: 'info',
       type: 'weather',
-      response: 'Here is your 7-day forcast',
+      response: 'Here is your 7-day forecast',
       suggestions: ['Hey Bixby, dismiss'],
       tts: 'Here\'s the weather this week',
       img: '/static/Images/results/info/weather-weekend.png',

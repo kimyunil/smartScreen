@@ -215,6 +215,7 @@ export default {
       state.vTimeOut = setTimeout(() => {
         dispatch('REMOVE_COMPONENT', 'volume', { root: true });
       }, 5000);
+      console.log(state.player.volume);
     },
     TOGGLE_MUTE({ state, dispatch }) {
       state.player.muted = !state.player.muted;

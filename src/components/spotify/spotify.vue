@@ -8,7 +8,9 @@
          <div class="playbck bkwd">
           </div>
           <div class="thumbnail" :style="{'background-image': `url(${musicplayer.details.thumbnail})`}">
-            <div class="ctrl">
+            <div class="ctrl pause" v-if="playerState === 0 && !fade">
+            </div>
+            <div class="ctrl play" v-if="playerState === 1">
             </div>
           </div>
            <div class="playbck ffw">
@@ -48,7 +50,7 @@ import Messages from '../../services/Messages';
 export default {
   name: 'spotify',
   mounted() {
-    // this.initiateTimer();
+    this.initiateTimer();
     console.log(this.musicplayer.details);
     this.saveContinue('spotify');
     this.updateMP();
@@ -63,6 +65,7 @@ export default {
     return {
       drivers: ['Hey Bixby, previous', 'Hey Bixby, next'],
       timeoutId: null,
+      fade: false,
     };
   },
   methods: {
@@ -94,8 +97,10 @@ export default {
     initiateTimer() {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
+      console.log(this.fade);
+      this.fade = false;
       this.timeoutId = setTimeout(() => {
-        this.switch_comp({ replace: false, name: 'home' });
+        this.fade = true;
       }, 5000);
     },
   },
@@ -108,6 +113,10 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
+    playBckIcon() {
+      if (this.playerState === 0) return 'pause';
+      return 'play';
+    },
     progress() {
       return (this.musicplayer.elapsedTime / this.musicplayer.total) * 100;
     },
@@ -127,7 +136,8 @@ export default {
     },
   },
   watch: {
-    thumbnail() {
+    playerState() {
+      this.initiateTimer();
       // this.initiateTimer();
     },
   },
@@ -188,6 +198,13 @@ export default {
                 height: 138 * $s;
                 background-image: url('/static/Images/spotify/pause.png');
                 background-size: 100% 100%;
+                &.pause {
+                   background-image: url('/static/Images/spotify/pause.png');
+                }
+                &.play {
+                  background-image: url('/static/Images/spotify/play.png');
+                  background-color: white;
+                }
               }
             }
             .playbck {

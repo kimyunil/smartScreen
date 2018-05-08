@@ -155,12 +155,11 @@ const store = new Vuex.Store({
         state.transition = 'fade'; // default;
       }
       console.log(payload.transition);
-      if (compDetail.type === 'screenshot') {
+      if (compDetail.vType === 'screenshot') {
         state.screenshot = compDetail;
-        compoName = 'screenshot';
-      } else {
-        commit('REMOVE_IF_EXSIST', compoName);
+        // compoName = 'screenshot';
       }
+      commit('REMOVE_IF_EXSIST', compoName);
       if (payload.replace) {
         let idx = state.viewStack.length - 1;
         if (idx < 0) idx = 0;
@@ -210,7 +209,7 @@ const store = new Vuex.Store({
         case 'home': {
           commit('home/select_nav', payload.subcategory);
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {
-            dispatch('SWITCH_COMPONENT', { replace: false, name: 'home' });
+            dispatch('SWITCH_COMPONENT', { replace: true, name: 'home' });
           }
           break;
         }
@@ -226,7 +225,7 @@ const store = new Vuex.Store({
           if (cIdx === -1) cIdx = 0;
           appSource.hulu.idx = cIdx;
           if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hulu' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'hulu' });
           break;
         }
         case 'hbo': {
@@ -239,7 +238,7 @@ const store = new Vuex.Store({
           }
           appSource.hbo.idx = cIdx;
           if (payload.content) dispatch('source/LOAD_APP_PLAYER', payload);
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'hbo' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'hbo' });
           break;
         }
         case 'which-song': {
@@ -251,17 +250,17 @@ const store = new Vuex.Store({
           break;
         }
         case 'spotify': {
-          dispatch('SWITCH_COMPONENT', { name: 'spotify' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotify' });
           if (payload.artist) dispatch('source/SET_MUSIC_PLAYER', payload);
           else if (payload.loop) dispatch('source/SKIP_NEXT');
           break;
         }
         case 'fitbit': {
-          dispatch('SWITCH_COMPONENT', { name: 'fitbit' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'fitbit' });
           break;
         }
         case 'spotifyhome': {
-          dispatch('SWITCH_COMPONENT', { name: 'spotifyhome' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotifyhome' });
           break;
         }
         case 'volume': {
@@ -274,7 +273,7 @@ const store = new Vuex.Store({
         }
         case 'movies': {
           commit('result/SET_RESULT', payload);
-          dispatch('SWITCH_COMPONENT', { name: 'result' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'result' });
           break;
         }
         case 'back': {

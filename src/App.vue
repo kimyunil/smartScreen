@@ -25,7 +25,7 @@ export default {
   mounted() {
     globalListener.init();
     Messages.$on('smartscreen.setup', this.setupScreen);
-    Messages.send('smartscreen.setupscreen', { from: 'smartscree'});
+    Messages.send('smartscreen.setupscreen', { from: 'smartscreen' });
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
     }

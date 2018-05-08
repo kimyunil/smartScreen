@@ -38,7 +38,7 @@ export default {
       this.audioEle.volume = (val * 1) / 16;
     },
     mplayerActive(val) {
-      if (!val) this.pause();
+      if (!val) this.updateState(1);
     },
     muted(val) {
       if (!this.audioEle) return;
