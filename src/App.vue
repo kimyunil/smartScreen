@@ -55,7 +55,7 @@ export default {
     }),
     setupScreen(param) {
       console.log(param);
-      if (param.page === 'home') {
+      if (param.page === 'home' || param.page === 'page0') {
         this.page = 0;
         this.setupInProcess = true;
       } else if (param.page === 'page8') {
