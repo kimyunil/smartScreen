@@ -6,28 +6,12 @@
     >
       <transition name="fade">
         <!-- <template > -->
-        <div class="grid-templates grid-templates-slideshow" v-show="slideshow">
-          <transition :name="transitionName">
-            <div class="slideshow-wrapper" :key="index">
+        <div class="grid-templates grid-templates-slideshow" :style="inlineTranslate">
+            <div class="slideshow-wrapper" :key="index" v-for="(page, index) in getGrids">
               <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :videoActive="videoEnabled" :focus="false"/>
             </div>
-          </transition>
         </div>
         <!-- </template> -->
-      </transition>
-      <transition name="fade">
-        <div class="grid-list" v-show="!slideshow" :style="{'transform': `translateY(${translateY}vw)`}">
-          <div class="grid-templates grid-templates-list" v-for="(page, index) in getGrids" v-if="page.template !== 'ignore'" :key="page.title">
-            <grid :videoActive="true" :details="page" :focus="(gridFocus && pageIdx === index)" @movefocus="movefocus" @select="selectedGridItem"/>
-          </div>
-          <div class="recent-apps">
-              <div class="apps-list">
-                <div class="apps" v-for="(item, index) in appsItems" :key="item.title" :class="{'focus': (focus === 'apps' && appIdx == index)}">
-                  <img :src="item.img"/>
-                </div>
-              </div>
-          </div>
-        </div>
       </transition>
     </div>
     <!-- <transition name="show"> -->
@@ -74,6 +58,9 @@ export default {
       suggest: 'GET_SUGGESTIONS',
       appsItems: 'GET_FORYOU_APPS',
     }),
+    inlineTranslate() {
+      return { transform: `translateX(${((this.index * -1920) * 100) / window.innerWidth}vw)` };
+    },
     getGrids() {
       const arr = [];
       for (let i = 0; i < this.grids.length; i += 1) {
@@ -274,9 +261,11 @@ export default {
   width: 100%;
   height: 100%;
   .grid-container {
-    position: absolute;
+    position: relative;
     width: 1920 * $s;
     height: 1080 * $s;
+    width: 100%;
+    height: 100%;
     // height: 807 * $s;
     // overflow: hidden;
     left:0;
@@ -320,7 +309,7 @@ export default {
       }
     }
     .grid-templates {
-      position: absolute;
+      position: relative!important;
       height: 940 * $s;
       height: 807 * $s;
       height: 100%;
@@ -330,15 +319,18 @@ export default {
         position: relative;
       }
       &.grid-templates-slideshow {
-       position: absolute;
+       position: relative;
+       white-space: nowrap;
        .slideshow-wrapper {
-         position: absolute;
+         position: relative;
          width: 100%;
+         vertical-align:top;
+         display:inline-block;
          height: 100%;
         .grid-wrapper {
-          height: 940 * $s;
-          margin: 10 * $s;
-          width: 1900 * $s;
+          height: 840 * $s;
+          margin: 100 * $s;
+          width: 1700 * $s;
           transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
         }
         &.slideshow-enter {

@@ -1,5 +1,17 @@
 <template>
   <div class="thumbnail">
+      <div class="content" :class="[(item.details.full ? 'full-wrapper': 'partial-wrapper')]">
+        <div class="content-tile" :style="{'background-image': `url(${item.details.img})`}">
+        </div>
+        <div class="content-metadata">
+          <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
+          </div>
+          <div class="meta-text">
+             <span v-html="item.details.bottomText"></span>
+          </div>
+        </div>
+      </div>
+    <!--<template v-else>
     <div class="content" :class="[item.contentType]">
       <div class="icon-label" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]" v-if="item.contentType !== 'iot'"></div>
       <template v-if="item.contentType === 'iot-weather'">
@@ -63,8 +75,8 @@
           </div>
         </div>
       </template>
-    </div>
-    <template v-if="item.details.video && vidAutoplay">
+    </div> -->
+    <!--<template v-if="item.details.video && vidAutoplay">
       <transition name="fade">
         <div class="thumb" :style="{'background-image': `url(${item.details.img})`}" v-show="!videImgTrans"></div>
        </transition>
@@ -73,10 +85,11 @@
             <video :src="item.details.video" loop muted :autoplay="videoActive"/>
           </div>
       </transition>
-    </template>
-    <template v-else>
+    </template> -->
+    <!--<template v-else>
       <div class="thumb" :style="{'background-image': `url(${item.details.img})`}"></div>
     </template>
+    </template> -->
   </div>
 </template>
 <script>
@@ -149,6 +162,43 @@ export default {
     z-index: 4;
     background-size: 100% 100%;
     top: 0;
+    .content-tile {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 240 * $s;
+      width: 100%;
+      background-size: 100% 100%;
+    }
+    .content-metadata {
+      position: absolute;
+      height: auto;
+      bottom: 0;
+      width: 100%;
+      font-size: 48 * $s;
+      font-family: SamsungOneUI400;
+      .meta-icon {
+        position: relative;
+        height: 50 * $s;
+        background-size:50 * $s 150 * $s;
+        width: 150 * $s;
+      }
+      .meta-text {
+        position: relative;
+        width: 90%;
+        color: black;
+        text-align:left;
+        color: rgba(80,80,80,1);
+        font-family: SamsungOneUI400;
+        font-size: 32 * $s;
+        margin-top: 20 * $s;
+      }
+    }
+    &.partial-wrapper {
+      .content-tile {
+        height: 100%;
+      }
+    }
   }
     .thumb {
     position: absolute;

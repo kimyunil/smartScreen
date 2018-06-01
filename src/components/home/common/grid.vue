@@ -17,6 +17,7 @@ import { mapState } from 'vuex';
 import tile from './tile';
 import thumbnail from './thumbnail';
 import poster from './poster';
+import hTile from './hTile';
 import Messages from '../../../services/Messages';
 
 export default {
@@ -178,6 +179,7 @@ export default {
   components: {
     tile,
     thumbnail,
+    hTile,
     poster,
   },
 };
@@ -214,25 +216,25 @@ export default {
       }
     }
     &.page-1 {
-      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+      grid-template-columns: 68% 16% 16%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "poster tile tile"
       "poster thumbnail1 thumbnail2";
     }
     &.page-2 {
-      grid-template-columns: 21.25% 21.25% 57.5%; //total is 100%
+      grid-template-columns: 32% 34% 34%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
-      "thumbnail1 thumbnail2 poster"
-      "tile tile poster";
+      "hTile poster poster"
+      "hTile poster poster";
     }
     &.page-3 {
-      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+      grid-template-columns: 32% 18% 18% 32%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
-      "poster tile tile"
-      "poster thumbnail1 thumbnail2";
+      "hTile tile tile hTile1"
+      "hTile thumbnail1 thumbnail2 hTile1";
     }
   }
 

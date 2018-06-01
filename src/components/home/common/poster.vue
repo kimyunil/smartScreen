@@ -1,29 +1,44 @@
 <template>
   <div class="poster">
-    <div class="content">
-      <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]"></div>
-      <div class="bottom-footer">
-        <template v-if="item.details.text1">
-            <div class="text simple">
-              <span v-html="item.details.text1"></span>
-            </div>
-            <div class="extra-img" v-if="item.details.extraImg" :style="[{'background-image': `url(${item.details.extraImg})`}]">
-            </div>
-          </template>
-      </div>
-    </div>
-    <template v-if="item.details.video && vidAutoplay">
-       <transition name="fade">
-        <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}" v-show="!videImgTrans"></div>
-        </transition>
-        <transition name="fade">
-          <div class="video"  v-show="videImgTrans">
-            <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+    <template v-if="item.details.full">
+      <div class="content">
+        <div class="content-poster" :style="{'background-image': `url(${item.details.poster})`}">
+        </div>
+        <div class="content-metadata">
+          <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
           </div>
-      </transition>
+          <div class="meta-text">
+            <span v-html="item.details.text1"></span>
+          </div>
+        </div>
+      </div>
     </template>
     <template v-else>
-      <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}"></div>
+      <div class="content">
+        <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]"></div>
+        <div class="bottom-footer">
+          <template v-if="item.details.text1">
+              <div class="text simple">
+                <span v-html="item.details.text1"></span>
+              </div>
+              <div class="extra-img" v-if="item.details.extraImg" :style="[{'background-image': `url(${item.details.extraImg})`}]">
+              </div>
+            </template>
+        </div>
+      </div>
+      <template v-if="item.details.video && vidAutoplay">
+        <transition name="fade">
+          <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}" v-show="!videImgTrans"></div>
+          </transition>
+          <transition name="fade">
+            <div class="video"  v-show="videImgTrans">
+              <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+            </div>
+        </transition>
+      </template>
+      <template v-else>
+        <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}"></div>
+      </template>
     </template>
   </div>
 </template>
@@ -103,6 +118,38 @@ export default {
     left: 0;
     top: 0;
     background-size: 100% 100%;
+    .content-poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 600 * $s;
+      width: 100%;
+      background-size: 100% 100%;
+    }
+    .content-metadata {
+      position: absolute;
+      height: auto;
+      bottom: 0;
+      width: 100%;
+      font-size: 48 * $s;
+      font-family: SamsungOneUI400;
+      .meta-icon {
+        position: relative;
+        height: 50 * $s;
+        background-size: 200 * $s 50 * $s;
+        width: 200 * $s;
+      }
+      .meta-text {
+        position: relative;
+        width: 90%;
+        color: black;
+        text-align:left;
+        color: rgba(80,80,80,1);
+        font-family: SamsungOneUI400;
+        font-size: 48 * $s;
+        margin-top: 20 * $s;
+      }
+    }
   }
   .video {
     position: absolute;
