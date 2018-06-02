@@ -44,13 +44,16 @@
         <div class="sqrThumb item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
           </div>
-          <div class="thumb-icons">
-          </div>
-          <div class="thumb-title">
-            <span v-html="item.title"></span>
-          </div>
-          <div class="thumb-subtitle">
-            <span v-html="item.subtitle"></span>
+          <div class="meta">
+            <div class="thumb-icons">
+              <img :src="item.logo"/>
+            </div>
+            <div class="thumb-title">
+              <span v-html="item.title"></span>
+            </div>
+            <div class="thumb-subtitle">
+              <span v-html="item.subtitle"></span>
+            </div>
           </div>
         </div>
       </template>
@@ -58,13 +61,16 @@
         <div class="recThumb item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
           </div>
-          <div class="thumb-icons">
-          </div>
-          <div class="thumb-title">
-            <span v-html="item.title"></span>
-          </div>
-          <div class="thumb-subtitle">
-            <span v-html="item.subtitle"></span>
+            <div class="meta">
+              <div class="thumb-icons">
+                <img :src="item.logo"/>
+              </div>
+              <div class="thumb-title">
+                <span v-html="item.title"></span>
+              </div>
+              <div class="thumb-subtitle">
+                <span v-html="item.subtitle"></span>
+              </div>
           </div>
         </div>
       </template>
@@ -179,37 +185,63 @@ export default {
       width: 534 * $s;
       height: 421 * $s;
       margin-right: 44 * $s;
+      overflow: hidden;
       .thumb-img {
         position: relative;
         width: 100%;
-        height: 309 * $s;
+        height: 290 * $s;
         background-size: 100% 100%;
       }
-      .thum-icons {
+      .thumb-icons {
         position: relative;
-        height: 35 * $s;
+        height: 30 * $s;
         display: flex;
+        img {
+          margin-top: 3 * $s;
+          margin-bottom: 0;
+          height: 100%;
+        }
       }
       .thumb-title {
-        font-family: SamsungOneUI400;
-        margin-top: 8 * $s;
-        font-size: 30 * $s;
         text-align: left;
-        color: rgba(80,80,80,1);
+        span {
+          font-family: SamsungOneUI400;
+          font-size: 30 * $s;
+          color: rgba(80,80,80,1);
+        }
       }
       .thumb-gist {
-        font-family: SamsungOneUI400;
-        margin-top: 8 * $s;
-        font-size: 30 * $s;
         text-align: left;
-        color: rgba(80,80,80,1);
+        span {
+          font-family: SamsungOneUI400;
+          font-size: 30 * $s;
+          color: rgba(80,80,80,1);
+        }
       }
       .thumb-subtitle {
-        font-family: SamsungOneUI400;
-        margin-top: 8 * $s;
         text-align: left;
-        font-size: 30 * $s;
         color: rgba(80,80,80,1);
+        span {
+        font-family: SamsungOneUI400;
+        font-size: 26 * $s;
+        color: rgba(80,80,80,1);
+        }
+      }
+      .meta {
+        div {
+          margin: 4 * $s 0;
+        }
+      }
+      &.selected {
+         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+         transform: scale(1.08, 1.18);
+         border-radius: 5 * $s;
+         overflow: hidden;
+         .meta {
+           background-color: white;
+           height:200 * $s;
+           padding-left: 20 * $s;
+         }
       }
     }
     .sqr {
@@ -220,6 +252,12 @@ export default {
       vertical-align: top;
       margin-right: 80 * $s;
       background-size: 100% 100%;
+      &.selected {
+         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+         transform: scale(1.21);
+         border-radius: 5 * $s;
+         background-color: white;
+      }
     }
     .recThumb {
       position: relative;
@@ -235,28 +273,57 @@ export default {
         height: 247 * $s;
         background-size: 100% 100%;
       }
-      .thum-icons {
+      .thumb-icons {
         position: relative;
-        height: 35 * $s;
+        height: 30 * $s;
         display: flex;
+        img {
+          margin-top: 3 * $s;
+          margin-bottom: 0;
+          height: 100%;
+        }
       }
       .thumb-title {
-        font-family: SamsungOneUI400;
-        font-size: 30 * $s;
         text-align: left;
-        color: rgba(80,80,80,1);
+        span {
+          font-family: SamsungOneUI400;
+          font-size: 28 * $s;
+          color: rgba(80,80,80,1);
+        }
       }
       .thumb-gist {
-        font-family: SamsungOneUI400;
-        font-size: 30 * $s;
         text-align: left;
-        color: rgba(80,80,80,1);
+        span {
+          font-family: SamsungOneUI400;
+          font-size: 30 * $s;
+          color: rgba(80,80,80,1);
+        }
       }
       .thumb-subtitle {
-        font-family: SamsungOneUI400;
-        font-size: 30 * $s;
         text-align: left;
         color: rgba(80,80,80,1);
+        span {
+        font-family: SamsungOneUI400;
+        font-size: 26 * $s;
+        color: rgba(80,80,80,1);
+        }
+      }
+      .meta {
+        div {
+          margin: 1 * $s 0;
+        }
+      }
+      overflow: hidden;
+      background-color: transparent;
+      &.selected {
+         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+         transform: scale(1.21);
+         border-radius: 5 * $s;
+         .meta {
+           background-color: white;
+           height: 150 * $s;
+           padding-left: 20 * $s;
+         }
       }
     }
     .grid-item {

@@ -1,10 +1,11 @@
 <template>
-  <div class="thumbnail">
+  <div class="thumbnail" :class="[{'selected': selected}]">
       <div class="content" :class="[(item.details.full ? 'full-wrapper': 'partial-wrapper')]">
         <div class="content-tile" :style="{'background-image': `url(${item.details.img})`}">
         </div>
         <div class="content-metadata">
-          <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
+          <div class="meta-icon">
+            <img :src="item.details.logo">
           </div>
           <div class="meta-text">
              <span v-html="item.details.bottomText"></span>
@@ -101,6 +102,9 @@ export default {
       type: Object,
       required: true,
     },
+    selected: {
+      type: Boolean,
+    },
     videoActive: {
       type: Boolean,
       required: true,
@@ -171,17 +175,22 @@ export default {
       background-size: 100% 100%;
     }
     .content-metadata {
-      position: absolute;
+      position: relative;
       height: auto;
-      bottom: 0;
+      top: 240 * $s;
       width: 100%;
       font-size: 48 * $s;
       font-family: SamsungOneUI400;
       .meta-icon {
         position: relative;
-        height: 50 * $s;
+        height: 40 * $s;
         background-size:50 * $s 150 * $s;
         width: 150 * $s;
+        img {
+          position: absolute;
+          left: 0;
+          height: 100%;
+        }
       }
       .meta-text {
         position: relative;
@@ -191,13 +200,20 @@ export default {
         color: rgba(80,80,80,1);
         font-family: SamsungOneUI400;
         font-size: 32 * $s;
-        margin-top: 20 * $s;
       }
     }
     &.partial-wrapper {
       .content-tile {
         height: 100%;
       }
+      .content-metadata {
+        top: 300 * $s;
+      }
+    }
+  }
+  &.selected {
+    .content-metadata {
+      padding-left: 15 * $s;
     }
   }
     .thumb {

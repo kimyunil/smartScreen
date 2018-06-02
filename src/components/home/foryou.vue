@@ -6,19 +6,20 @@
       :style="translateY"
     >
         <div class="grid-templates grid-templates-slideshow" :style="inlineTranslate">
-            <div class="slideshow-wrapper" :key="index" v-for="(page, index) in getGrids">
-              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper"
-              :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
+            <div class="slideshow-wrapper" :key="idx" v-for="(page, idx) in getGrids">
+              <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
+              v-if="(slideshow && index === idx || !slideshow)"
+              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
               @movefocus="movefocus" @select="selectedGridItem"
               />
             </div>
         </div>
         <!-- </template> -->
-        <div class="grid-list">
+        <div class="grid-list" v-if="isRemoteEnabled">
           <template v-for="(subCat, index) in gridlist">
             <div class="grid-templates template subcategory-template"  :key="index">
-              <div class="title">{{subCat.title}}</div>
-              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
+              <div class="title" :class="[{'elevate': (rowIdx === index)}]">{{subCat.title}}</div>
+              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </template>
         </div>
@@ -145,32 +146,22 @@ export default {
           }
           break;
         case 'RIGHT':
-          if (this.focus === 'apps') {
-            if (this.appIdx < this.appsItems.length - 1) {
-              this.appIdx += 1;
-            }
-          }
           break;
         case 'DOWN':
           if (this.isRemoteEnabled) {
             if (this.focus !== 'grid') {
-              if (this.rowIdx >= 0 && this.rowIdx < this.gridlist.length - 1) {
+              if (this.rowIdx < this.gridlist.length - 1) {
                 this.rowIdx += 1;
-                const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+                // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
                 console.log(this.voffset[this.rowIdx].top);
-                if (this.translate + offset > 1080) {
-                  this.scroll('==', this.voffset[this.rowIdx].top * -1);
-                }
+                // if (this.translate + offset > 1080) {
+                this.scroll('==', this.voffset[this.rowIdx].top * -1);
+                // }
               }
             }
           }
           break;
         case 'LEFT':
-          if (this.focus === 'apps') {
-            if (this.appIdx > 0) {
-              this.appIdx -= 1;
-            }
-          }
           break;
         default:
           break;
@@ -203,6 +194,7 @@ export default {
       this.transitionName = '';
       this.videoEnabled = true;
       clearTimeout(this.videoTime);
+      this.pageIdx = this.index;
       this.slideshow = false;
       this.updateVOffset();
     },
@@ -241,12 +233,12 @@ export default {
         } else if (param.dir === 'up') {
           this.$emit('movefocus', { dir: 'up', from: 'content' });
         } else if (param.dir === 'down') {
-          this.rowIdx = 0;
-          const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
-          console.log(this.voffset[this.rowIdx].top);
-          if (this.translate + offset > 1080) {
-            this.scroll('==', this.voffset[this.rowIdx].top * -1);
-          }
+          this.rowIdx = -1;
+          // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+          // console.log(this.voffset[this.rowIdx].top);
+          // if (this.translate + offset > 1080) {
+          //   this.scroll('==', this.voffset[this.rowIdx].top * -1);
+          // }
           this.focus = 'apps';
         }
       }
@@ -292,10 +284,14 @@ export default {
     index(val) {
       this.updatePageIdx(val);
     },
-    isRemoteEnabled(val, old) {
-      console.log(val, old);
-      if (!val) this.startSlideShow();
-      else this.stopSlideShow(true);
+    isRemoteEnabled(val) {
+      if (!val) {
+        this.startSlideShow();
+        this.rowIdx = -1;
+        this.translate = 0;
+      } else {
+        this.stopSlideShow(true);
+      }
     },
   },
 };
@@ -306,7 +302,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow-y: hidden;
+  // overflow-y: hidden;
   .grid-container {
     position: relative;
     width: 1920 * $s;
@@ -370,23 +366,38 @@ export default {
           position: relative;
           // left: 15 * $s;
           width: calc(100% - #{150 * $s}); // include margin
-          padding: 10 * $s 15 * $s;
-          margin-bottom: 60 * $s;
+          padding: 0 15 * $s;
+          margin-bottom: 0;
           padding-top: 0;
           height: auto;
           .title {
             text-align: left;
             height: 50 * $s;
             font-family:Helvetica;
-            font-size: 30 * $s;
+            font-size: 36 * $s;
+            color: rgb(44,44,44);
+            &.elevate {
+              transform: translateY(#{-30  *$s});
+            }
           }
           .subCategoryList {
-            height: 370 * $s;
+            height: 480 * $s;
+            box-sizing: content-box!important;
+            &.apps {
+              height: 420 * $s;
+            }
+            &.avengers {
+              height: 560 * $s;
+            }
+            &.elevate {
+              z-index: 99;
+            }
           }
         }
       }
       &.grid-templates-slideshow {
        position: static;
+       padding-top:20 * $s;
        transition: transform 0.3s ease;
        white-space: nowrap;
        .slideshow-wrapper {

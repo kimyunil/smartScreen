@@ -1,10 +1,26 @@
 
 <template>
-  <div class="hTile">
+  <div class="hTile" :class="[{'selected': selected}]">
     <div class="content">
-        <div class="full-wrapper" :class="[(item.details.full ? 'fullwrapper': 'partial-wrapper')]" :style="{'background-image': `url(${item.details.hTile})`}">
+        <div class="full-wrapper" :class="[(item.details.full ? 'fullwrapper': 'partial-wrapper')]">
+          <div class="content-hTile">
+              <template v-if="item.details.video && vidAutoplay">
+                <transition name="fade">
+                  <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
+                  </transition>
+                  <transition name="fade">
+                    <div class="video"  v-show="videImgTrans">
+                      <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+                    </div>
+                </transition>
+              </template>
+              <template v-else>
+                <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
+              </template>
+          </div>
           <div class="metadata">
-            <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
+            <div class="meta-icon">
+              <img :src="item.details.logo">
             </div>
             <div class="meta-text">
               <span v-html="item.details.text1"></span>
@@ -35,6 +51,9 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    selected: {
+      type: Boolean,
     },
     videoActive: {
       type: Boolean,
@@ -129,10 +148,35 @@ export default {
     top: 0;
     left: 0;
     background-size: 100% 100%;
+    .content-hTile {
+      position: absolute;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      .meta-thumb {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        height: 100%;
+      }
+      .video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        height: 100%;
+      }
+    }
     .metadata {
       position: absolute;
       bottom: 35  * $s;
       width: 100%;
+      height: 100%;
+      z-index: 999;
       height: auto;
       .meta-text {
         padding-left: 20  * $s;
@@ -145,9 +189,12 @@ export default {
       }
       .meta-icon {
         position: relative;
-        height: 50 * $s;
+        height: 40 * $s;
         background-size:50 * $s 150 * $s;
         width: 150 * $s;
+        img {
+          height: 100%;
+        }
       }
     }
   }
@@ -157,25 +204,52 @@ export default {
     height: 100%;
     top: 0;
     left: 0;
-    background-size: 100% 700 * $s;
-    background-repeat: no-repeat;
+    .content-hTile {
+      position: absolute;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      .meta-thumb {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        height: 670 * $s;
+      }
+      .video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        height: 100%;
+      }
+    }
     .metadata {
       position: absolute;
-      bottom: 0  * $s;
+      bottom: 20  * $s;
       width: 100%;
+      z-index: 999;
       height: auto;
       .meta-text {
         position: relative;
         width: 90%;
         font-family: SamsungOneUI400;
         font-size: 48 * $s;
-        margin-top: 20 * $s;
+        margin-top: 5 * $s;
       }
       .meta-icon {
         position: relative;
-        height: 50 * $s;
+        height: 40 * $s;
         background-size:50 * $s 200 * $s;
         width: 200 * $s;
+        img {
+          position: absolute;
+          left: 0;
+          height: 100%;
+        }
       }
     }
   }

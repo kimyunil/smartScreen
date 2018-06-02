@@ -19,7 +19,10 @@ export default {
     this.$nextTick(() => {
       this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
       this.css.headerWidth = this.$el.offsetWidth;
-      this.offsetArr = this.$el.querySelectorAll('.nav-button');
+      const t = this.$el.querySelectorAll('.nav-button');
+      for (let i = 0; i < t.length; i += 1) {
+        this.offsetArr[i] = t[i].offsetLeft;
+      }
       this.translateHeadr(this.nav_selected);
     });
   },
@@ -56,7 +59,7 @@ export default {
       selectHeaderItem: 'select_nav',
     }),
     translateHeadr(index) {
-      this.translateX = ((this.offsetArr[index].offsetLeft) * -1);
+      this.translateX = ((this.offsetArr[index]) * -1);
     },
     handleKeyDown(type) {
       if (!this.focus) return;
@@ -141,6 +144,9 @@ export default {
       &:last-child {
         margin-right: 80 * $s;
       }
+      &:first-child {
+        margin-right: 40 * $s;
+      }
       &.selected {
         // background: rgba(0,0,0,1);
         // color: white;
@@ -155,6 +161,7 @@ export default {
         // box-shadow: 0 0.52083vw 0.67708vw 0 rgba(122, 122, 122, 0.35);
       }
       &.idle {
+         transform-origin: 20% center;
          color: black;
          background: transparent;
       }

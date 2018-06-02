@@ -1,11 +1,25 @@
 <template>
-  <div class="poster">
+  <div class="poster" :class="[{'selected': selected}]">
     <template v-if="item.details.full">
       <div class="content">
-        <div class="content-poster" :style="{'background-image': `url(${item.details.poster})`}">
+        <div class="content-poster">
+            <template v-if="item.details.video && vidAutoplay">
+              <transition name="fade">
+                <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}"></div>
+                </transition>
+                <transition name="fade">
+                  <div class="video"  v-show="videImgTrans">
+                    <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+                  </div>
+              </transition>
+            </template>
+            <template v-else>
+              <div class="thumb" :style="{'background-image': `url(${item.details.poster})`}"></div>
+            </template>
         </div>
         <div class="content-metadata">
-          <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
+          <div class="meta-icon">
+            <img :src="item.details.logo">
           </div>
           <div class="meta-text">
             <span v-html="item.details.text1"></span>
@@ -50,6 +64,9 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    selected: {
+      type: Boolean,
     },
     videoActive: {
       type: Boolean,
@@ -125,19 +142,35 @@ export default {
       height: 600 * $s;
       width: 100%;
       background-size: 100% 100%;
+      .thumb {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .video {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        height: 100%;
+      }
     }
     .content-metadata {
       position: absolute;
       height: auto;
-      bottom: 0;
+      bottom: 20 * $s;
       width: 100%;
       font-size: 48 * $s;
       font-family: SamsungOneUI400;
       .meta-icon {
         position: relative;
-        height: 50 * $s;
+        height: 40 * $s;
         background-size: 200 * $s 50 * $s;
         width: 200 * $s;
+        img {
+          position: absolute;
+          left: 0;
+          height: 100%;
+        }
       }
       .meta-text {
         position: relative;
@@ -149,6 +182,11 @@ export default {
         font-size: 48 * $s;
         margin-top: 20 * $s;
       }
+    }
+  }
+  &.selected {
+    .content-metadata {
+      padding-left: 15 * $s;
     }
   }
   .video {

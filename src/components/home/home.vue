@@ -206,7 +206,7 @@ export default {
         overflow: hidden;
       }
       &.squeeze-header {
-        height: 100 * $s;
+        height: 80 * $s;
       }
       &.show-enter {
         opacity: 0;

@@ -1,11 +1,12 @@
 <template>
-  <div class="tile">
+  <div class="tile" :class="[{'selected': selected}]">
     <template v-if="item.details.full">
       <div class="content">
         <div class="content-tile" :style="{'background-image': `url(${item.details.tile})`}">
         </div>
         <div class="content-metadata">
-          <div class="meta-icon" :style="[{'background-image': `url(${item.details.logo})`}]">
+          <div class="meta-icon">
+            <img :src="item.details.logo">
           </div>
           <div class="meta-text">
              <span v-html="item.details.bottomText"></span>
@@ -58,6 +59,9 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    selected: {
+      type: Boolean,
     },
     videoActive: {
       type: Boolean,
@@ -138,15 +142,20 @@ export default {
     .content-metadata {
       position: absolute;
       height: auto;
-      bottom: 0;
+      bottom: 10 * $s;
       width: 100%;
       font-size: 48 * $s;
       font-family: SamsungOneUI400;
       .meta-icon {
         position: relative;
-        height: 50 * $s;
+        height: 30 * $s;
         background-size:50 * $s 150 * $s;
         width: 150 * $s;
+        img {
+          position: absolute;
+          left: 0;
+          height: 100%;
+        }
       }
       .meta-text {
         position: relative;
@@ -156,8 +165,12 @@ export default {
         color: rgba(80,80,80,1);
         font-family: SamsungOneUI400;
         font-size: 32 * $s;
-        margin-top: 20 * $s;
       }
+    }
+  }
+  &.selected {
+    .content-metadata {
+      padding-left: 15 * $s;
     }
   }
   .video {

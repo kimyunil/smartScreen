@@ -7,7 +7,9 @@
         :key="gridItem.key"
       >
         <div class="item-wrapper">
-          <component :videoActive="videoActive" :is="gridItem.template" :item="gridItem"></component>
+          <div class="container">
+            <component :videoActive="videoActive" :is="gridItem.template" :item="gridItem" :selected="(focus && gridItem.type === currType)"></component>
+          </div>
         </div>
       </div>
     </div>
@@ -206,11 +208,22 @@ export default {
         position: absolute;
         width: 100%;
         border: 20 * $s solid transparent;
+        border-bottom: 0px;
         height: 100%;
         transition: transform 0.3s ease;
+        .container {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+        }
       }
       &.selected {
-         .item-wrapper {
+         .container {
+          box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+          transform: scale(1.03);
+          border-radius: 5 * $s;
           border-width: 20 * $s;
          }
       }

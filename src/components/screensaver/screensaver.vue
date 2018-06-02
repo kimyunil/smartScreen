@@ -34,7 +34,7 @@ export default {
     if (this.sleep) {
       this.timeOut = setTimeout(() => {
         this.toggleSleep({ sleep: false });
-      }, 2000);
+      }, 10000);
     }
   },
   computed: {
