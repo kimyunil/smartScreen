@@ -194,7 +194,7 @@ export default {
       intervalId: null,
       focus: 'grid',
       pageIdx: 0,
-      index: 2,
+      index: 0,
       translate: 0,
       appIdx: 0,
       slideshow: true,

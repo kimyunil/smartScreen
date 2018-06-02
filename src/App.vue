@@ -27,9 +27,9 @@ export default {
     Messages.$on('smartscreen.setup', this.setupScreen);
     Messages.$on('button_down', this.handleButton);
     Messages.send('smartscreen.setupscreen', { from: 'smartscreen' });
-    if (window.sessionStorage.getItem('oobe') !== null) {
-      this.setUpcomplete(true);
-    }
+    // if (window.sessionStorage.getItem('oobe') !== null) {
+    this.setUpcomplete(true);
+    // }
   },
   destroyed() {
     globalListener.destroyed();

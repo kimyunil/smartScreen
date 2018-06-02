@@ -31,6 +31,11 @@ export default {
     Messages.send('horizon-weather.get-forecast', {
       place: 'portland',
     });
+    if (this.sleep) {
+      this.timeOut = setTimeout(() => {
+        this.toggleSleep({ sleep: false });
+      }, 2000);
+    }
   },
   computed: {
     ...mapState([
@@ -215,7 +220,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    opacity: 0.4;
+    opacity: 1;
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,1);
@@ -259,7 +264,7 @@ export default {
   }
   &.blur {
     .backdrop {
-      opacity: 0;
+      // opacity: 0;
     }
     .weather {
       opacity: 0;

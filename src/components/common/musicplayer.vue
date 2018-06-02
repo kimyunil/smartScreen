@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   mounted() {
@@ -52,8 +52,10 @@ export default {
     playstate(val) {
       if (val === 0) {
         this.play();
+        this.clearVoiceTimer();
       } else if (val === 1) {
         this.pause();
+        this.resetVoiceTimer();
       }
     },
   },
@@ -62,6 +64,10 @@ export default {
       totalDuration: 'SET_MUSIC_DURATION',
       elapsedTime: 'SET_MUSIC_ELAPSED',
       updateState: 'MUSIC_STATE_UPDATE',
+    }),
+    ...mapActions({
+      clearVoiceTimer: 'CLEARTIMEOUT',
+      resetVoiceTimer: 'RESET_VOICE_TIMER',
     }),
     updateTime(event) {
       this.elapsedTime(event.target.currentTime);

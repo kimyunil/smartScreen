@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapMutations } from 'vuex';
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 import foryou from './foryou';
 import movies from './movies';
 import health from './health';
@@ -59,6 +59,7 @@ export default {
   },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
+    this.resetVoiceTimer();
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -66,6 +67,9 @@ export default {
   methods: {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
+    }),
+    ...mapActions({
+      resetVoiceTimer: 'RESET_VOICE_TIMER',
     }),
     movefocus(param) {
       if (param.from === 'header') {

@@ -107,13 +107,16 @@ export default {
     handleKeyDown(type) {
       console.log('Handle Key dowb', type);
       if (!this.active) return;
-      // this.resetVoiceTimer();
+      this.resetVoiceTimer();
       switch (type) {
         case 'VOICE':
           if (this.isBixbyActive) {
             this.closeVoice();
           }
           this.heyBixby();
+          break;
+        case 'SMART_HUB':
+          this.switch_comp({ replace: true, name: 'home' });
           break;
         case 'ONE':
           this.toggleVideo();

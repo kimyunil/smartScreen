@@ -88,6 +88,7 @@ export default {
       this.updateBixby('initial');
       this.enableKeybrd(false);
       this.closeTimer();
+      this.bixbyResult = payload;
       clearTimeout(this.timeout);
       Messages.send('audio-input.stop');
       if (payload.type === 'action') {
@@ -98,6 +99,7 @@ export default {
         if (this.isBixbyActive) {
           this.closeBixby(false);
         }
+        console.log(payload);
         this.launchComponent(payload.param);
       }
     },

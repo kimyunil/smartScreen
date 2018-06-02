@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 
@@ -32,9 +32,13 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.addSlideShow();
+    this.homeTimer = setTimeout(() => {
+      this.switch_comp({ replace: true, name: 'home' });
+    }, 6000);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+    clearTimeout(this.homeTimer);
     this.updateIdx(0);
   },
   computed: {
@@ -59,11 +63,15 @@ export default {
     return {
       intervalId: null,
       timeout: 10000,
+      homeTimer: null,
     };
   },
   methods: {
     ...mapMutations('result', {
       updateIdx: 'UPDATE_SLIDE_IDX',
+    }),
+    ...mapActions({
+      switch_comp: 'SWITCH_COMPONENT',
     }),
     startSlideShow() {
       clearInterval(this.intervalId);
