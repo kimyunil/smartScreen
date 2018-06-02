@@ -323,7 +323,7 @@ export default {
       width: 100%;
       .grid-templates {
         &:not(.subcategory-template) {
-          height: 760 * $s;
+          // height: 760 * $s;
         }
       }
     }

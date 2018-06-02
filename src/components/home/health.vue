@@ -20,7 +20,7 @@
       <template v-for="(subCat, index) in subCategories">
       <div class="grid-templates template subcategory-template"  :key="index">
         <div class="title">{{subCat.title}}</div>
-          <lgrid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
+        <lgrid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
       </div>
       </template>
       <div class="recent-apps template">
@@ -194,7 +194,7 @@ export default {
       intervalId: null,
       focus: 'grid',
       pageIdx: 0,
-      index: 0,
+      index: 2,
       translate: 0,
       appIdx: 0,
       slideshow: true,
@@ -233,8 +233,8 @@ export default {
   height: 100%;
   .grid-container {
     position: absolute;
-    width: 1900 * $s;
-    margin: 10 * $s;
+    width: 100%;
+    // margin: 10 * $s;
     height: 940 * $s;
     left:0;
     transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
@@ -243,8 +243,8 @@ export default {
       height: 100%;
       .recent-apps {
         position: relative;
-        left: 15 * $s;
         height: 400 * $s;
+        padding:50 * $s 15 * $s;
         width: 100%;
         .title {
           text-align: left;
@@ -295,9 +295,10 @@ export default {
           position: relative;
           &.subcategory-template {
             position: relative;
-            left: 15 * $s;
+            // left: 15 * $s;
+            width: 100%;
+            padding: 50 * $s 15 * $s;
             height: auto;
-            padding: 50 * $s 0;
             .title {
               text-align: left;
               height: 50 * $s;

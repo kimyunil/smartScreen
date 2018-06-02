@@ -31,7 +31,7 @@ export default {
   subCategory: {
   },
   pages: {
-    pagination: ['page-1', 'page-2', 'page-3'],
+    pagination: ['page-1', 'page-2', 'page-3h'],
     focusIdx: 0,
     subCategories: {
       yoga: {
@@ -175,8 +175,8 @@ export default {
         },
         suggestions: ['Hey Bixby, go Home'],
       },
-      'page-3': {
-        title: 'page-3',
+      'page-3h': {
+        title: 'page-3h',
         type: 'grid',
         content: ['fitbit-gym', 'fitbit-yoga', 'sponsor', 'source'],
         nav: [

@@ -3,16 +3,25 @@
     <div class="grid-container"
       :class="{'shrink':isRemoteEnabled, 'squeeze-header': (isRemoteEnabled && !active)}"
       @transitionend="shrinkTransitionCB"
+      :style="translateY"
     >
-      <transition name="fade">
-        <!-- <template > -->
         <div class="grid-templates grid-templates-slideshow" :style="inlineTranslate">
             <div class="slideshow-wrapper" :key="index" v-for="(page, index) in getGrids">
-              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :details="grids[index]" :videoActive="videoEnabled" :focus="false"/>
+              <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper"
+              :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
+              @movefocus="movefocus" @select="selectedGridItem"
+              />
             </div>
         </div>
         <!-- </template> -->
-      </transition>
+        <div class="grid-list">
+          <template v-for="(subCat, index) in gridlist">
+            <div class="grid-templates template subcategory-template"  :key="index">
+              <div class="title">{{subCat.title}}</div>
+              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
+            </div>
+          </template>
+        </div>
     </div>
     <!-- <transition name="show"> -->
       <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
@@ -31,6 +40,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 import grid from './common/grid';
+import lgrid from './common/lgrid';
 import artinfo from './common/artInfo';
 import Messages from '../../services/Messages';
 
@@ -55,11 +65,11 @@ export default {
     ]),
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
+      gridlist: 'GET_FORYOU_LIST',
       suggest: 'GET_SUGGESTIONS',
-      appsItems: 'GET_FORYOU_APPS',
     }),
     inlineTranslate() {
-      return { transform: `translateX(${((this.index * -1920) * 100) / window.innerWidth}vw)` };
+      return { transform: `translateX(${((this.index * -1700) * 100) / window.innerWidth}vw)` };
     },
     getGrids() {
       const arr = [];
@@ -74,7 +84,8 @@ export default {
       return gridPages;
     },
     translateY() {
-      return ((this.translate * 100) / window.innerWidth);
+      console.log(this.translate);
+      return { transform: `translateY(${((this.translate * 100) / window.innerWidth)}vw)` };
     },
     gridFocus() {
       if (this.active && (this.focus === 'grid')) {
@@ -120,9 +131,15 @@ export default {
       switch (type) {
         case 'UP':
           if (this.isRemoteEnabled) {
-            if (this.focus === 'apps') {
-              const top = this.$el.querySelector('.recent-apps').offsetHeight;
-              this.scroll('up', top);
+            if (this.rowIdx > 0) {
+              this.rowIdx -= 1;
+              const offset = this.voffset[this.rowIdx].top;
+              if ((this.translate * -1) > offset) {
+                this.scroll('==', offset * -1);
+              }
+            } else {
+              this.rowIdx = -1;
+              this.scroll('==', 0);
               this.focus = 'grid';
             }
           }
@@ -135,6 +152,18 @@ export default {
           }
           break;
         case 'DOWN':
+          if (this.isRemoteEnabled) {
+            if (this.focus !== 'grid') {
+              if (this.rowIdx >= 0 && this.rowIdx < this.gridlist.length - 1) {
+                this.rowIdx += 1;
+                const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+                console.log(this.voffset[this.rowIdx].top);
+                if (this.translate + offset > 1080) {
+                  this.scroll('==', this.voffset[this.rowIdx].top * -1);
+                }
+              }
+            }
+          }
           break;
         case 'LEFT':
           if (this.focus === 'apps') {
@@ -175,41 +204,50 @@ export default {
       this.videoEnabled = true;
       clearTimeout(this.videoTime);
       this.slideshow = false;
+      this.updateVOffset();
+    },
+    updateVOffset() {
+      this.$nextTick(() => {
+        const temps = this.$el.querySelectorAll('.template');
+        for (let i = 0; i < temps.length; i += 1) {
+          this.voffset[i] = {};
+          this.voffset[i].top = temps[i].offsetTop;
+          this.voffset[i].height = temps[i].offsetHeight;
+        }
+      });
     },
     scroll(dir, delta) {
       console.log(dir, delta);
       if (dir === 'up') {
         this.translate += delta;
-      } else {
+      } else if (dir === 'down') {
         this.translate -= delta;
+      } else {
+        this.translate = delta;
       }
     },
     movefocus(param) {
       if (param.from === 'grid') {
-        if (param.dir === 'up') {
+        if (param.dir === 'left') {
           if (this.pageIdx > 0) {
             this.pageIdx -= 1;
-            const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
-            this.scroll('up', top);
-          } else {
-            this.$emit('movefocus', { dir: 'up', from: 'content' });
+            this.index = this.pageIdx;
           }
-        } else if (param.dir === 'down') {
-          console.log(this.pageIdx, this.grids.length);
+        } else if (param.dir === 'right') {
           if (this.pageIdx < this.grids.length - 1) {
             this.pageIdx += 1;
-            const top = this.$el.querySelectorAll('.grid-list .grid-templates')[this.pageIdx].offsetHeight;
-            this.scroll('down', top);
-          } else if (this.focus !== 'apps') {
-            const top = this.$el.querySelector('.recent-apps').offsetHeight;
-            this.scroll('down', top);
-            this.focus = 'apps';
+            this.index = this.pageIdx;
           }
-        }
-        if (this.pageIdx === 0) {
-          this.$emit('showHeader', true);
-        } else {
-          this.$emit('showHeader', false);
+        } else if (param.dir === 'up') {
+          this.$emit('movefocus', { dir: 'up', from: 'content' });
+        } else if (param.dir === 'down') {
+          this.rowIdx = 0;
+          const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+          console.log(this.voffset[this.rowIdx].top);
+          if (this.translate + offset > 1080) {
+            this.scroll('==', this.voffset[this.rowIdx].top * -1);
+          }
+          this.focus = 'apps';
         }
       }
     },
@@ -219,10 +257,12 @@ export default {
       transitionName: 'slideshow',
       videoTime: null,
       intervalId: null,
+      voffset: [],
       infoArtIdx: 0,
       videoEnabled: false,
       focus: 'grid',
       pageIdx: 0,
+      rowIdx: -1,
       index: 0,
       translate: 0,
       appIdx: 0,
@@ -231,9 +271,15 @@ export default {
   },
   components: {
     grid,
+    lgrid,
     artinfo,
   },
   watch: {
+    rowIdx() {
+      console.log('rowIdx Watching');
+      if (this.rowIdx >= 0) this.$emit('showHeader', false);
+      else this.$emit('showHeader', true);
+    },
     timeout() {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -260,17 +306,17 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  overflow-y: hidden;
   .grid-container {
     position: relative;
     width: 1920 * $s;
-    height: 1080 * $s;
-    width: 100%;
-    height: 100%;
+    height: auto;
     // height: 807 * $s;
     // overflow: hidden;
     left:0;
-    transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+    transition: transform 0.3s ease;
     .grid-list {
+      position: static;
       transition: transform 0.4s ease;
       height: 100%;
       .recent-apps {
@@ -309,17 +355,39 @@ export default {
       }
     }
     .grid-templates {
-      position: relative!important;
-      height: 940 * $s;
-      height: 807 * $s;
-      height: 100%;
-      width: 100%;
+      position: static;
+      margin:0 100 * $s;
+      margin-bottom: 60 * $s;
+      height: 840 * $s;
+      width: 1700 * $s;
       transition: height 0.3s ease;
       &.grid-templates-list {
+        position: static;
+      }
+      &.template {
         position: relative;
+        &.subcategory-template {
+          position: relative;
+          // left: 15 * $s;
+          width: calc(100% - #{150 * $s}); // include margin
+          padding: 10 * $s 15 * $s;
+          margin-bottom: 60 * $s;
+          padding-top: 0;
+          height: auto;
+          .title {
+            text-align: left;
+            height: 50 * $s;
+            font-family:Helvetica;
+            font-size: 30 * $s;
+          }
+          .subCategoryList {
+            height: 370 * $s;
+          }
+        }
       }
       &.grid-templates-slideshow {
-       position: relative;
+       position: static;
+       transition: transform 0.3s ease;
        white-space: nowrap;
        .slideshow-wrapper {
          position: relative;
@@ -328,9 +396,6 @@ export default {
          display:inline-block;
          height: 100%;
         .grid-wrapper {
-          height: 840 * $s;
-          margin: 100 * $s;
-          width: 1700 * $s;
           transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
         }
         &.slideshow-enter {
@@ -358,13 +423,6 @@ export default {
       }
     }
     &.shrink {
-      width: 1720 * $s;
-      height: 880 * $s;
-      .grid-templates {
-        .grid-templates-list {
-        height: 880 * $s;
-        }
-      }
     }
     &.squeeze-header {
       // margin-top: 150 * $s;

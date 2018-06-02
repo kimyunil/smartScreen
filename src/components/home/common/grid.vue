@@ -145,10 +145,13 @@ export default {
           if (this.col > 0) {
             const val = this.checkLeft(this.col);
             if (val === -1) {
+              this.$emit('movefocus', { dir: 'left', from: 'grid' });
               // emit change
             } else {
               this.col = val;
             }
+          } else {
+            this.$emit('movefocus', { dir: 'left', from: 'grid' });
           }
           break;
         case 'RIGHT':
@@ -156,9 +159,12 @@ export default {
             const val = this.checkRight(this.col);
             if (val === -1) {
               // emit change
+              this.$emit('movefocus', { dir: 'right', from: 'grid' });
             } else {
               this.col = val;
             }
+          } else {
+            this.$emit('movefocus', { dir: 'right', from: 'grid' });
           }
           break;
         case 'SELECT':
@@ -203,14 +209,8 @@ export default {
         height: 100%;
         transition: transform 0.3s ease;
       }
-      &.shrink {
-        .item-wrapper {
-          transform: scale(0.98);
-        }
-      }
       &.selected {
          .item-wrapper {
-          border-image: url("/static/Images/home/border.png") 30 round;
           border-width: 20 * $s;
          }
       }
@@ -235,6 +235,13 @@ export default {
       grid-template-areas:
       "hTile tile tile hTile1"
       "hTile thumbnail1 thumbnail2 hTile1";
+    }
+    &.page-3h {
+      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+       grid-template-rows: 50% 50%;
+       grid-template-areas:
+      "poster tile tile"
+      "poster thumbnail1 thumbnail2";
     }
   }
 

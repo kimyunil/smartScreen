@@ -4,13 +4,13 @@
     </div>
     <div class="dashboard">
       <transition :name="headerTransition">
-      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}"  v-show="isRemoteEnabled || nav_selected != 0">
+      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}">
           <div class="wrapper">
-          <home-header :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
+          <home-header v-show="isRemoteEnabled || nav_selected != 0" :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
           </div>
       </div>
       </transition>
-      <div class="content-body" :class="[{'shrink':isRemoteEnabled,'squeeze-header': (isRemoteEnabled && !headerFocus)}, navItems[nav_selected].template]">
+      <div class="content-body" :class="[{'push-down':isRemoteEnabled && showHeader,'squeeze-header': (isRemoteEnabled && !headerFocus)}, navItems[nav_selected].template]">
         <transition :name="direction">
           <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
@@ -185,8 +185,8 @@ export default {
     height: 100%;
     background-image: url('/static/Images/home/home_bg.png');
     .header-cont {
-      position: absolute;
-      height: 230 * $s;
+      position: relative;
+      height: 120 * $s;
       display: flex;
       align-items: center;
       width: 100%;
@@ -235,30 +235,36 @@ export default {
       justify-content: flex-start;
     }
     .content-body {
-      position: absolute;
+      position: relative;
       width: 1920 * $s;
-      // margin: 10 * $s;
-      height: 940 * $s;
-      // overflow: hidden;
+      height: 980 * $s;
       transform: translate(#{0 * $s}, #{0 * $s});
       transition: transform 0.3s ease;
       left:0;
       &.health {
-        transform: translate(#{0 * $s}, #{110 * $s});
+        transform: translate(#{0 * $s}, #{50 * $s});
       }
       &.movies {
-        transform: translate(#{0 * $s}, #{110 * $s});
+        transform: translate(#{0 * $s}, #{50 * $s});
       }
-      &.shrink {
-        transform: translate(#{80 * $s}, #{230 * $s});
-        width: 1760 * $s;
-        &.squeeze-header {
-          transform: translate(#{80 * $s}, #{130 * $s});
-          &.health {
-            transform: translate(#{80 * $s}, #{150 * $s});
-          }
-        }
+      &.push-down {
+        transform: translate(#{0 * $s}, #{50 * $s});
       }
+      // &.shrink {
+      //   transform: translate(#{80 * $s}, #{230 * $s});
+      //   &::not(.foryou) {
+      //     width: 1760 * $s;
+      //   }
+      //   &.foryou {
+      //     transform: translateY(#{80 * $s});
+      //   }
+      //   &.squeeze-header {
+      //     transform: translateY(#{80 * $s});
+      //     &.health {
+      //       transform: translate(#{80 * $s}, #{150 * $s});
+      //     }
+      //   }
+      // }
       .left-enter-active, .left-leave-active {
         transition: transform 0.4s ease, opacity 0.3s ease;
       }
