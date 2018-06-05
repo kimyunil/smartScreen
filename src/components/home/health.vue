@@ -325,9 +325,9 @@ export default {
       // margin-top: 150 * $s;
     }
   }
-    .bixby-suggestions {
+  .bixby-suggestions {
     position: absolute;
-    bottom: -30 * $s;
+    bottom: 20 * $s;
     height: 135 * $s;
     width: 100%;
     display: flex;

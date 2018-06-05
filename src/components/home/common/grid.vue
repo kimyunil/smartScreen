@@ -67,6 +67,9 @@ export default {
     };
   },
   methods: {
+    setCol(idx) {
+      this.col = idx;
+    },
     checkLeft(column) {
       let col = column;
       const currType = this.details.nav[this.row][this.col];

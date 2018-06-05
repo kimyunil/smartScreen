@@ -96,15 +96,21 @@ const store = new Vuex.Store({
     CLEARTIMEOUT({ state }) {
       clearTimeout(state.voiceTimerID);
     },
-    RESET_VOICE_TIMER({ state, dispatch }) {
+    RESET_VOICE_TIMER() {
       // state.isRemoteEnabled = true;
       clearTimeout(this.voiceTimerID);
       this.voiceTimerID = setTimeout(() => {
-        if (state.viewStack[state.viewStack.length - 1] !== 'screensaver') {
-          state.sleep = true;
-          dispatch('SWITCH_COMPONENT', { replace: true, name: 'screensaver', transition: 'slide' });
-        }
+        // if (state.viewStack[state.viewStack.length - 1] !== 'screensaver') {
+        //   state.sleep = true;
+        //   dispatch('SWITCH_COMPONENT', { replace: true, name: 'screensaver', transition: 'slide' });
+        // }
       }, 15000);
+    },
+    SCREEN_TIMEOUT({ state, dispatch }) {
+      if (state.viewStack[state.viewStack.length - 1] !== 'screensaver') {
+        state.sleep = true;
+        dispatch('SWITCH_COMPONENT', { replace: true, name: 'screensaver', transition: 'slide' });
+      }
     },
     COMPLETE_SETUP({ state }, payload) {
       state.setup = payload;
@@ -198,6 +204,9 @@ const store = new Vuex.Store({
               dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
             }
           }
+          break;
+        case 'screen-timeout':
+          dispatch('SCREEN_TIMEOUT');
           break;
         case 'enableVideo':
         case 'disableVideo':

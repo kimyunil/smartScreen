@@ -17,12 +17,7 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.$nextTick(() => {
-      this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
-      this.css.headerWidth = this.$el.offsetWidth;
-      const t = this.$el.querySelectorAll('.nav-button');
-      for (let i = 0; i < t.length; i += 1) {
-        this.offsetArr[i] = t[i].offsetLeft;
-      }
+      this.updateOffset();
       this.translateHeadr(this.nav_selected);
     });
   },
@@ -58,6 +53,14 @@ export default {
     ...mapMutations('home', {
       selectHeaderItem: 'select_nav',
     }),
+    updateOffset() {
+      this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
+      this.css.headerWidth = this.$el.offsetWidth;
+      const t = this.$el.querySelectorAll('.nav-button');
+      for (let i = 0; i < t.length; i += 1) {
+        this.offsetArr[i] = t[i].offsetLeft;
+      }
+    },
     translateHeadr(index) {
       this.translateX = ((this.offsetArr[index]) * -1);
     },
@@ -101,6 +104,13 @@ export default {
     nav_selected(val) {
       console.log(val);
       this.translateHeadr(val);
+    },
+    isRemoteEnabled(val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.updateOffset();
+        });
+      }
     },
   },
 };

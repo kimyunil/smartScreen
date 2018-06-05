@@ -5,10 +5,27 @@
       @transitionend="shrinkTransitionCB"
       :style="translateY"
     >
-        <div class="grid-templates grid-templates-slideshow" :style="inlineTranslate">
-            <div class="slideshow-wrapper" :key="idx" v-for="(page, idx) in getGrids">
+        <div class="grid-templates grid-templates-slideshow"  :style="inlineTranslate" :class="{'translateAnim': !slideshow}">
+            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids"
+             :style="{'left': `${setLeft(idx)}vw`}"
+            v-if="!slideshow && index > idx">
               <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
-              v-if="(slideshow && index === idx || !slideshow)"
+                ref="previous"
+              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
+              @movefocus="movefocus" @select="selectedGridItem"
+              />
+            </div>
+          <transition :name="transitionName">
+              <div class="slideshow-wrapper" :key="index">
+                <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper"
+                :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
+                @movefocus="movefocus" @select="selectedGridItem"
+                />
+              </div>
+          </transition>
+            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids" v-if="!slideshow & index < idx">
+              <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
+              :style="{'left': `${setLeft(idx)}vw`}"
               :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
               @movefocus="movefocus" @select="selectedGridItem"
               />
@@ -30,8 +47,8 @@
           <div class="dots"
             v-for="(i, idx) in grids"
             :key="i.title"
-            :class="{'selected': index === idx}"
           >
+          <div class="selected" :class="{'progress': (index === idx)}"></div>
           </div>
         </div>
       </div>
@@ -49,6 +66,9 @@ export default {
   mounted() {
     this.chkSlideShow();
     Messages.$on('button_down', this.handleKeyDown);
+    this.$nextTick(() => {
+      this.slideWidth = this.$el.querySelector('.slideshow-wrapper').offsetWidth;
+    });
   },
   destroyed() {
     this.stopSlideShow();
@@ -70,7 +90,9 @@ export default {
       suggest: 'GET_SUGGESTIONS',
     }),
     inlineTranslate() {
-      return { transform: `translateX(${((this.index * -1700) * 100) / window.innerWidth}vw)` };
+      let idx = this.index - this.pageIdx;
+      if (this.slideshow) idx = 0;
+      return { transform: `translateX(${((idx * this.slideWidth) * 100) / window.innerWidth}vw)` };
     },
     getGrids() {
       const arr = [];
@@ -85,7 +107,6 @@ export default {
       return gridPages;
     },
     translateY() {
-      console.log(this.translate);
       return { transform: `translateY(${((this.translate * 100) / window.innerWidth)}vw)` };
     },
     gridFocus() {
@@ -106,6 +127,9 @@ export default {
     ...mapMutations('home', {
       updatePageIdx: 'UPDATE_PAGE_IDX',
     }),
+    setLeft(idx) {
+      return ((((idx - this.index) * this.slideWidth) * 100) / window.innerWidth);
+    },
     chkSlideShow() {
       this.toggleSuggetion(true);
       if (this.isRemoteEnabled) {
@@ -177,6 +201,7 @@ export default {
     startSlideShow() {
       this.slideshow = true;
       this.autoplayeVieo();
+      this.index = this.pageIdx;
       clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
         this.transitionName = 'slideshow';
@@ -222,24 +247,24 @@ export default {
       if (param.from === 'grid') {
         if (param.dir === 'left') {
           if (this.pageIdx > 0) {
+            this.$children[this.pageIdx].setCol(1);
             this.pageIdx -= 1;
-            this.index = this.pageIdx;
+            // this.index = this.pageIdx;
           }
         } else if (param.dir === 'right') {
           if (this.pageIdx < this.grids.length - 1) {
             this.pageIdx += 1;
-            this.index = this.pageIdx;
+            this.$children[this.pageIdx].setCol(0);
+            // this.index = this.pageIdx;
           }
         } else if (param.dir === 'up') {
           this.$emit('movefocus', { dir: 'up', from: 'content' });
         } else if (param.dir === 'down') {
-          this.rowIdx = -1;
-          // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
-          // console.log(this.voffset[this.rowIdx].top);
-          // if (this.translate + offset > 1080) {
-          //   this.scroll('==', this.voffset[this.rowIdx].top * -1);
-          // }
-          this.focus = 'apps';
+          this.rowIdx = 0;
+          this.scroll('==', this.voffset[this.rowIdx].top * -1);
+          this.$nextTick(() => {
+            this.focus = 'apps';
+          });
         }
       }
     },
@@ -249,6 +274,7 @@ export default {
       transitionName: 'slideshow',
       videoTime: null,
       intervalId: null,
+      slideWidth: 1700,
       voffset: [],
       infoArtIdx: 0,
       videoEnabled: false,
@@ -396,13 +422,16 @@ export default {
         }
       }
       &.grid-templates-slideshow {
-       position: static;
+       position: relative;
        padding-top:20 * $s;
-       transition: transform 0.3s ease;
        white-space: nowrap;
+       &.translateAnim {
+        transition: transform 0.3s ease;
+       }
        .slideshow-wrapper {
-         position: relative;
-         width: 100%;
+         position: absolute;
+         width: 1700 * $s;
+         left: 0;
          vertical-align:top;
          display:inline-block;
          height: 100%;
@@ -410,16 +439,18 @@ export default {
           transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
         }
         &.slideshow-enter {
+          transform: translateX(#{1770 * $s});
           opacity: 0;
         }
         &.slideshow-leave-to {
+          transform: translateX(#{-1770 * $s});
           opacity: 0;
         }
         &.slideshow-enter-active{
-          transition: opacity 1.3s ease;
+          transition: transform 1.3s ease, opacity 1.8s ease;
         }
         &.slideshow-leave-active {
-          transition: opacity 1.3s ease;
+          transition: transform 1.3s ease, opacity 1.8s ease;
         }
        }
       &.fade-enter-active {
@@ -441,7 +472,7 @@ export default {
   }
   .bixby-suggestions {
     position: absolute;
-    bottom: -140 * $s;
+    top: calc(100% - #{135 * $s});
     height: 135 * $s;
     width: 100%;
     display: flex;
@@ -462,16 +493,36 @@ export default {
     .pagination-dots {
       position: absolute;
       right: 70 * $s;
-      display: flex;
-      width: 84 * $s;
-      justify-content: space-between;
+      overflow: hidden;
+      width: 500 * $s;
       .dots {
-        height: 10* $s;
-        width: 10* $s;
-        border-radius: 50%;
-        background-color: rgba(0,0,0,0.2);
-        &.selected {
-          background-color: rgba(0,0,0,1)
+        position: relative;
+        display: inline-block;
+        height: 5 * $s;
+        margin-right: 10 * $s;
+        width: 103 * $s;
+        overflow: hidden;
+        border-radius: 5 * $s;
+        background-color: rgba(0,0,0,0.1);
+        .selected {
+          position: absolute;
+          left: 0;
+          transform: scale(0);
+          width: 100%;
+          height: 100%;
+          background-color: rgba(90,90,90,1)
+        }
+      }
+      .progress {
+        animation: bounce-in 35s ease 0.4s;
+        transform-origin: 0% 50%;
+      }
+      @keyframes bounce-in {
+        0% {
+          transform: scaleX(0);
+        }
+        100% {
+          transform: scaleX(1);
         }
       }
     }
