@@ -2,11 +2,11 @@
   <div class="screensaver" :class="{'enabled': sleep, 'blur': !active}">
     <div class="backdrop">
     </div>
-      <div class="time">
+      <!--<div class="time">
           {{time}}
       </div>
       <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
-      </div>
+      </div> -->
   </div>
 </template>
 <script>
