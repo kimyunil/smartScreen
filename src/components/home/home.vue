@@ -295,7 +295,7 @@ export default {
   }
   .bixby-suggestions {
     position: absolute;
-    bottom: -300 * $s;
+    top: calc(100% - #{135 * $s});
     height: 135 * $s;
     width: 100%;
     display: flex;

@@ -117,12 +117,14 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 10 * $s;
   overflow: hidden;
   .thumb {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 3;
+    border-radius: 10 * $s;
     left: 0;
     top: 0;
     background-size: 100% 100%;
@@ -160,7 +162,7 @@ export default {
       bottom: 20 * $s;
       width: 100%;
       font-size: 48 * $s;
-      font-family: SamsungOneUI400;
+      font-family: TTNormsBold;
       .meta-icon {
         position: relative;
         height: 40 * $s;
@@ -178,13 +180,16 @@ export default {
         color: black;
         text-align:left;
         color: rgba(80,80,80,1);
-        font-family: SamsungOneUI400;
+        font-family: TTNormsBold;
         font-size: 48 * $s;
         margin-top: 20 * $s;
       }
     }
   }
   &.selected {
+     .thumb {
+       border-radius: 0;
+     }
     .content-metadata {
       padding-left: 15 * $s;
     }

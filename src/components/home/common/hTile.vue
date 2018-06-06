@@ -183,9 +183,9 @@ export default {
         position: relative;
         width: 90%;
         text-align: left;
-        font-family: SamsungOneUI400;
+        font-family: TTNormsBold;
         font-size: 48 * $s;
-        margin-top: 20 * $s;
+        margin-top: 10 * $s;
       }
       .meta-icon {
         position: relative;
@@ -212,6 +212,7 @@ export default {
       .meta-thumb {
         position: absolute;
         left: 0;
+        border-radius: 10 * $s;
         top: 0;
         width: 100%;
         background-size: 100% 100%;
@@ -236,7 +237,7 @@ export default {
       .meta-text {
         position: relative;
         width: 90%;
-        font-family: SamsungOneUI400;
+        font-family: TTNormsBold;
         font-size: 48 * $s;
         margin-top: 5 * $s;
       }
@@ -251,6 +252,13 @@ export default {
           height: 100%;
         }
       }
+    }
+  }
+  &.selected {
+    .partial-wrapper {
+       .meta-thumb {
+         border-radius: 0;
+       }
     }
   }
   .seekbar {

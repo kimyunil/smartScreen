@@ -424,6 +424,7 @@ export default {
       &.grid-templates-slideshow {
        position: relative;
        padding-top:20 * $s;
+       padding-bottom: 20 * $s;
        white-space: nowrap;
        &.translateAnim {
         transition: transform 0.3s ease;
@@ -440,17 +441,15 @@ export default {
         }
         &.slideshow-enter {
           transform: translateX(#{1770 * $s});
-          opacity: 0;
         }
         &.slideshow-leave-to {
           transform: translateX(#{-1770 * $s});
-          opacity: 0;
         }
         &.slideshow-enter-active{
-          transition: transform 1.3s ease, opacity 1.8s ease;
+          transition: transform 0.5s ease, opacity 0s ease 0.5s;
         }
         &.slideshow-leave-active {
-          transition: transform 1.3s ease, opacity 1.8s ease;
+          transition: transform 0.5s ease, opacity 0s ease 0.5s;
         }
        }
       &.fade-enter-active {

@@ -494,7 +494,7 @@ export default {
           contentType: 'cp',
           details: {
             icon: '',
-            bottomText: '<span class="bold-text">Classical <br> Playlist</span>',
+            bottomText: '',
             logoType: 'big',
             logo: '/static/Images/home/foryou/slidesIcons/spotify.png',
           },

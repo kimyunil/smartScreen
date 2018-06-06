@@ -163,7 +163,7 @@ export default {
         color: black;
         text-align:left;
         color: rgba(80,80,80,1);
-        font-family: SamsungOneUI400;
+        font-family: TTNormsBold;
         font-size: 32 * $s;
       }
     }
