@@ -180,8 +180,8 @@ export default {
         type: 'grid',
         content: ['fitbit-gym', 'fitbit-yoga', 'sponsor', 'source'],
         nav: [
-          ['tile', 'tile', 'poster'],
-          ['thumbnail2', 'thumbnail1', 'poster'],
+          ['poster', 'tile', 'tile'],
+          ['poster', 'thumbnail1', 'thumbnail2'],
         ],
         'fitbit-gym': {
           type: 'poster',

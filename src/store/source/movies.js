@@ -36,15 +36,16 @@ export default {
         total: 0,
         pageIdx: 0,
         details: {
+          full: 'partial',
           action: {
             category: 'hulu',
             subcategory: 'home',
             content: 'handmaids',
           },
           topLeftText: '<span class="bold-top-text">Continue Watching</span>',
-          bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br> <span class="light-text">S2 Ep2 Bisrth Day</span>',
+          bottomText: '<span class="bold-text">The Handmaid’s Tale</span><br>',
           tile: '/static/Images/home/tile/morning/maid.png',
-          logo: '/static/Images/home/icons/common/hulu.png',
+          logo: '/static/Images/home/foryou/slidesIcons/hulu.png',
           logoType: 'rect',
           img: '',
         },

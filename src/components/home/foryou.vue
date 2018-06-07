@@ -5,7 +5,7 @@
       @transitionend="shrinkTransitionCB"
       :style="translateY"
     >
-        <div class="grid-templates grid-templates-slideshow"  :style="inlineTranslate" :class="{'translateAnim': !slideshow}">
+        <div class="grid-templates grid-templates-slideshow"  :style="inlineTranslate" :class="[{'translateAnim': !slideshow}]">
             <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids"
              :style="{'left': `${setLeft(idx)}vw`}"
             v-if="!slideshow && index > idx">
@@ -426,41 +426,44 @@ export default {
        padding-top:20 * $s;
        padding-bottom: 20 * $s;
        white-space: nowrap;
-       &.translateAnim {
-        transition: transform 0.3s ease;
-       }
-       .slideshow-wrapper {
-         position: absolute;
-         width: 1700 * $s;
-         left: 0;
-         vertical-align:top;
-         display:inline-block;
-         height: 100%;
-        .grid-wrapper {
-          transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+        &.translateAnim {
+          transition: transform 0.3s ease;
         }
-        &.slideshow-enter {
-          transform: translateX(#{1770 * $s});
+        .slideshow-wrapper {
+          position: absolute;
+          width: 1700 * $s;
+          left: 0;
+          vertical-align:top;
+          display:inline-block;
+          height: 100%;
+          .grid-wrapper {
+            transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+          }
+          &.slideshow-enter {
+            transform: translateX(#{1770 * $s});
+          }
+          &.slideshow-leave-to {
+            transform: translateX(#{-1770 * $s});
+          }
+          &.slideshow-enter-active{
+            transition: transform 0.5s ease, opacity 0s ease 0.5s;
+          }
+          &.slideshow-leave-active {
+            transition: transform 0.5s ease, opacity 0s ease 0.5s;
+          }
         }
-        &.slideshow-leave-to {
-          transform: translateX(#{-1770 * $s});
+        &.fade-enter-active {
+          // transition: opacity 0.1s ease;
         }
-        &.slideshow-enter-active{
-          transition: transform 0.5s ease, opacity 0s ease 0.5s;
+        &.fade-leave-active {
+          // transition: opacity 0.1s ease;
         }
-        &.slideshow-leave-active {
-          transition: transform 0.5s ease, opacity 0s ease 0.5s;
+        &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+          opacity: 0;
         }
-       }
-      &.fade-enter-active {
-        // transition: opacity 0.1s ease;
-      }
-      &.fade-leave-active {
-        // transition: opacity 0.1s ease;
-      }
-      &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        opacity: 0;
-      }
+        &.invisble {
+          opacity: 0;
+        }
       }
     }
     &.shrink {

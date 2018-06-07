@@ -236,7 +236,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/facebook.mp4',
+            video: '/resources/videos/smartscreen/A_1_Newyork_times.mp4',
             poster: '/static/Images/home/posters/morning/news_n.png',
             text1: '<span>Meghan Markle and the Bicultural <br> Blackness of the <span style="color: rgba(255,97,97,1);">Royal Wedding</span></span>',
             logo: '/static/Images/home/icons/morning/news_n.png',
@@ -249,7 +249,7 @@ export default {
           template: 'tile',
           contentType: 'simple',
           details: {
-            full: true,
+            full: 'partial',
             action: {
               category: 'hulu',
               subcategory: 'home',
@@ -268,9 +268,8 @@ export default {
           template: 'thumbnail',
           contentType: 'cp',
           details: {
-            full: true,
+            full: 'partial',
             icon: '',
-            video: '/resources/videos/smartscreen/curry.mp4',
             topLeftText: '<span class="bold-top-text">sponsored</span>',
             bottomText: '<span>Your <span style="color: rgba(255,97,97,1);">Daily Mix</span></span>',
             logoType: 'sqr-2',
@@ -318,7 +317,6 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/facebook.mp4',
             hTile: '/static/Images/home/hTile/morning/htile2.png',
             text1: '<span style="color:white">Cake By The Ocean </br> by <span style="color: rgba(255,97,97,1);">DNCE</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/pandora.png',
@@ -332,7 +330,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/facebook.mp4',
+            video: '/resources/videos/smartscreen/A_2_NBA.mp4',
             poster: '/static/Images/home/posters/morning/poster2.png',
             text1: '<span>Warriors at Rockets: </br> <span style="color: rgba(255,97,97,1);">Dubs get their biggest test yet</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/espn.png',
@@ -438,7 +436,6 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/game.mp4',
             tile: '/static/Images/home/tile/morning/tile3.png',
             bottomText: '<span class="bold-text">Fnatic vs. Flash Wolves</span>',
             logo: '/static/Images/home/foryou/slidesIcons/youtube.png',
@@ -452,6 +449,7 @@ export default {
           contentType: 'simple',
           details: {
             full: false,
+            video: '/resources/videos/smartscreen/A_3_Snowmantrek.mp4',
             hTile: '/static/Images/home/hTile/morning/htile4.png',
             text1: '<span style="color:black"><span style="color: rgba(255,97,97,1);">The Snowman </span>Trek</span>',
             logo: '/static/Images/home/foryou/slidesIcons/amazon.png',
@@ -493,6 +491,7 @@ export default {
           template: 'thumbnail',
           contentType: 'cp',
           details: {
+            full: 'full',
             icon: '',
             bottomText: '',
             logoType: 'big',
@@ -512,11 +511,11 @@ export default {
           },
         },
         hbo: {
-          full: true,
           type: 'thumbnail2',
           template: 'thumbnail',
           contentType: 'cp-type-1',
           details: {
+            full: 'full',
             icon: '',
             bottomText: '',
             logoType: 'text-big',
@@ -532,6 +531,7 @@ export default {
           details: {
             icon: '',
             bottomText: '',
+            full: 'full',
             logoType: 'text-big',
             logo: '/static/Images/home/foryou/slidesIcons/hulu.png',
             img: '/static/Images/home/thumbnail/morning/thumbnail3.png',

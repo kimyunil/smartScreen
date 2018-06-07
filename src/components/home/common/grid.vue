@@ -210,24 +210,27 @@ export default {
       .item-wrapper {
         position: absolute;
         width: 100%;
-        border: 20 * $s solid transparent;
+        // border: 20 * $s solid transparent;
         border-bottom: 0px;
         height: 100%;
         transition: transform 0.3s ease;
         .container {
           position: absolute;
           left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
+          left: 20 * $s;
+          top: 20 * $s;
+          width: calc(100% - #{40 * $s});
+          height: calc(100% - #{40 * $s});
+          // width: 100%;
+          // height: 100%;
         }
       }
       &.selected {
          .container {
-          box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
-          transform: scale(1.03);
-          border-radius: 5 * $s;
-          border-width: 20 * $s;
+            // box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+            // transform: scale(1.03);
+            // border-radius: 5 * $s;
+            // border-width: 20 * $s;
          }
       }
     }

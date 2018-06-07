@@ -2,21 +2,23 @@
 <template>
   <div class="hTile" :class="[{'selected': selected}]">
     <div class="content">
-        <div class="full-wrapper" :class="[(item.details.full ? 'fullwrapper': 'partial-wrapper')]">
-          <div class="content-hTile">
-              <template v-if="item.details.video && vidAutoplay">
-                <transition name="fade">
-                  <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
-                  </transition>
+        <div :class="[(item.details.full ? 'full-wrapper': 'partial-wrapper')]">
+          <div class="image-container">
+            <div class="content-hTile">
+                <template v-if="item.details.video && vidAutoplay">
                   <transition name="fade">
-                    <div class="video"  v-show="videImgTrans">
-                      <video :src="item.details.video" loop muted :autoplay="videoActive"/>
-                    </div>
-                </transition>
-              </template>
-              <template v-else>
-                <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
-              </template>
+                    <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
+                    </transition>
+                    <transition name="fade">
+                      <div class="video"  v-show="videImgTrans">
+                        <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+                      </div>
+                  </transition>
+                </template>
+                <template v-else>
+                  <div class="meta-thumb" :style="{'background-image': `url(${item.details.hTile})`}"></div>
+                </template>
+            </div>
           </div>
           <div class="metadata">
             <div class="meta-icon">
@@ -104,7 +106,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   background-size: cover;
   .thumb {
     position: absolute;
@@ -148,27 +149,34 @@ export default {
     top: 0;
     left: 0;
     background-size: 100% 100%;
-    .content-hTile {
+    .image-container {
       position: absolute;
+      top: 0;
       left: 0;
-      height: 100%;
       width: 100%;
-      .meta-thumb {
+      height: 100%;
+      .content-hTile {
         position: absolute;
         left: 0;
-        top: 0;
-        width: 100%;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
         height: 100%;
-      }
-      .video {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
-        z-index: 10;
-        height: 100%;
+        .meta-thumb {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          height: 100%;
+        }
+        .video {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 10;
+          height: 100%;
+        }
       }
     }
     .metadata {
@@ -204,33 +212,40 @@ export default {
     height: 100%;
     top: 0;
     left: 0;
-    .content-hTile {
+    .image-container {
       position: absolute;
+      top: 0;
       left: 0;
-      height: 100%;
       width: 100%;
-      .meta-thumb {
+      height: 100%;
+      .content-hTile {
         position: absolute;
         left: 0;
-        border-radius: 10 * $s;
-        top: 0;
-        width: 100%;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        height: 670 * $s;
-      }
-      .video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 10;
         height: 100%;
+        width: 100%;
+        border-radius: 10 * $s;
+        .meta-thumb {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          height: 670 * $s;
+        }
+        .video {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 10;
+          height: 100%;
+        }
       }
     }
     .metadata {
       position: absolute;
-      bottom: 20  * $s;
+      bottom: 10  * $s;
       width: 100%;
       z-index: 999;
       height: auto;
@@ -255,10 +270,31 @@ export default {
     }
   }
   &.selected {
+    .content {
+      .full-wrapper {
+        transform: scale(1.05);
+        box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+        border-radius: 10 * $s;
+        border-width: 20 * $s;
+      }
+    }
     .partial-wrapper {
-       .meta-thumb {
-         border-radius: 0;
-       }
+      .image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: scale(1.05);
+        width: 100%;
+        transform-origin: 60% center;
+        height: 100%;
+        overflow: hidden;
+        box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+        border-radius: 10 * $s;
+        border-width: 20 * $s;
+         .content-hTile {
+          border-radius:0;
+        }
+      }
     }
   }
   .seekbar {
