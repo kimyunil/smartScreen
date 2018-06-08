@@ -9,7 +9,7 @@
             <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids"
              :style="{'left': `${setLeft(idx)}vw`}"
             v-if="!slideshow && index > idx">
-              <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
+              <grid :colIdx="colIdx" v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
                 ref="previous"
               :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
               @movefocus="movefocus" @select="selectedGridItem"
@@ -17,13 +17,13 @@
             </div>
           <transition :name="transitionName">
               <div class="slideshow-wrapper" :key="index">
-                <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper"
+                <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :colIdx="colIdx"
                 :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
                 @movefocus="movefocus" @select="selectedGridItem"
                 />
               </div>
           </transition>
-            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids" v-if="!slideshow & index < idx">
+            <div class="slideshow-wrapper" :colIdx="colIdx" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids" v-if="!slideshow & index < idx">
               <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
               :style="{'left': `${setLeft(idx)}vw`}"
               :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
@@ -247,14 +247,14 @@ export default {
       if (param.from === 'grid') {
         if (param.dir === 'left') {
           if (this.pageIdx > 0) {
-            this.$children[this.pageIdx].setCol(1);
             this.pageIdx -= 1;
+            this.colIdx = 1;
             // this.index = this.pageIdx;
           }
         } else if (param.dir === 'right') {
           if (this.pageIdx < this.grids.length - 1) {
             this.pageIdx += 1;
-            this.$children[this.pageIdx].setCol(0);
+            this.colIdx = 0;
             // this.index = this.pageIdx;
           }
         } else if (param.dir === 'up') {
@@ -273,6 +273,7 @@ export default {
     return {
       transitionName: 'slideshow',
       videoTime: null,
+      colIdx: 0,
       intervalId: null,
       slideWidth: 1700,
       voffset: [],

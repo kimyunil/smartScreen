@@ -32,6 +32,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    colIdx: {
+      type: Number,
+    },
     focus: {
       type: Boolean,
       required: true,
@@ -187,6 +190,13 @@ export default {
       }
     },
   },
+  watch: {
+    colIdx(val) {
+      if (this.focus) {
+        this.col = val;
+      }
+    },
+  },
   components: {
     tile,
     thumbnail,
@@ -235,7 +245,7 @@ export default {
       }
     }
     &.page-1 {
-      grid-template-columns: 68% 16% 16%; //total is 100%
+      grid-template-columns: 64% 18% 18%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "poster tile tile"

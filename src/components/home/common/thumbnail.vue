@@ -258,7 +258,7 @@ export default {
     .content-ui {
       &.full-wrapper {
         &.content-ui {
-          transform: scale(1.12);
+          transform: scale(1.09);
           box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
           border-radius: 10 * $s;
           border-width: 20 * $s;

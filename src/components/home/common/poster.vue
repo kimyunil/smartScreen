@@ -184,6 +184,7 @@ export default {
       .meta-icon {
         position: relative;
         height: 40 * $s;
+        top: 15 * $s;
         background-size: 200 * $s 50 * $s;
         width: 200 * $s;
         img {

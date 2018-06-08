@@ -238,7 +238,7 @@ export default {
             full: true,
             video: '/resources/videos/smartscreen/TV_Shows_1_Westworld.mp4',
             poster: '/static/Images/home/posters/morning/westw.png',
-            text1: '<span><span style="color: rgba(255,97,97,1);">Westworld</span>2 Seasons | 20 Episodes</span>',
+            text1: '<span><span style="color: rgba(255,97,97,1);">Westworld</span> <br> <span>2 Seasons | 20 Episodes</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/amazon.png',
             logoType: 'sqr',
             img: '',
@@ -317,9 +317,9 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/A_2_NBA.mp4',
+            video: '/resources/videos/smartscreen/TV_Shows_2_Six_feet_under.mp4',
             poster: '/static/Images/home/posters/morning/sixfeet.png',
-            text1: '<span><span style="color: rgba(255,97,97,1);">Six Feet Under</span>5 Seasons | 63 Episodes</span>',
+            text1: '<span><span style="color: rgba(255,97,97,1);">Six Feet Under</span><br><span>5 Seasons | 63 Episodes</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/hbo-b.png',
             logoType: 'sqr',
             img: '',
@@ -340,6 +340,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
+            video: '/resources/videos/smartscreen/TV_Shows_3_True_detective.mp4',
             hTile: '/static/Images/home/hTile/morning/detective.png',
             text1: '<span style="color:white">True Detective</span>',
             logo: '/static/Images/home/foryou/slidesIcons/hbo.png',
@@ -366,7 +367,6 @@ export default {
           contentType: 'simple',
           details: {
             full: false,
-            video: '/resources/videos/smartscreen/A_3_Snowmantrek.mp4',
             hTile: '/static/Images/home/hTile/morning/jane.png',
             text1: '<span style="color:black"><span style="color: rgba(255,97,97,1);">Jane the Virgin</span>Trek</span>',
             logo: '/static/Images/home/foryou/slidesIcons/netflix.png',
