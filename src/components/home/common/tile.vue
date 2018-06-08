@@ -157,7 +157,7 @@ export default {
         top: 0;
         border-radius: 10 * $s;
         left: 0;
-        height: 270 * $s;
+        height: 290 * $s;
         width: 100%;
         background-size: 100% 100%;
       }

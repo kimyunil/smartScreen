@@ -24,6 +24,7 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 import foryou from './foryou';
 import movies from './movies';
 import health from './health';
+import tvshows from './tvshows';
 import drivers from '../common/drivers';
 import homeHeader from './common/header';
 import Messages from '../../services/Messages';
@@ -144,6 +145,7 @@ export default {
     foryou,
     movies,
     drivers,
+    tvshows,
     health,
   },
   watch: {

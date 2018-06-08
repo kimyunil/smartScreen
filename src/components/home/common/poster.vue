@@ -151,6 +151,7 @@ export default {
         height: 600 * $s;
         width: 100%;
         border-radius: 10 * $s;
+        overflow: hidden;
         background-size: 100% 100%;
         .thumb {
           position: absolute;

@@ -249,7 +249,8 @@ export default {
         height: 100%;
       }
       .content-metadata {
-        top: 340 * $s;
+        top: 320 * $s;
+        left: 20 * $s;
       }
     }
   }

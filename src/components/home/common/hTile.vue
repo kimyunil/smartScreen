@@ -160,6 +160,8 @@ export default {
         left: 0;
         height: 100%;
         width: 100%;
+        overflow: hidden;
+        border-radius: 10 * $s;
         .meta-thumb {
           position: absolute;
           left: 0;
@@ -198,9 +200,12 @@ export default {
       .meta-icon {
         position: relative;
         height: 40 * $s;
+        padding-left: 20 * $s;
         background-size:50 * $s 150 * $s;
         width: 150 * $s;
         img {
+          position: absolute;
+          left: 20 * $s;
           height: 100%;
         }
       }
@@ -259,11 +264,12 @@ export default {
       .meta-icon {
         position: relative;
         height: 40 * $s;
+        padding-left: 20 * $s;
         background-size:50 * $s 200 * $s;
         width: 200 * $s;
         img {
           position: absolute;
-          left: 0;
+          left: 20 * $s;
           height: 100%;
         }
       }
