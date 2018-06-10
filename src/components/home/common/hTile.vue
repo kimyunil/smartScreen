@@ -226,6 +226,7 @@ export default {
       .content-hTile {
         position: absolute;
         left: 0;
+        overflow: hidden;
         height: 100%;
         width: 100%;
         border-radius: 10 * $s;

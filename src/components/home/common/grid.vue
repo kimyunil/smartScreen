@@ -265,12 +265,47 @@ export default {
       "hTile tile tile hTile1"
       "hTile thumbnail1 thumbnail2 hTile1";
     }
-    &.page-3h {
-      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+    &.health-1 {
+      grid-template-columns: 34% 34% 32%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "poster poster tile1"
+      "poster poster tile2";
+    }
+    &.health-2 {
+      grid-template-columns: 32% 34% 34%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "hTile poster poster"
+      "hTile poster poster";
+    }
+    &.health-3 {
+      grid-template-columns: 33% 33% 34%; //total is 100%
        grid-template-rows: 50% 50%;
        grid-template-areas:
-      "poster tile tile"
-      "poster thumbnail1 thumbnail2";
+      "hTile1 hTile2 tile1"
+      "hTile1 hTile2 tile2";
+    }
+    &.movie-1 {
+      grid-template-columns: 34% 34% 32%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "poster poster hTile"
+      "poster poster hTile";
+    }
+    &.movie-2 {
+      grid-template-columns: 33% 33% 33%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "hTile1 hTile2 hTile3"
+      "hTile1 hTile2 hTile3";
+    }
+    &.movie-3 {
+      grid-template-columns: 33% 33% 17% 17%; //total is 100%
+       grid-template-rows: 50% 50%;
+       grid-template-areas:
+      "hTile1 hTile2 thumbnail1 thumbnail2"
+      "hTile1 hTile2 thumbnail3 thumbnail4";
     }
   }
 
