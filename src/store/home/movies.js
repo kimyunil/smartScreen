@@ -236,7 +236,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/TV_Shows_1_Westworld.mp4',
+            video: '/resources/videos/smartscreen/Movies_1_Tomb_Raider.mp4',
             poster: '/static/Images/home/posters/morning/tom.png',
             text1: '<span><span style="color: rgba(255,97,97,1);">Tomb Raider</span> <br> <span>2018</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/amazon.png',
@@ -272,6 +272,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
+            video: '/resources/videos/smartscreen/Movies_2_COCO.mp4',
             hTile: '/static/Images/home/hTile/morning/coco.png',
             text1: '',
             logo: '/static/Images/home/foryou/slidesIcons/starz.png',
@@ -320,7 +321,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/TV_Shows_3_True_detective.mp4',
+            video: '/resources/videos/smartscreen/Movies_3_Black_Panther.mp4',
             hTile: '/static/Images/home/hTile/morning/panther.png',
             text1: '',
             logo: '/static/Images/home/foryou/slidesIcons/netflix.png',
@@ -334,7 +335,6 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/TV_Shows_3_True_detective.mp4',
             hTile: '/static/Images/home/hTile/morning/mygirl.png',
             text1: '',
             logo: '/static/Images/home/foryou/slidesIcons/amazon-w.png',

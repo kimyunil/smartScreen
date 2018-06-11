@@ -20,6 +20,9 @@
         <div class="content-metadata">
           <div class="meta-icon">
             <img :src="item.details.logo">
+            <template v-for="img in item.details.extraImg">
+              <img :src="img" :key="img"/>
+            </template>
           </div>
           <div class="meta-text">
              <span v-html="item.details.bottomText"></span>
@@ -188,10 +191,12 @@ export default {
       .meta-icon {
         position: relative;
         height: 30 * $s;
+        display: flex;
+        justify-content: space-between;
         background-size:50 * $s 150 * $s;
-        width: 150 * $s;
+        width: 100%;
         img {
-          position: absolute;
+          position: relative;
           left: 0;
           height: 100%;
         }

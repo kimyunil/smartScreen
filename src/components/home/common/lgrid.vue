@@ -42,11 +42,18 @@
       </template>
       <template v-if="itemType === 'sqrThumb'">
         <div class="sqrThumb item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <div class="focus-div" v-if="focus && $index === index"></div>
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
+            <div class = "progress" v-if = "item.progress">
+              <div class="elapsed" :style = "{'width': `${item.progress}%`, 'background-color': `${item.progressColor}`}"></div>
+            </div>
           </div>
           <div class="meta">
             <div class="thumb-icons">
               <img :src="item.logo"/>
+              <template v-for="img in item.extraImg">
+                <img :src="img" :key="img"/>
+              </template>
             </div>
             <div class="thumb-title">
               <span v-html="item.title"></span>
@@ -59,6 +66,7 @@
       </template>
       <template v-if="itemType === 'recThumb'">
         <div class="recThumb item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+          <div class="focus-div" v-if="focus && $index === index"></div>
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
           </div>
             <div class="meta">
@@ -185,16 +193,45 @@ export default {
       width: 534 * $s;
       height: 421 * $s;
       margin-right: 44 * $s;
-      overflow: hidden;
+      // overflow: hidden;
+      .focus-div {
+        position: absolute;
+        left: -20 * $s;
+        height: calc(100% + #{40 * $s});
+        width: calc(100% + #{40 * $s});
+        top: -20 * $s;
+        border-radius: 10 * $s;
+        box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+        background-color: white;
+      }
       .thumb-img {
         position: relative;
         width: 100%;
         height: 290 * $s;
+        border-radius: 10 * $s;
         background-size: 100% 100%;
+        .progress {
+          position: absolute;
+          width: calc(100% - #{40 * $s});
+          background: rgba(255,255,255,0.6);
+          bottom: 18 * $s;
+          left: 20 * $s;
+          height: 5 * $s;
+          .elapsed {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 5 * $s;
+            height: 100%;
+            background: #FF2624;
+          }
+        }
       }
       .thumb-icons {
         position: relative;
         height: 30 * $s;
+        display: flex;
+        justify-content: space-between;
         display: flex;
         img {
           margin-top: 3 * $s;
@@ -204,6 +241,7 @@ export default {
       }
       .thumb-title {
         text-align: left;
+        position: relative;
         span {
           font-family: SamsungOneUI400;
           font-size: 30 * $s;
@@ -212,6 +250,7 @@ export default {
       }
       .thumb-gist {
         text-align: left;
+        position: relative;
         span {
           font-family: SamsungOneUI400;
           font-size: 30 * $s;
@@ -220,6 +259,7 @@ export default {
       }
       .thumb-subtitle {
         text-align: left;
+        position: relative;
         color: rgba(80,80,80,1);
         span {
         font-family: SamsungOneUI400;
@@ -228,19 +268,21 @@ export default {
         }
       }
       .meta {
+        margin-top: 10 * $s;
         div {
           margin: 4 * $s 0;
         }
       }
       &.selected {
-         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
-         transform: scale(1.08, 1.18);
-         border-radius: 5 * $s;
-         overflow: hidden;
+        .thumb-img {
+          border-radius:0;
+          border-top-left-radius: 10 * $s;
+          border-top-right-radius: 10 * $s;
+         transform: scale(1.08, 1.08);
+         transform-origin: bottom center;
+        }
          .meta {
-           background-color: white;
-           height:200 * $s;
-           padding-left: 20 * $s;
+           z-index: 99;
          }
       }
     }
@@ -255,7 +297,7 @@ export default {
       &.selected {
          box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
          transform: scale(1.21);
-         border-radius: 5 * $s;
+         border-radius: 10 * $s;
          background-color: white;
       }
     }
@@ -267,9 +309,20 @@ export default {
       vertical-align: top;
       height: 356 * $s;
       margin-right: 44 * $s;
+      .focus-div {
+        position: absolute;
+        left: -20 * $s;
+        height: calc(100% + #{40 * $s});
+        width: calc(100% + #{40 * $s});
+        top: -20 * $s;
+        border-radius: 10 * $s;
+        box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+        background-color: white;
+      }
       .thumb-img {
         position: relative;
         width: 100%;
+        border-radius: 10 * $s;
         height: 247 * $s;
         background-size: 100% 100%;
       }
@@ -277,6 +330,7 @@ export default {
         position: relative;
         height: 30 * $s;
         display: flex;
+        justify-content: space-between;
         img {
           margin-top: 3 * $s;
           margin-bottom: 0;
@@ -285,6 +339,7 @@ export default {
       }
       .thumb-title {
         text-align: left;
+        position: relative;
         span {
           font-family: SamsungOneUI400;
           font-size: 28 * $s;
@@ -293,6 +348,7 @@ export default {
       }
       .thumb-gist {
         text-align: left;
+        position: relative;
         span {
           font-family: SamsungOneUI400;
           font-size: 30 * $s;
@@ -301,6 +357,7 @@ export default {
       }
       .thumb-subtitle {
         text-align: left;
+        position: relative;
         color: rgba(80,80,80,1);
         span {
         font-family: SamsungOneUI400;
@@ -309,21 +366,23 @@ export default {
         }
       }
       .meta {
+        margin-top: 6 * $s;
         div {
-          margin: 1 * $s 0;
+          margin: 2 * $s 0;
         }
       }
-      overflow: hidden;
       background-color: transparent;
       &.selected {
-         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
-         transform: scale(1.21);
-         border-radius: 5 * $s;
-         .meta {
-           background-color: white;
-           height: 150 * $s;
-           padding-left: 20 * $s;
-         }
+        .thumb-img {
+         transform: scale(1.16);
+         transform-origin: bottom center;
+         border-radius: 0 * $s;
+         border-top-left-radius: 10 * $s;
+         border-top-right-radius: 10 * $s;
+        }
+        .meta {
+          height: 150 * $s;
+        }
       }
     }
     .grid-item {

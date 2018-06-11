@@ -32,14 +32,14 @@
             </div>
         </div>
         <!-- </template> -->
-        <div class="grid-list" v-if="isRemoteEnabled">
+        <!-- <div class="grid-list" v-if="isRemoteEnabled">
           <template v-for="(subCat, index) in gridlist">
             <div class="grid-templates template subcategory-template"  :key="index">
               <div class="title" :class="[{'elevate': (rowIdx === index)}]">{{subCat.title}}</div>
               <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </template>
-        </div>
+        </div> -->
     </div>
     <!-- <transition name="show"> -->
       <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
@@ -260,11 +260,11 @@ export default {
         } else if (param.dir === 'up') {
           this.$emit('movefocus', { dir: 'up', from: 'content' });
         } else if (param.dir === 'down') {
-          this.rowIdx = 0;
-          this.scroll('==', this.voffset[this.rowIdx].top * -1);
-          this.$nextTick(() => {
-            this.focus = 'apps';
-          });
+          // this.rowIdx = 0;
+          // this.scroll('==', this.voffset[this.rowIdx].top * -1);
+          // this.$nextTick(() => {
+          //   this.focus = 'apps';
+          // });
         }
       }
     },

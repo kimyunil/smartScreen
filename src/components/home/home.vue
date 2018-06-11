@@ -248,10 +248,10 @@ export default {
       transition: transform 0.3s ease;
       left:0;
       &.health {
-        transform: translate(#{0 * $s}, #{50 * $s});
+        // transform: translate(#{0 * $s}, #{50 * $s});
       }
       &.movies {
-        transform: translate(#{0 * $s}, #{50 * $s});
+        // transform: translate(#{0 * $s}, #{50 * $s});
       }
       &.push-down {
         transform: translate(#{0 * $s}, #{50 * $s});

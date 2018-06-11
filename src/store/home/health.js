@@ -236,7 +236,6 @@ export default {
           contentType: 'simple',
           details: {
             full: 'full',
-            video: '/resources/videos/smartscreen/TV_Shows_1_Westworld.mp4',
             poster: '/static/Images/home/posters/morning/fitbit.png',
             text1: '<span><span style="color: rgba(255,97,97,1);">Westworld</span> <br> <span>2 Seasons | 20 Episodes</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/amazon.png',
@@ -256,6 +255,7 @@ export default {
               content: 'handmaids',
             },
             topLeftText: '<span class="bold-top-text">Continue Watching</span>',
+            video: '/resources/videos/smartscreen/Health_1_Daily_Burn.mp4',
             bottomText: '<span>Daily 5-min <span style="color: rgba(42,109,156,1);">Body Tone</span></span>',
             tile: '/static/Images/home/tile/morning/body.png',
             logo: '/static/Images/home/foryou/slidesIcons/daily.png',
@@ -310,7 +310,7 @@ export default {
           contentType: 'simple',
           details: {
             full: true,
-            video: '/resources/videos/smartscreen/TV_Shows_2_Six_feet_under.mp4',
+            video: '/resources/videos/smartscreen/Health_2_How_to_5k.mp4',
             poster: '/static/Images/home/posters/morning/shealth.png',
             text1: '<span>How to Prepare for <span style="color: rgba(42,109,156,1);">Your First 5k</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/shealth.png',
@@ -333,7 +333,7 @@ export default {
           contentType: 'simple',
           details: {
             full: false,
-            video: '/resources/videos/smartscreen/TV_Shows_3_True_detective.mp4',
+            video: '/resources/videos/smartscreen/Health_3_Barre_Basic.mp4',
             hTile: '/static/Images/home/hTile/morning/lesson.png',
             text1: '<span>Lesson 3: <span style="color: rgba(42,109,156,1);">Barre Basics</span></span>',
             logo: '/static/Images/home/foryou/slidesIcons/cody.png',
@@ -347,7 +347,6 @@ export default {
           contentType: 'simple',
           details: {
             full: false,
-            video: '/resources/videos/smartscreen/TV_Shows_3_True_detective.mp4',
             hTile: '/static/Images/home/hTile/morning/meal.png',
             text1: '<span><span style="color: rgba(42,109,156,1);">Meap Prep</span> Sundays</span>',
             logo: '/static/Images/home/foryou/slidesIcons/food.png',

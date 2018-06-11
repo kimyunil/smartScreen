@@ -189,8 +189,9 @@ export default {
       z-index: 999;
       height: auto;
       .meta-text {
-        padding-left: 20  * $s;
+        // padding-left: 20  * $s;
         position: relative;
+        left: 20 * $s;
         width: 90%;
         text-align: left;
         font-family: TTNormsBold;
@@ -200,7 +201,7 @@ export default {
       .meta-icon {
         position: relative;
         height: 40 * $s;
-        padding-left: 20 * $s;
+        // padding-left: 20 * $s;
         background-size:50 * $s 150 * $s;
         width: 150 * $s;
         img {
@@ -258,6 +259,8 @@ export default {
       .meta-text {
         position: relative;
         width: 90%;
+        left: 10 * $s;
+        text-align: left;
         font-family: TTNormsBold;
         font-size: 48 * $s;
         margin-top: 5 * $s;
@@ -265,12 +268,12 @@ export default {
       .meta-icon {
         position: relative;
         height: 40 * $s;
-        padding-left: 20 * $s;
+        // padding-left: 20 * $s;
         background-size:50 * $s 200 * $s;
         width: 200 * $s;
         img {
           position: absolute;
-          left: 20 * $s;
+          left: 10 * $s;
           height: 100%;
         }
       }
