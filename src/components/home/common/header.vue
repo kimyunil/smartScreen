@@ -17,8 +17,7 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.$nextTick(() => {
-      this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
-      this.css.headerWidth = this.$el.offsetWidth;
+      this.updateOffset();
       this.translateHeadr(this.nav_selected);
     });
   },
@@ -54,9 +53,16 @@ export default {
     ...mapMutations('home', {
       selectHeaderItem: 'select_nav',
     }),
+    updateOffset() {
+      this.css.listOffset = this.$el.querySelector('.nav_list').offsetLeft;
+      this.css.headerWidth = this.$el.offsetWidth;
+      const t = this.$el.querySelectorAll('.nav-button');
+      for (let i = 0; i < t.length; i += 1) {
+        this.offsetArr[i] = t[i].offsetLeft;
+      }
+    },
     translateHeadr(index) {
-      const ele = this.$el.querySelectorAll('.nav-button')[index];
-      this.translateX = ((ele.offsetLeft) * -1);
+      this.translateX = ((this.offsetArr[index]) * -1);
     },
     handleKeyDown(type) {
       if (!this.focus) return;
@@ -86,6 +92,7 @@ export default {
   data() {
     return {
       hIdx: 0,
+      offsetArr: [],
       css: {
         offsetLeft: 0,
         headerWidth: 0,
@@ -98,6 +105,13 @@ export default {
       console.log(val);
       this.translateHeadr(val);
     },
+    isRemoteEnabled(val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.updateOffset();
+        });
+      }
+    },
   },
 };
 </script>
@@ -108,7 +122,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 20 * $s 0;
+  // left:40 * $s;
   overflow: hidden;
   .nav_list {
     position: relative;
@@ -125,7 +139,7 @@ export default {
       position: relative;
       margin-right: 50 * $s;
       height: 82 * $s;
-      font-size: 30 * $s;
+      font-size: 28 * $s;
       padding: 0 70* $s;
       box-sizing: content-box;
       white-space: nowrap;
@@ -136,21 +150,28 @@ export default {
       background: transparent;
       font-family: SamsungOneUI700;
       transition: transform 0.3s ease;
+      color: rgba(44,44,44,1);
       &:last-child {
         margin-right: 80 * $s;
       }
+      &:first-child {
+        margin-right: 40 * $s;
+      }
       &.selected {
-        background: rgba(0,0,0,1);
-        color: white;
-        box-shadow: 0 0 0;
+        // background: rgba(0,0,0,1);
+        // color: white;
+        transform: scale(1.46);
+        // box-shadow: 0 0 0;
       }
       &.focus {
-        background: white;
-        transform: scale(1.05);
-        color: black;
-        box-shadow: 0 0.52083vw 0.67708vw 0 rgba(122, 122, 122, 0.35);
+        // background: white;
+        color: rgba(88,88,88,1);
+        transform: scale(1.68);
+        // color: black;
+        // box-shadow: 0 0.52083vw 0.67708vw 0 rgba(122, 122, 122, 0.35);
       }
       &.idle {
+         transform-origin: 20% center;
          color: black;
          background: transparent;
       }

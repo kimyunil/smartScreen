@@ -83,6 +83,7 @@ export default {
   methods: {
     ...mapActions({
       closeVoice: 'CLOSE_VOICE',
+      resetVoiceTimer: 'RESET_VOICE_TIMER',
     }),
     ...mapMutations('bixby', {
       resetResult: 'RESET_RESULT',
@@ -243,6 +244,12 @@ export default {
       this.closeTimeout = setTimeout(() => {
         if (this.isBixbyActive) {
           this.closeBixby(false);
+          if (this.bixbyResult) {
+            const param = this.bixbyResult.param.category;
+            if (param === 'info' || param === 'movies') {
+              this.switch_comp({ replace: true, name: 'home' });
+            }
+          }
         }
       }, 10000);
     },
@@ -254,7 +261,6 @@ export default {
         this.defaultOptions.animationData = undefined;
         console.log(this.bixbyState);
         this.$nextTick(() => {
-          console.log(this.bixbyState, this.lottieanim);
           this.$set(this.defaultOptions, 'animationData', this.lottieanim[this.bixbyState].data.animationData);
         });
       }
@@ -276,6 +282,7 @@ export default {
       utilClass: '',
       clippath: '',
       resTranslate: 0,
+      bixbyResult: null,
       timeout: null,
       defaultOptions: {
         animationData: undefined,

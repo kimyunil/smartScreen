@@ -13,6 +13,22 @@ export default {
     },
   },
   getters: {
+    GET_FORYOU_LIST(state) {
+      const foryou = state.data.navs.details.for_you.data;
+      const grid = foryou.gridlist;
+      const gridList = [];
+      for (let i = 0; i < grid.length; i += 1) {
+        const key = grid[i];
+        const gridItem = foryou[key];
+        gridList[i] = foryou[key];
+        gridList[i].listItems = [];
+        for (let j = 0; j < gridItem.items.length; j += 1) {
+          const subkey = gridItem.items[j];
+          gridList[i].listItems[j] = gridItem[subkey];
+        }
+      }
+      return gridList;
+    },
     GET_SUGGESTIONS(state) {
       const navItem = state.data.navs.items[state.data.navs.selectedIdx];
       const category = state.data.navs.details[navItem].data.pages;
@@ -51,16 +67,6 @@ export default {
     },
     GET_SELECTED_NAV(state) {
       return state.data.navs.selectedIdx;
-    },
-    GET_FORYOU_APPS(state) {
-      const foryou = state.data.navs.details.for_you.data;
-      const apps = foryou.apps.items;
-      const appsArr = [];
-      for (let i = 0; i < apps.length; i += 1) {
-        const key = apps[i];
-        appsArr[i] = foryou.apps.details[key];
-      }
-      return appsArr;
     },
     GET_HEALTH_APPS(state) {
       const health = state.data.navs.details.health.data;

@@ -32,5 +32,16 @@ export default {
         },
       },
     },
+    more: {
+      list: ['moreresult'],
+      title: 'TOP RECOMMENDED MOVIES',
+      details: {
+        moreresult: {
+          img: './static/Images/results/moreresult.png',
+          suggestions: ['Hey Bixby, play the first one'],
+          sayWord: 'Try saying',
+        },
+      },
+    },
   },
 };

@@ -102,7 +102,7 @@ export default new Vue({
   },
   methods: {
     handleKeys(event) {
-      console.log('keyboard event:', event);
+      // console.log('keyboard event:', event);
       Object.keys(KEY_CODES).forEach(name => {
         if (event.keyCode === KEY_CODES[name]) {
           // check to see if this key is not allowed to repeat

@@ -1,102 +1,113 @@
 <template>
-  <div class="movies">
+  <div class="foryou">
     <div class="grid-container"
-      :class="{'shrink':isRemoteEnabled, 'listing': !slideshow, 'squeeze-header': (isRemoteEnabled && !active)}"
+      :class="{'shrink':isRemoteEnabled, 'squeeze-header': (isRemoteEnabled && !active)}"
       @transitionend="shrinkTransitionCB"
+      :style="translateY"
     >
-    <!-- <template v-if="slideshow"> -->
-      <transition :name="transitionName">
-        <div class="grid-templates" :key="index">
-          <div class="screenshot" :style="{'background-image':`url('${grids[index].img}')`}">
-          </div>
-          <!--<lgrid :items="content" :itemType="'grid'" :focus="false" @movefocus="movefocus"/>-->
-        </div>
-      </transition>
-    <!-- </template> -->
-    <!-- <div class="grid-list" v-else :style="{'transform': `translateY(${translateY}vw)`}">
-      <div class="grid-templates template">
-        <lgrid  :items="content" :itemType="'grid'" :focus="(gridFocus && pageIdx === 0)" @movefocus="movefocus"/>
-      </div>
-      <template v-for="(subCat, index) in subCategories">
-      <div class="grid-templates template subcategory-template"  :key="index">
-        <div class="title">{{subCat.title}}</div>
-          <lgrid :items="subCat.items" :focus="(gridFocus && pageIdx === (1 + index))" :itemType="'thumbnail'" class="subCategoryList" @movefocus="movefocus"/>
-      </div>
-      </template>
-      <div class="recent-apps template">
-          <div class="title">Apps</div>
-          <div class="apps-list">
-              <lgrid :items="appsItems" :focus="(subCategories.length + 1) === pageIdx" :itemType="'apps'" class="subCategoryList" @movefocus="movefocus"/>
+        <div class="grid-templates grid-templates-slideshow"  :style="inlineTranslate" :class="[{'translateAnim': !slideshow}]">
+            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids"
+             :style="{'left': `${setLeft(idx)}vw`}"
+            v-if="!slideshow && index > idx">
+              <grid :colIdx="colIdx" v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
+                ref="previous"
+              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
+              @movefocus="movefocus" @select="selectedGridItem"
+              />
             </div>
-          </div>
-      </div> -->
+          <transition :name="transitionName">
+              <div class="slideshow-wrapper" :key="index">
+                <grid v-show="grids[index].template !== 'ignore'" class="grid-wrapper" :colIdx="colIdx"
+                :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
+                @movefocus="movefocus" @select="selectedGridItem"
+                />
+              </div>
+          </transition>
+            <div class="slideshow-wrapper" :colIdx="colIdx" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids" v-if="!slideshow & index < idx">
+              <grid v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
+              :style="{'left': `${setLeft(idx)}vw`}"
+              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
+              @movefocus="movefocus" @select="selectedGridItem"
+              />
+            </div>
+        </div>
+        <!-- </template>
+        <div class="grid-list" v-if="isRemoteEnabled">
+          <template v-for="(subCat, index) in gridlist">
+            <div class="grid-templates template subcategory-template"  :key="index">
+              <div class="title" :class="[{'elevate': (rowIdx === index)}]">{{subCat.title}}</div>
+              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
+            </div>
+          </template>
+        </div> -->
     </div>
-    <transition name="show">
-        <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
-          <div class="pagination-dots">
-            <div class="dots"
-              v-for="(i, idx) in grids"
-              :key="i.title"
-              :class="{'selected': index === idx}"
-            >
-            </div>
+    <!-- <transition name="show"> -->
+      <div class="bixby-suggestions" v-if="!isRemoteEnabled && !isBixbyActive">
+        <div class="pagination-dots">
+          <div class="dots"
+            v-for="(i, idx) in grids"
+            :key="i.title"
+          >
+          <div class="selected" :class="{'progress': (index === idx)}"></div>
           </div>
         </div>
-     </transition>
+      </div>
+    <!-- </transition> -->
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapMutations } from 'vuex';
-import lgrid from './common/lgrid';
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 import grid from './common/grid';
+import lgrid from './common/lgrid';
+import artinfo from './common/artInfo';
 import Messages from '../../services/Messages';
 
 export default {
   mounted() {
-    this.stopSlideShow();
-    if (!this.isRemoteEnabled) {
-      this.startSlideShow();
-    }
+    this.chkSlideShow();
     Messages.$on('button_down', this.handleKeyDown);
+    this.$nextTick(() => {
+      this.slideWidth = this.$el.querySelector('.slideshow-wrapper').offsetWidth;
+    });
   },
   destroyed() {
     this.stopSlideShow();
+    this.toggleSuggetion(true);
     Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {
     ...mapState([
       'isRemoteEnabled',
+      'sleep',
       'isBixbyActive',
     ]),
     ...mapState('home', [
       'timeout',
     ]),
     ...mapGetters('home', {
-      catGrid: 'GET_CAT_GRID',
-      pageSubCat: 'PAGE_SUB_CAT_HEALTH',
-      appsItems: 'GET_HEALTH_APPS',
+      cat_grid: 'GET_CAT_GRID',
+      gridlist: 'GET_FORYOU_LIST',
+      suggest: 'GET_SUGGESTIONS',
     }),
-    subCategories() {
-      return this.pageSubCat(this.index);
+    inlineTranslate() {
+      let idx = this.index - this.pageIdx;
+      if (this.slideshow) idx = 0;
+      return { transform: `translateX(${((idx * this.slideWidth) * 100) / window.innerWidth}vw)` };
     },
-    pageType() {
-      return this.grids[this.index].template;
-    },
-    content() {
-      const array = [];
-      const details = this.grids[this.index];
-      for (let i = 0; i < details.content.length; i += 1) {
-        const key = details.content[i];
-        array[i] = details[key];
+    getGrids() {
+      const arr = [];
+      for (let i = 0; i < this.grids.length; i += 1) {
+        const idx = ((this.index + i) % this.grids.length);
+        arr[i] = this.grids[idx];
       }
-      return array;
+      return arr;
     },
     grids() {
-      const gridPages = this.catGrid(5);
+      const gridPages = this.cat_grid(5);
       return gridPages;
     },
     translateY() {
-      return ((this.translate * 100) / window.innerWidth);
+      return { transform: `translateY(${((this.translate * 100) / window.innerWidth)}vw)` };
     },
     gridFocus() {
       if (this.active && (this.focus === 'grid')) {
@@ -106,25 +117,73 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      launch: 'LAUNCH_COMPONENT',
+    }),
+    ...mapMutations({
+      toggleSuggetion: 'TOGGLE_SUGGESTION',
+      updateFlag: 'UPDATE_SYS_FLAG',
+    }),
     ...mapMutations('home', {
       updatePageIdx: 'UPDATE_PAGE_IDX',
     }),
-    shrinkTransitionCB() {
+    setLeft(idx) {
+      return ((((idx - this.index) * this.slideWidth) * 100) / window.innerWidth);
+    },
+    chkSlideShow() {
+      this.toggleSuggetion(true);
       if (this.isRemoteEnabled) {
-        this.slideshow = false;
+        this.stopSlideShow(true);
       } else {
-        this.slideshow = true;
+        this.startSlideShow();
       }
+    },
+    selectedGridItem(item) {
+      console.log(item);
+      if (item.details.action) {
+        this.launch(item.details.action);
+      }
+    },
+    shrinkTransitionCB() {
+      // if (this.isRemoteEnabled) {
+      //   this.slideshow = false;
+      // } else {
+      //   this.slideshow = true;
+      // }
     },
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
         case 'UP':
-          this.$emit('movefocus', { dir: 'up', from: 'content' });
+          if (this.isRemoteEnabled) {
+            if (this.rowIdx > 0) {
+              this.rowIdx -= 1;
+              const offset = this.voffset[this.rowIdx].top;
+              if ((this.translate * -1) > offset) {
+                this.scroll('==', offset * -1);
+              }
+            } else {
+              this.rowIdx = -1;
+              this.scroll('==', 0);
+              this.focus = 'grid';
+            }
+          }
           break;
         case 'RIGHT':
           break;
         case 'DOWN':
+          if (this.isRemoteEnabled) {
+            if (this.focus !== 'grid') {
+              if (this.rowIdx < this.gridlist.length - 1) {
+                this.rowIdx += 1;
+                // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+                console.log(this.voffset[this.rowIdx].top);
+                // if (this.translate + offset > 1080) {
+                this.scroll('==', this.voffset[this.rowIdx].top * -1);
+                // }
+              }
+            }
+          }
           break;
         case 'LEFT':
           break;
@@ -132,69 +191,97 @@ export default {
           break;
       }
     },
+    autoplayeVieo() {
+      clearTimeout(this.videoTime);
+      this.videoTime = setTimeout(() => {
+        console.log(this.videoEnabled);
+        this.videoEnabled = true;
+      }, 3000);
+    },
     startSlideShow() {
-      this.transitionName = 'slideshow';
       this.slideshow = true;
-      console.log(this.timeout);
+      this.autoplayeVieo();
+      this.index = this.pageIdx;
+      clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
-        this.index = (((this.index) + 1) % this.grids.length);
+        this.transitionName = 'slideshow';
+        this.videoEnabled = false;
+        this.$nextTick(() => {
+          this.index = (((this.index) + 1) % this.grids.length);
+          this.autoplayeVieo();
+        });
       }, this.timeout);
+      // this.index = 3;
     },
     stopSlideShow() {
       clearInterval(this.intervalId);
       this.intervalId = null;
       this.transitionName = '';
+      this.videoEnabled = true;
+      clearTimeout(this.videoTime);
+      this.pageIdx = this.index;
       this.slideshow = false;
+      this.updateVOffset();
+    },
+    updateVOffset() {
+      this.$nextTick(() => {
+        const temps = this.$el.querySelectorAll('.template');
+        for (let i = 0; i < temps.length; i += 1) {
+          this.voffset[i] = {};
+          this.voffset[i].top = temps[i].offsetTop;
+          this.voffset[i].height = temps[i].offsetHeight;
+        }
+      });
     },
     scroll(dir, delta) {
       console.log(dir, delta);
       if (dir === 'up') {
         this.translate += delta;
-      } else {
+      } else if (dir === 'down') {
         this.translate -= delta;
+      } else {
+        this.translate = delta;
       }
     },
     movefocus(param) {
-      if (param.from === 'lgrid' || param.from === 'grid') {
-        if (param.dir === 'up') {
-          if (this.pageIdx === 0) {
-            this.$emit('movefocus', { dir: 'up', from: 'content' });
-          } else {
-            console.log(this.pageIdx);
+      if (param.from === 'grid') {
+        if (param.dir === 'left') {
+          if (this.pageIdx > 0) {
             this.pageIdx -= 1;
-            const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop;
-            if (this.translate * -1 > top) {
-              this.translate += ((this.translate * -1) - top);
-            }
-            console.log(top);
-            // this.scroll('up', top);
+            this.colIdx = 1;
+            // this.index = this.pageIdx;
           }
-        } else if (param.dir === 'down') {
-          if (this.pageIdx !== (this.subCategories.length + 1)) {
+        } else if (param.dir === 'right') {
+          if (this.pageIdx < this.grids.length - 1) {
             this.pageIdx += 1;
-            const top = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetTop + this.translate;
-            const height = this.$el.querySelectorAll('.grid-list .template')[this.pageIdx].offsetHeight;
-            const diff = this.$el.offsetHeight - (top + height);
-            console.log(diff, height, top);
-            if (diff < 0) {
-              this.translate += (diff);
-            }
+            this.colIdx = 0;
+            // this.index = this.pageIdx;
           }
+        } else if (param.dir === 'up') {
+          this.$emit('movefocus', { dir: 'up', from: 'content' });
+        } else if (param.dir === 'down') {
+          // this.rowIdx = 0;
+          // this.scroll('==', this.voffset[this.rowIdx].top * -1);
+          // this.$nextTick(() => {
+          //   this.focus = 'apps';
+          // });
         }
-      }
-      if (this.pageIdx === 0) {
-        this.$emit('showHeader', true);
-      } else {
-        this.$emit('showHeader', false);
       }
     },
   },
   data() {
     return {
       transitionName: 'slideshow',
+      videoTime: null,
+      colIdx: 0,
       intervalId: null,
+      slideWidth: 1700,
+      voffset: [],
+      infoArtIdx: 0,
+      videoEnabled: false,
       focus: 'grid',
       pageIdx: 0,
+      rowIdx: -1,
       index: 0,
       translate: 0,
       appIdx: 0,
@@ -202,10 +289,16 @@ export default {
     };
   },
   components: {
-    lgrid,
     grid,
+    lgrid,
+    artinfo,
   },
   watch: {
+    rowIdx() {
+      console.log('rowIdx Watching');
+      if (this.rowIdx >= 0) this.$emit('showHeader', false);
+      else this.$emit('showHeader', true);
+    },
     timeout() {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -218,47 +311,41 @@ export default {
     index(val) {
       this.updatePageIdx(val);
     },
-    isRemoteEnabled(val, old) {
-      console.log(val, old);
-      if (!val) this.startSlideShow();
-      else this.stopSlideShow();
+    isRemoteEnabled(val) {
+      if (!val) {
+        this.startSlideShow();
+        this.rowIdx = -1;
+        this.translate = 0;
+      } else {
+        this.stopSlideShow(true);
+      }
     },
   },
 };
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../../mixins/scss/main';
-.movies {
+.foryou {
   position: absolute;
   width: 100%;
   height: 100%;
+  // overflow-y: hidden;
   .grid-container {
-    position: absolute;
-    width: 1900 * $s;
-    margin: 10 * $s;
-    height: 940 * $s;
+    position: relative;
+    width: 1920 * $s;
+    height: auto;
+    // height: 807 * $s;
+    // overflow: hidden;
     left:0;
-    transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
-    .screenshot {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-size: 100% 100%;
-    }
+    transition: transform 0.3s ease;
     .grid-list {
+      position: static;
       transition: transform 0.4s ease;
       height: 100%;
       .recent-apps {
         position: relative;
-        left: 15 * $s;
         height: 400 * $s;
         width: 100%;
-        .title {
-          text-align: left;
-          height: 50 * $s;
-          font-family:Helvetica;
-          font-size: 30 * $s;
-        }
         .apps-list {
           position: absolute;
           width: 100%;
@@ -280,60 +367,115 @@ export default {
           }
         }
       }
+      &.fade-enter-active {
+        // transition: opacity 0.3s ease;
+      }
+      &.fade-leave-active {
+        // transition: opacity 0.3s ease;
+      }
+      &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+      }
     }
     .grid-templates {
-      position: absolute;
-      height: 827 * $s; /* Height 807 + 40 border */
-      width: 100%;
+      position: static;
+      margin:0 100 * $s;
+      margin-bottom: 60 * $s;
+      height: 840 * $s;
+      width: 1700 * $s;
       transition: height 0.3s ease;
-        &.slideshow-enter {
-          opacity: 0;
-        }
-        &.slideshow-leave-to {
-          opacity: 0;
-        }
-        &.slideshow-enter-active{
-          transition: opacity 1.3s ease;
-        }
-        &.slideshow-leave-active {
-          transition: opacity 1.3s ease;
-        }
-        &.template {
+      &.grid-templates-list {
+        position: static;
+      }
+      &.template {
+        position: relative;
+        &.subcategory-template {
           position: relative;
-          &.subcategory-template {
-            position: relative;
-            left: 15 * $s;
-            height: auto;
-            padding: 50 * $s 0;
-            .title {
-              text-align: left;
-              height: 50 * $s;
-              font-family:Helvetica;
-              font-size: 30 * $s;
+          // left: 15 * $s;
+          width: calc(100% - #{150 * $s}); // include margin
+          padding: 0 15 * $s;
+          margin-bottom: 0;
+          padding-top: 0;
+          height: auto;
+          .title {
+            text-align: left;
+            height: 50 * $s;
+            font-family:Helvetica;
+            font-size: 36 * $s;
+            color: rgb(44,44,44);
+            &.elevate {
+              transform: translateY(#{-30  *$s});
             }
-            width: 100%;
-            .subCategoryList {
-              height: 370 * $s;
+          }
+          .subCategoryList {
+            height: 480 * $s;
+            box-sizing: content-box!important;
+            &.apps {
+              height: 420 * $s;
+            }
+            &.avengers {
+              height: 560 * $s;
+            }
+            &.elevate {
+              z-index: 99;
             }
           }
         }
-    }
-    &.shrink {
-      // width: 1720 * $s;
-      width: 100%;
-      .grid-templates {
-        &:not(.subcategory-template) {
-          height: 760 * $s;
+      }
+      &.grid-templates-slideshow {
+       position: relative;
+       padding-top:20 * $s;
+       padding-bottom: 20 * $s;
+       white-space: nowrap;
+        &.translateAnim {
+          transition: transform 0.3s ease;
+        }
+        .slideshow-wrapper {
+          position: absolute;
+          width: 1700 * $s;
+          left: 0;
+          vertical-align:top;
+          display:inline-block;
+          height: 100%;
+          .grid-wrapper {
+            transition: margin 0.3s ease, width 0.3s ease, left 0.3s ease;
+          }
+          &.slideshow-enter {
+            transform: translateX(#{1770 * $s});
+          }
+          &.slideshow-leave-to {
+            transform: translateX(#{-1770 * $s});
+          }
+          &.slideshow-enter-active{
+            transition: transform 0.5s ease, opacity 0s ease 0.5s;
+          }
+          &.slideshow-leave-active {
+            transition: transform 0.5s ease, opacity 0s ease 0.5s;
+          }
+        }
+        &.fade-enter-active {
+          // transition: opacity 0.1s ease;
+        }
+        &.fade-leave-active {
+          // transition: opacity 0.1s ease;
+        }
+        &.fade-enter, &.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+          opacity: 0;
+        }
+        &.invisble {
+          opacity: 0;
         }
       }
+    }
+    &.shrink {
     }
     &.squeeze-header {
       // margin-top: 150 * $s;
     }
   }
-    .bixby-suggestions {
+  .bixby-suggestions {
     position: absolute;
-    bottom: -30 * $s;
+    top: calc(100% - #{135 * $s});
     height: 135 * $s;
     width: 100%;
     display: flex;
@@ -354,16 +496,36 @@ export default {
     .pagination-dots {
       position: absolute;
       right: 70 * $s;
-      display: flex;
-      width: 84 * $s;
-      justify-content: space-between;
+      overflow: hidden;
+      width: 500 * $s;
       .dots {
-        height: 10* $s;
-        width: 10* $s;
-        border-radius: 50%;
-        background-color: rgba(0,0,0,0.2);
-        &.selected {
-          background-color: rgba(0,0,0,1)
+        position: relative;
+        display: inline-block;
+        height: 5 * $s;
+        margin-right: 10 * $s;
+        width: 103 * $s;
+        overflow: hidden;
+        border-radius: 5 * $s;
+        background-color: rgba(0,0,0,0.1);
+        .selected {
+          position: absolute;
+          left: 0;
+          transform: scale(0);
+          width: 100%;
+          height: 100%;
+          background-color: rgba(90,90,90,1)
+        }
+      }
+      .progress {
+        animation: bounce-in 35s ease 0.4s;
+        transform-origin: 0% 50%;
+      }
+      @keyframes bounce-in {
+        0% {
+          transform: scaleX(0);
+        }
+        100% {
+          transform: scaleX(1);
         }
       }
     }
@@ -374,10 +536,10 @@ export default {
       opacity: 0;
     }
     &.show-enter-active{
-      transition: opacity 0.3s ease;
+      transition: opacity 0.1s ease;
     }
     &.show-leave-active {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.1s ease;
     }
   }
 }

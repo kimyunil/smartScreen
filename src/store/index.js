@@ -93,16 +93,27 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    RESET_VOICE_TIMER({ state }) {
-      state.isRemoteEnabled = true;
+    CLEARTIMEOUT({ state }) {
+      clearTimeout(state.voiceTimerID);
+    },
+    RESET_VOICE_TIMER() {
+      // state.isRemoteEnabled = true;
       clearTimeout(this.voiceTimerID);
       this.voiceTimerID = setTimeout(() => {
-        // state.isRemoteEnabled = false;
+        // if (state.viewStack[state.viewStack.length - 1] !== 'screensaver') {
+        //   state.sleep = true;
+        //   dispatch('SWITCH_COMPONENT', { replace: true, name: 'screensaver', transition: 'slide' });
+        // }
       }, 15000);
+    },
+    SCREEN_TIMEOUT({ state, dispatch }) {
+      if (state.viewStack[state.viewStack.length - 1] !== 'screensaver') {
+        state.sleep = true;
+        dispatch('SWITCH_COMPONENT', { replace: true, name: 'screensaver', transition: 'slide' });
+      }
     },
     COMPLETE_SETUP({ state }, payload) {
       state.setup = payload;
-      console.log('payload::::::::::::', payload);
       if (payload) {
         setTimeout(() => {
           state.sleep = false;
@@ -123,12 +134,14 @@ const store = new Vuex.Store({
     LAUNCH_VOICE({ state, commit, dispatch }) {
       commit('bixby/UPDATE_BIXBY', 'invoke');
       dispatch('REMOVE_COMPONENT_TYPE', { type: 'system' });
+      dispatch('CLEARTIMEOUT');
       state.isRemoteEnabled = false;
       state.isBixbyActive = true;
     },
-    CLOSE_VOICE({ state, commit }) {
+    CLOSE_VOICE({ state, commit, dispatch }) {
       commit('bixby/UPDATE_BIXBY', 'initial');
       state.isBixbyActive = false;
+      dispatch('RESET_VOICE_TIMER');
       // state.isRemoteEnabled = true;
     },
     TOGGLE_MEDIA({ state }) {
@@ -191,6 +204,9 @@ const store = new Vuex.Store({
               dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
             }
           }
+          break;
+        case 'screen-timeout':
+          dispatch('SCREEN_TIMEOUT');
           break;
         case 'enableVideo':
         case 'disableVideo':

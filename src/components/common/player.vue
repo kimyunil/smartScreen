@@ -62,6 +62,8 @@ export default {
   methods: {
     ...mapActions({
       saveContinue: 'SAVE_CONTINUE',
+      clearVoiceTimer: 'CLEARTIMEOUT',
+      resetVoiceTimer: 'RESET_VOICE_TIMER',
     }),
     ...mapMutations('source', {
       setPlayer: 'UPDATE_PLAYER',
@@ -139,10 +141,12 @@ export default {
     playerState(val) {
       if (val === 0) {
         this.play();
+        this.clearVoiceTimer();
         this.initiateTimer();
       } else if (val === 1) {
         this.pause();
         clearTimeout(this.timeoutId);
+        this.resetVoiceTimer();
         this.timeoutId = null;
         this.fade = false;
       }

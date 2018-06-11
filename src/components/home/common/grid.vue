@@ -7,7 +7,9 @@
         :key="gridItem.key"
       >
         <div class="item-wrapper">
-          <component :videoActive="videoActive" :is="gridItem.template" :item="gridItem"></component>
+          <div class="container">
+            <component :videoActive="videoActive" :is="gridItem.template" :item="gridItem" :selected="(focus && gridItem.type === currType)"></component>
+          </div>
         </div>
       </div>
     </div>
@@ -17,6 +19,7 @@ import { mapState } from 'vuex';
 import tile from './tile';
 import thumbnail from './thumbnail';
 import poster from './poster';
+import hTile from './hTile';
 import Messages from '../../../services/Messages';
 
 export default {
@@ -28,6 +31,9 @@ export default {
     videoActive: {
       type: Boolean,
       default: false,
+    },
+    colIdx: {
+      type: Number,
     },
     focus: {
       type: Boolean,
@@ -64,6 +70,9 @@ export default {
     };
   },
   methods: {
+    setCol(idx) {
+      this.col = idx;
+    },
     checkLeft(column) {
       let col = column;
       const currType = this.details.nav[this.row][this.col];
@@ -144,10 +153,13 @@ export default {
           if (this.col > 0) {
             const val = this.checkLeft(this.col);
             if (val === -1) {
+              this.$emit('movefocus', { dir: 'left', from: 'grid' });
               // emit change
             } else {
               this.col = val;
             }
+          } else {
+            this.$emit('movefocus', { dir: 'left', from: 'grid' });
           }
           break;
         case 'RIGHT':
@@ -155,9 +167,12 @@ export default {
             const val = this.checkRight(this.col);
             if (val === -1) {
               // emit change
+              this.$emit('movefocus', { dir: 'right', from: 'grid' });
             } else {
               this.col = val;
             }
+          } else {
+            this.$emit('movefocus', { dir: 'right', from: 'grid' });
           }
           break;
         case 'SELECT':
@@ -175,9 +190,17 @@ export default {
       }
     },
   },
+  watch: {
+    colIdx(val) {
+      if (this.focus) {
+        this.col = val;
+      }
+    },
+  },
   components: {
     tile,
     thumbnail,
+    hTile,
     poster,
   },
 };
@@ -197,42 +220,92 @@ export default {
       .item-wrapper {
         position: absolute;
         width: 100%;
-        border: 20 * $s solid transparent;
+        // border: 20 * $s solid transparent;
+        border-bottom: 0px;
         height: 100%;
         transition: transform 0.3s ease;
-      }
-      &.shrink {
-        .item-wrapper {
-          transform: scale(0.98);
+        .container {
+          position: absolute;
+          left: 0;
+          left: 20 * $s;
+          top: 20 * $s;
+          width: calc(100% - #{40 * $s});
+          height: calc(100% - #{40 * $s});
+          // width: 100%;
+          // height: 100%;
         }
       }
       &.selected {
-         .item-wrapper {
-          border-image: url("/static/Images/home/border.png") 30 round;
-          border-width: 20 * $s;
+         .container {
+            // box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+            // transform: scale(1.03);
+            // border-radius: 5 * $s;
+            // border-width: 20 * $s;
          }
       }
     }
     &.page-1 {
-      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+      grid-template-columns: 64% 18% 18%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
       "poster tile tile"
       "poster thumbnail1 thumbnail2";
     }
     &.page-2 {
-      grid-template-columns: 21.25% 21.25% 57.5%; //total is 100%
+      grid-template-columns: 32% 34% 34%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
-      "thumbnail1 thumbnail2 poster"
-      "tile tile poster";
+      "hTile poster poster"
+      "hTile poster poster";
     }
     &.page-3 {
-      grid-template-columns: 57.5% 21.25% 21.25%; //total is 100%
+      grid-template-columns: 32% 18% 18% 32%; //total is 100%
       grid-template-rows: 50% 50%;
       grid-template-areas:
-      "poster tile tile"
-      "poster thumbnail1 thumbnail2";
+      "hTile tile tile hTile1"
+      "hTile thumbnail1 thumbnail2 hTile1";
+    }
+    &.health-1 {
+      grid-template-columns: 34% 34% 32%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "poster poster tile1"
+      "poster poster tile2";
+    }
+    &.health-2 {
+      grid-template-columns: 32% 34% 34%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "hTile poster poster"
+      "hTile poster poster";
+    }
+    &.health-3 {
+      grid-template-columns: 33% 33% 34%; //total is 100%
+       grid-template-rows: 50% 50%;
+       grid-template-areas:
+      "hTile1 hTile2 tile1"
+      "hTile1 hTile2 tile2";
+    }
+    &.movie-1 {
+      grid-template-columns: 34% 34% 32%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "poster poster hTile"
+      "poster poster hTile";
+    }
+    &.movie-2 {
+      grid-template-columns: 33% 33% 33%; //total is 100%
+      grid-template-rows: 50% 50%;
+      grid-template-areas:
+      "hTile1 hTile2 hTile3"
+      "hTile1 hTile2 hTile3";
+    }
+    &.movie-3 {
+      grid-template-columns: 33% 33% 17% 17%; //total is 100%
+       grid-template-rows: 50% 50%;
+       grid-template-areas:
+      "hTile1 hTile2 thumbnail1 thumbnail2"
+      "hTile1 hTile2 thumbnail3 thumbnail4";
     }
   }
 

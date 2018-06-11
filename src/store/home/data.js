@@ -1,6 +1,7 @@
 import foryou from './foryou';
 import movies from './movies';
 import health from './health';
+import tvshows from './tvshows';
 
 export default {
   navs: {
@@ -19,8 +20,8 @@ export default {
       },
       tvshows: {
         title: 'TV SHOWS',
-        template: 'health',
-        data: health,
+        template: 'tvshows',
+        data: tvshows,
       },
       apps: {
         title: 'APPS',

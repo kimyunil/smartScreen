@@ -1,37 +1,71 @@
 <template>
-  <div class="tile">
-  <div class="content">
-    <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]">
-    </div>
-    <div class="header-text" >
-      <div class="sponsor" v-if="item.details.topLeftText !== null">
-        <span v-html="item.details.topLeftText"></span>
-      </div>
-    </div>
-    <div class="bottom-footer">
-      <div class="sponsored" v-if="item.details.bottomText">
-        <span v-html="item.details.bottomText"></span>
-      </div>
-    </div>
-    <template v-if="item.key === 'hbo' || item.key === 'hulu'">
-      <div class="seekbar">
-        <div class="progress" :style="{'width': `${item.elapsedTime/item.total * 100}%`}">
+  <div class="tile" :class="[{'selected': selected}]">
+    <template v-if="item.details.full">
+      <div class="content-ui">
+        <div class="image-container">
+          <template v-if="item.details.video && vidAutoplay">
+              <transition name="fade">
+                <div class="content-tile" :style="{'background-image': `url(${item.details.tile})`}" v-show="!videImgTrans"></div>
+              </transition>
+              <transition name="fade">
+                <div class="video"  v-show="videImgTrans">
+                  <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+                </div>
+            </transition>
+          </template>
+          <template v-else>
+            <div class="content-tile" :style="{'background-image': `url(${item.details.tile})`}"></div>
+          </template>
+        </div>
+        <div class="content-metadata">
+          <div class="meta-icon">
+            <img :src="item.details.logo">
+            <template v-for="img in item.details.extraImg">
+              <img :src="img" :key="img"/>
+            </template>
+          </div>
+          <div class="meta-text">
+             <span v-html="item.details.bottomText"></span>
+          </div>
         </div>
       </div>
     </template>
-  </div>
-    <template v-if="item.details.video && vidAutoplay">
-        <transition name="fade">
-        <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}" v-show="!videImgTrans"></div>
-        </transition>
-        <transition name="fade">
-          <div class="video"  v-show="videImgTrans">
-            <video :src="item.details.video" loop muted :autoplay="videoActive"/>
-          </div>
-      </transition>
-    </template>
     <template v-else>
-      <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}"></div>
+      <div class="content-wrapper">
+        <div class="content">
+          <div class="icon" :style="[{'background-image': `url(${item.details.logo})`}]" :class="[item.details.logoType]">
+          </div>
+          <div class="header-text" >
+            <div class="sponsor" v-if="item.details.topLeftText !== null">
+              <span v-html="item.details.topLeftText"></span>
+            </div>
+          </div>
+          <div class="bottom-footer">
+            <div class="sponsored" v-if="item.details.bottomText">
+              <span v-html="item.details.bottomText"></span>
+            </div>
+          </div>
+          <template v-if="item.key === 'hbo' || item.key === 'hulu'">
+            <div class="seekbar">
+              <div class="progress" :style="{'width': `${item.elapsedTime/item.total * 100}%`}">
+              </div>
+            </div>
+          </template>
+        </div>
+        <template v-if="item.details.video && vidAutoplay">
+            <transition name="fade">
+            <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}" v-show="!videImgTrans"></div>
+            </transition>
+            <transition name="fade">
+              <div class="video"  v-show="videImgTrans">
+                <video :src="item.details.video" loop muted :autoplay="videoActive"/>
+              </div>
+          </transition>
+        </template>
+        <template v-else>
+          <div class="thumb" :style="{'background-image': `url(${item.details.tile})`}"></div>
+        </template>
+      </div>
     </template>
   </div>
 </template>
@@ -43,6 +77,9 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    selected: {
+      type: Boolean,
     },
     videoActive: {
       type: Boolean,
@@ -93,7 +130,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
   background-size: cover;
   .thumb {
     position: absolute;
@@ -104,7 +141,7 @@ export default {
     top: 0;
     background-size: 100% 100%;
   }
-  .content {
+  .content-ui {
     position: absolute;
     width: 100%;
     z-index: 4;
@@ -112,87 +149,187 @@ export default {
     left: 0;
     top: 0;
     background-size: 100% 100%;
-  }
-  .video {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    left: 0;
-    top: 0;
-    background-size: 100% 100%;
-    background-color: black;
-    video {
+    .image-container {
       position: absolute;
-      width: 100%;
-      height: 100%;
       left: 0;
       top: 0;
+      width: 100%;
+      height: 100%;
+      .content-tile {
+        position: absolute;
+        top: 0;
+        border-radius: 10 * $s;
+        left: 0;
+        height: 290 * $s;
+        width: 100%;
+        background-size: 100% 100%;
+      }
+      .video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        background-size: 100% 100%;
+        background-color: black;
+        video {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          top: 0;
+        }
+      }
     }
-  }
-  .header-text {
-    position: absolute;
-    left: 30 * $s;
-    top: 20 * $s;
-    .sponsor {
-      font-family: 'TTNormsMedium';
-      font-size: 30 * $s;
-      color: white;
-    }
-    .time {
-     font-family: Helvetica;
-      font-size: 50 * $s;
-      color: white;
-    }
-  }
-  .bottom-footer {
-    position: absolute;
-    bottom: 0px;
-    left: 20 * $s;
-    margin-bottom: 40 * $s;
-    width: calc(90% - #{ 30 * $s });
-    .sponsored {
-      font-family: Helvetica;
-      font-size: 40 * $s;
-      font-family: 'TTNormsMedium';
-      text-align: left;
-      color: white;
-      .light-text {
-        font-family: 'TTNormsLight';
-         font-size: 18 * $s;
+    .content-metadata {
+      position: absolute;
+      height: auto;
+      bottom: 10 * $s;
+      width: 100%;
+      font-size: 48 * $s;
+      .meta-icon {
+        position: relative;
+        height: 30 * $s;
+        display: flex;
+        justify-content: space-between;
+        background-size:50 * $s 150 * $s;
+        width: 100%;
+        img {
+          position: relative;
+          left: 0;
+          height: 100%;
+        }
+      }
+      .meta-text {
+        position: relative;
+        width: 90%;
+        color: black;
+        text-align:left;
+        color: rgba(80,80,80,1);
+        font-family: TTNormsBold;
+        font-size: 32 * $s;
       }
     }
   }
-  .seekbar {
-    background: red;
-    width: 87%;
-    height: 8 * $s;
-    margin:0 15 * $s;
-    position: absolute;
-    bottom: 10 * $s;
-    border-radius:20 * $s;
-    overflow: hidden;
-    background: rgba(255,255,255,0.1);
-    .progress {
-      position: absolute;
-      left: 0;
-      width: 20%;
-      height: 100%;
-      background: white;
+  &.selected {
+    .image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: scale(1.05);
+        width: 100%;
+        transform-origin: 60% center;
+        height: 100%;
+        box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+        border-radius: 10 * $s;
+        overflow: hidden;
+        border-width: 20 * $s;
+        .content-tile {
+          border-radius:0;
+        }
+    }
+    .content-wrapper {
+      border-image: url("/static/Images/home/border.png") 30 round;
+      border-width: 20 * $s;
     }
   }
-  .icon {
+  .content-wrapper {
     position: absolute;
-    right: 0;
-    bottom: 0 * $s;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 120 * $s;
-    height: 120 * $s;
-    &.big {
-      width: 200 * $s;
-      height: 120 * $s
+    border: 20 * $s solid transparent;
+    left: -20 * $s;
+    top: -20 * $s;
+    width: calc(100% + #{40 * $s});
+    height: calc(100% + #{40 * $s});
+    .content {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 22;
+      top: 0;
+    }
+    .video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      left: 0;
+      top: 0;
+      background-size: 100% 100%;
+      background-color: black;
+      video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+      }
+    }
+    .header-text {
+      position: absolute;
+      left: 30 * $s;
+      top: 20 * $s;
+      .sponsor {
+        font-family: 'TTNormsMedium';
+        font-size: 30 * $s;
+        color: white;
+      }
+      .time {
+      font-family: Helvetica;
+        font-size: 50 * $s;
+        color: white;
+      }
+    }
+    .bottom-footer {
+      position: absolute;
+      bottom: 0px;
+      left: 20 * $s;
+      margin-bottom: 40 * $s;
+      width: calc(90% - #{ 30 * $s });
+      .sponsored {
+        font-family: Helvetica;
+        font-size: 40 * $s;
+        font-family: 'TTNormsMedium';
+        text-align: left;
+        color: white;
+        .light-text {
+          font-family: 'TTNormsLight';
+          font-size: 18 * $s;
+        }
+      }
+    }
+    .seekbar {
+      background: red;
+      width: 87%;
+      height: 8 * $s;
+      margin:0 15 * $s;
+      position: absolute;
+      bottom: 10 * $s;
+      border-radius:20 * $s;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+      .progress {
+        position: absolute;
+        left: 0;
+        width: 20%;
+        height: 100%;
+        background: white;
+      }
+    }
+    .icon {
+      position: absolute;
+      right: 0;
+      bottom: 0 * $s;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 120 * $s;
+      height: 120 * $s;
+      &.big {
+        width: 200 * $s;
+        height: 120 * $s
+      }
     }
   }
 }
