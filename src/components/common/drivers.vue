@@ -124,14 +124,15 @@ export default {
         position: relative;
         padding-right: 10 * $s;
         display: inline-block;
-        font-family: SamsungOneUI300;
+        font-size: 31 * $s;
+        font-family: TTNormsRegular;
       }
       .suggestions {
         position: relative;
         padding-right: 10 * $s;
         display: inline-block;
         font-size: 31 * $s;
-        font-family: SamsungOneUI700;
+        font-family: TTNormsBold;
       }
     }
     &.overlap {
