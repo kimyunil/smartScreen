@@ -15,7 +15,7 @@
           <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
       </div>
-      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" ></drivers>
+      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" :loop="true"></drivers>
     </div>
   </div>
 </template>

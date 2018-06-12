@@ -248,7 +248,7 @@ export default {
     details: {
       'page-1': {
         title: 'page-1',
-        suggestions: ['Hey Bixby, continue watching The Handmaid’s Tale'],
+        suggestions: ['Hey Bixby, play the Royal Weddings news', 'Hey Bixby, what\'s in the news'],
         nav: [
           ['poster', 'tile', 'tile'],
           ['poster', 'thumbnail1', 'thumbnail2'],
@@ -329,7 +329,7 @@ export default {
       },
       'page-2': {
         title: 'page-2',
-        suggestions: ['Hey Bixby, go to Fitbit'],
+        suggestions: ['Hey Bixby, play DNCE', 'Hey Bixby, what\'s trending on Pandora'],
         content: ['pandora', 'espn'],
         nav: [
           ['hTile', 'poster', 'poster'],
@@ -436,7 +436,7 @@ export default {
       },
       'page-3': {
         title: 'page-3',
-        suggestions: ['Hey Bixby, play my Classical Playlist'],
+        suggestions: ['Hey Bixby, go to my Samsung Health', 'Hey Bixby, show me more'],
         content: ['fitbit', 'youtube', 'spotify', 'hulu', 'hbo', 'primeVideo'],
         nav: [
           ['hTile', 'tile', 'tile', 'hTile1'],
