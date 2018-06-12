@@ -24,6 +24,7 @@ export default {
   name: 'App',
   mounted() {
     globalListener.init();
+    window.sessionStorage.setItem('oobe', 'true');
     Messages.$on('smartscreen.setup', this.setupScreen);
     Messages.$on('button_down', this.handleButton);
     Messages.send('smartscreen.setupscreen', { from: 'smartscreen' });

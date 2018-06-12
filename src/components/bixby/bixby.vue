@@ -66,6 +66,9 @@ export default {
     translateY() {
       return (((this.translate) * 100) / window.innerWidth);
     },
+    topView() {
+      return this.viewStack[this.viewStack.length - 1];
+    },
     resTrans() {
       return ((this.resTranslate * 100) / window.innerWidth);
     },
@@ -247,7 +250,9 @@ export default {
           if (this.bixbyResult) {
             const param = this.bixbyResult.param.category;
             if (param === 'info' || param === 'movies') {
-              this.switch_comp({ replace: true, name: 'home' });
+              if (this.topView === 'screensaver') {
+                this.switch_comp({ replace: true, name: 'home' });
+              }
             }
           }
         }

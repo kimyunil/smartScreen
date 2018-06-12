@@ -68,15 +68,15 @@ export default {
     GET_SELECTED_NAV(state) {
       return state.data.navs.selectedIdx;
     },
-    GET_HEALTH_APPS(state) {
-      const health = state.data.navs.details.health.data;
-      const apps = health.apps.items;
-      const appsArr = [];
-      for (let i = 0; i < apps.length; i += 1) {
-        const key = apps[i];
-        appsArr[i] = health.apps.details[key];
-      }
-      return appsArr;
+    GET_HEALTH_APPS() {
+      // const health = state.data.navs.details.health.data;
+      // const apps = health.apps.items;
+      // const appsArr = [];
+      // for (let i = 0; i < apps.length; i += 1) {
+      //   const key = apps[i];
+      //   appsArr[i] = health.apps.details[key];
+      // }
+      // return appsArr;
     },
     GET_NAVS(state) {
       const navs = state.data.navs.items;

@@ -293,6 +293,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
+        background: white;
         transform: scale(1.05);
         width: 100%;
         transform-origin: 60% center;

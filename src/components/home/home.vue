@@ -271,25 +271,25 @@ export default {
       //     }
       //   }
       // }
-      .left-enter-active, .left-leave-active {
-        transition: transform 0.4s ease, opacity 0.3s ease;
-      }
-      .left-enter {
-        transform: translateX(#{-1920 * $s});
-        opacity: 0;
-      }
-      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: translateX(#{1920 * $s});
-        opacity: 0;
-      }
       .right-enter-active, .right-leave-active {
         transition: transform 0.4s ease, opacity 0.3s ease;
       }
       .right-enter {
-        transform: translateX(#{1920 * $s});
+        transform: translateX(#{-1920 * $s});
         opacity: 0;
       }
       .right-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .left-enter-active, .left-leave-active {
+        transition: transform 0.4s ease, opacity 0.3s ease;
+      }
+      .left-enter {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
         transform: translateX(#{-1920 * $s});
         opacity: 0;
       }
