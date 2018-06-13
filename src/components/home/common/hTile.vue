@@ -234,6 +234,7 @@ export default {
         .meta-thumb {
           position: absolute;
           left: 0;
+          border-radius: 10 * $s;
           top: 0;
           width: 100%;
           background-size: 100% 100%;
@@ -293,6 +294,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
+        background: white;
         transform: scale(1.05);
         width: 100%;
         transform-origin: 60% center;
@@ -303,6 +305,9 @@ export default {
         border-width: 20 * $s;
          .content-hTile {
           border-radius:0;
+          .meta-thumb {
+            border-radius:0;
+          }
         }
       }
     }

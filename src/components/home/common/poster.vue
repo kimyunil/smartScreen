@@ -194,6 +194,7 @@ export default {
         left: 0;
         transform: scale(1.03);
         width: 100%;
+        background: white;
         transform-origin: 60% center;
         height: 100%;
         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);

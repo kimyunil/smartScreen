@@ -1,12 +1,21 @@
 <template>
   <transition name="show">
       <div class="bixby-suggestions" v-if="toggle" :class="[theme]">
-        <div class="text-container">
-          <div class="text-suggestion" v-for="suggest in drivers" :key="suggest">
-            <div class="speakerIcon"></div>
-            <div class="text"> {{sayWord}}</div>
-            <div class="suggestions">"{{suggest}}"</div>
-          </div>
+        <div class="text-container" :class="{'overlap': loop}">
+          <template v-if="!loop">
+            <div class="text-suggestion" v-for="suggest in drivers" :key="suggest">
+              <div class="speakerIcon"></div>
+              <div class="text"> {{sayWord}}</div>
+              <div class="suggestions">"{{suggest}}"</div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="text-suggestion" :key="index">
+              <div class="speakerIcon"></div>
+              <div class="text"> {{sayWord}}</div>
+              <div class="suggestions">"{{drivers[index]}}"</div>
+            </div>
+          </template>
         </div>
       </div>
   </transition>
@@ -16,6 +25,10 @@ export default {
   props: {
     drivers: {
       type: Array,
+      required: true,
+    },
+    loop: {
+      type: Boolean,
       required: true,
     },
     sayWord: {
@@ -31,8 +44,30 @@ export default {
       required: true,
     },
   },
+  mounted() {
+    this.index = 0;
+    if (this.loop) {
+      this.startTimer();
+    }
+  },
+  destroyed() {
+    clearInterval(this.intervalID);
+  },
+  methods: {
+    startTimer() {
+      this.intervalID = null;
+      clearInterval(this.intervalID);
+      this.intervalID = setInterval(() => {
+        this.index = ((this.index + 1) % this.drivers.length);
+      }, 10000);
+    },
+  },
+  data() {
+    return {
+      index: 0,
+    };
+  },
   computed: {
-
   },
 };
 </script>
@@ -89,14 +124,21 @@ export default {
         position: relative;
         padding-right: 10 * $s;
         display: inline-block;
-        font-family: SamsungOneUI300;
+        font-size: 31 * $s;
+        font-family: TTNormsRegular;
       }
       .suggestions {
         position: relative;
         padding-right: 10 * $s;
         display: inline-block;
         font-size: 31 * $s;
-        font-family: SamsungOneUI700;
+        font-family: TTNormsBold;
+      }
+    }
+    &.overlap {
+      justify-content: initial;
+      &.text-suggestion {
+        position: absolute;
       }
     }
   }

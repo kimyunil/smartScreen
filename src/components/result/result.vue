@@ -163,11 +163,12 @@ export default {
       top: -3 * $s;
       font-size: 32 * $s;
       .text {
-        font-family: SamsungOneUI300;
+        font-size: 31 * $s;
+        font-family: TTNormsRegular;
       }
       .suggestions {
         font-size: 31 * $s;
-        font-family: SamsungOneUI700;
+        font-family: TTNormsBold;
       }
     }
     .pagination-dots {

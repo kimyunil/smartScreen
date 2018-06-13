@@ -15,7 +15,7 @@
           <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
         </transition>
       </div>
-      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" ></drivers>
+      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" :loop="true"></drivers>
     </div>
   </div>
 </template>
@@ -271,25 +271,25 @@ export default {
       //     }
       //   }
       // }
-      .left-enter-active, .left-leave-active {
-        transition: transform 0.4s ease, opacity 0.3s ease;
-      }
-      .left-enter {
-        transform: translateX(#{-1920 * $s});
-        opacity: 0;
-      }
-      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: translateX(#{1920 * $s});
-        opacity: 0;
-      }
       .right-enter-active, .right-leave-active {
         transition: transform 0.4s ease, opacity 0.3s ease;
       }
       .right-enter {
-        transform: translateX(#{1920 * $s});
+        transform: translateX(#{-1920 * $s});
         opacity: 0;
       }
       .right-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .left-enter-active, .left-leave-active {
+        transition: transform 0.4s ease, opacity 0.3s ease;
+      }
+      .left-enter {
+        transform: translateX(#{1920 * $s});
+        opacity: 0;
+      }
+      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
         transform: translateX(#{-1920 * $s});
         opacity: 0;
       }
@@ -308,11 +308,12 @@ export default {
       top: -3 * $s;
       font-size: 32 * $s;
       .text {
-        font-family: SamsungOneUI300;
+        font-size: 31 * $s;
+        font-family: TTNormsRegular;
       }
       .suggestions {
         font-size: 31 * $s;
-        font-family: SamsungOneUI700;
+        font-family: TTNormsBold;
       }
     }
     .pagination-dots {
