@@ -125,7 +125,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '../../../mixins/scss/main';
+@import '../../../../mixins/scss/main';
 .tile {
   position: relative;
   width: 100%;
@@ -185,7 +185,7 @@ export default {
     .content-metadata {
       position: absolute;
       height: auto;
-      bottom: 10 * $s;
+      top: 68%;
       width: 100%;
       font-size: 48 * $s;
       .meta-icon {

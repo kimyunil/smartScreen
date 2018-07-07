@@ -1,69 +1,64 @@
 <template>
-  <div class="home">
-    <div class="backdrop blur">
-    </div>
-    <div class="dashboard">
-      <transition :name="headerTransition">
-      <div class="header-cont" :class="{'hideHeader': (isRemoteEnabled && !showHeader),'squeeze-header': (!headerFocus), 'subtitle': (!isRemoteEnabled && nav_selected != 0)}">
-          <div class="wrapper">
-          <home-header v-show="isRemoteEnabled || nav_selected != 0" :navItems="navItems" :focus="headerFocus" @movefocus="movefocus" :selectedIdx="nav_selected"/>
+  <div class="home" style="background-image:url('/static/Images/home/homeUI/screen2.jpg')">
+    <div class="dashboard" :class="{'voice-enabled':isRemoteEnabled}">
+      <div class="upperDeck">
+        <div class="left-corner">
+            <div class="wrapper">
+              <div class="video-feeds">
+                <div class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
+              </div>
+              <div class="metadata">
+                  <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                  </div>
+                  <div class="text" v-html="sponsored.text">
+                 </div>
+              </div>
+              <div class="up-next">
+                <div class="up-title">
+                  {{upnext.title}}
+                </div>
+                <div class="upnext-icon" :style="{'background-image':`url(${upnext.icon})`}">
+                </div>
+                <div class="text" v-html="upnext.text">
+                 </div>
+              </div>
+            </div>
+        </div>
+        <div class="right-corner">
+          <div class="right-wrapper">
+              <div class="list">
+                <template v-for="(grid, index) in gridDetails">
+                  <gridpage class="grid-wrapper" :details="grid" :colIdx="0" :focus="false" :key="index"></gridpage>
+                </template>
+              </div>
           </div>
+        </div>
       </div>
-      </transition>
-      <div class="content-body" :class="[{'push-down':isRemoteEnabled && showHeader,'squeeze-header': (isRemoteEnabled && !headerFocus)}, navItems[nav_selected].template]">
-        <transition :name="direction">
-          <component @showHeader="headerVisible" :is="navItems[nav_selected].template" :active="contentFocus" @movefocus="movefocus"></component>
-        </transition>
-      </div>
-      <drivers :theme="'light'" :drivers="suggest" :toggle="!isRemoteEnabled" :loop="true"></drivers>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
-import foryou from './foryou';
-import movies from './movies';
-import health from './health';
-import tvshows from './tvshows';
 import drivers from '../common/drivers';
-import homeHeader from './common/header';
 import Messages from '../../services/Messages';
+import gridpage from './common/UI/gridpage';
 
 export default {
   name: 'home',
-  computed: {
-    ...mapState([
-      'isRemoteEnabled',
-    ]),
-    ...mapGetters('home', {
-      suggest: 'GET_SUGGESTIONS',
-      navItems: 'GET_NAVS',
-      grid_info: 'GET_CAT_GRID',
-      nav_selected: 'GET_SELECTED_NAV',
-    }),
-    headerTransition() {
-      if (this.isRemoteEnabled) return 'show';
-      return 'none';
-    },
-    contentFocus() {
-      if (this.active && (this.focus === 'content') && this.isRemoteEnabled) {
-        return true;
-      }
-      return false;
-    },
-    headerFocus() {
-      if (this.active && (this.focus === 'header') && this.isRemoteEnabled) {
-        return true;
-      }
-      return false;
-    },
-  },
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.resetVoiceTimer();
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+  },
+  computed: {
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
+    ...mapGetters('home', {
+        gridDetails: 'GET_HOME_GRIDS',
+    }),
   },
   methods: {
     ...mapMutations({
@@ -89,42 +84,14 @@ export default {
           this.updateMode(!this.isRemoteEnabled);
           break;
         case 'UP':
-          if (this.isRemoteEnabled) {
-            if (this.focus === 'apps') {
-              const top = this.$el.querySelector('.recent-apps').offsetHeight;
-              this.scroll('up', top);
-              this.focus = 'grid';
-            }
-          }
           break;
         case 'RIGHT':
-          if (this.focus === 'apps') {
-            if (this.appIdx < this.appsItems.length - 1) {
-              this.appIdx += 1;
-            }
-          }
           break;
         case 'DOWN':
-          // if (this.isRemoteEnabled) {
-          //   this.showHeader = false;
-          // }
           break;
         case 'LEFT':
-          if (this.focus === 'apps') {
-            if (this.appIdx > 0) {
-              this.appIdx -= 1;
-            }
-          }
           break;
         case 'BACK':
-          if (this.isRemoteEnabled) {
-            if (!this.showHeader) {
-              this.showHeader = true;
-            } else {
-              this.$emit('exit');
-              this.showHeader = true;
-            }
-          }
           break;
         default:
           break;
@@ -134,19 +101,23 @@ export default {
   data() {
     return {
       remote: true,
-      showHeader: true,
+      sponsored: {
+        poster: '/static/Images/home/homeUI/poster.png',
+        icon: '/static/Images/home/homeUI/source.png',
+        text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span><span>',
+      },
+      upnext: {
+        title: 'COMING UP NEXT',
+        icon: '/static/Images/home/homeUI/upnext-icon.png',
+        text: '<span>The Bicultural Blackness of <br> the <span style="color:rgb(255,96,93)">Royal Wedding</span><span>',
+      },
       direction: 'left',
       index: 0,
       focus: 'content',
     };
   },
   components: {
-    homeHeader,
-    foryou,
-    movies,
-    drivers,
-    tvshows,
-    health,
+    gridpage,
   },
   watch: {
     nav_selected(old, nw) {
@@ -170,180 +141,164 @@ export default {
   height: 100%;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  .backdrop {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 1;
-    width: 100%;
-    height: 100%;
-    background-image: url('/static/Images/background.png');
-    &.blur {
-      filter: blur(50px);
-      -webkit-filter: blur(50px);
-    }
-      // background-image: url('/static/bgbg.png');
-      background-size: 100%;
-    }
   .dashboard {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
-    background-image: url('/static/Images/home/home_bg.png');
-    .header-cont {
-      position: relative;
-      height: 120 * $s;
-      display: flex;
-      align-items: center;
+    // background: rgb(248,248,248);
+    .upperDeck {
+      position: absolute;
       width: 100%;
-      z-index: 2;
-      transition: height 0.3s ease, transform 0.3s ease;
-      &.subtitle {
-        transform: translateX(#{-150 * $s});
-      }
-      .wrapper {
+      height: 1000 * $s;
+      display: flex;
+      .left-corner {
         position: relative;
-        top: 35 * $s;
-        width: 100%;
-        overflow: hidden;
+        transition: flex 0.3s ease;
+        flex: 6.4;
+        height: 100%;
+        .wrapper {
+          position: relative;
+          width: 778 * $s;
+          top: 100 * $s;
+          left: 125 * $s;
+          flex-wrap: wrap;
+          height: auto;
+          display: flex;
+          .video-feeds {
+            position: relative;
+            width: 778 * $s;
+            height: 436 * $s;
+            transition: transform 0.3s ease;
+            transform: scale(1.4);
+            transform-origin: 0 0;
+            .poster {
+              position: relative;
+              width: 100%;
+              background-size: 100% 100%;
+              height: 100%;
+            }
+          }
+          .metadata {
+            position: relative;
+            width: 778 * $s;
+            height: auto;
+            transition: transform 0.3s ease;
+            margin-bottom: 50 * $s;
+            transform: translateY(#{190 * $s});
+            .source-icon {
+              position: relative;
+              height: 60 * $s;
+              width: 60 * $s;
+              background-size: 100% 100%;
+            }
+            .text {
+              position: relative;
+              width: 100%;
+              text-align: left;
+              font-family: TTNormsBold;
+              color: rgba(80,80,80,1);
+              font-size: 48 * $s;
+            }
+          }
+          .up-next {
+            position: relative;
+            opacity: 0;
+            .up-title {
+              font-family: TTNormsBold;
+              color: rgba(80,80,80,1);
+              font-size: 24 * $s;
+              text-align: left;
+            }
+            .upnext-icon {
+              position: relative;
+              height: 60 * $s;
+              width: 200 * $s;
+            }
+            .text {
+              font-size: 32 * $s;
+              text-align: left;
+              color: rgba(80,80,80,1);
+              font-family: TTNormsBold;
+            }
+          }
+        }
       }
-      &.squeeze-header {
-        height: 80 * $s;
-      }
-      &.show-enter {
-        opacity: 0;
-        height: 0;
-      }
-      &.show-leave-to {
-        opacity: 0;
-        height: 0;
-      }
-      &.show-enter-active{
-        transition: height 0.3s ease, opacity 0.2s ease;
-      }
-      &.show-leave-active {
-        transition: height 0.3s ease, opacity 0.2s ease;
-      }
-      &.hideHeader {
-        opacity: 0;
-      }
-    }
-    .title {
-      position: absolute;
-      left: 0;
-      height: 130 * $s;
-      display: flex;
-      align-items: center;
-      margin-left: 40 * $s;
-      padding-top: 10 * $s;
-      font-size: 30 * $s;
-      font-family: Helvetica;
-      justify-content: flex-start;
-    }
-    .content-body {
-      position: relative;
-      width: 1920 * $s;
-      height: 980 * $s;
-      transform: translate(#{0 * $s}, #{0 * $s});
-      transition: transform 0.3s ease;
-      left:0;
-      &.health {
-        // transform: translate(#{0 * $s}, #{50 * $s});
-      }
-      &.movies {
-        // transform: translate(#{0 * $s}, #{50 * $s});
-      }
-      &.push-down {
-        transform: translate(#{0 * $s}, #{50 * $s});
-      }
-      // &.shrink {
-      //   transform: translate(#{80 * $s}, #{230 * $s});
-      //   &::not(.foryou) {
-      //     width: 1760 * $s;
-      //   }
-      //   &.foryou {
-      //     transform: translateY(#{80 * $s});
-      //   }
-      //   &.squeeze-header {
-      //     transform: translateY(#{80 * $s});
-      //     &.health {
-      //       transform: translate(#{80 * $s}, #{150 * $s});
-      //     }
-      //   }
-      // }
-      .right-enter-active, .right-leave-active {
-        transition: transform 0.4s ease, opacity 0.3s ease;
-      }
-      .right-enter {
-        transform: translateX(#{-1920 * $s});
-        opacity: 0;
-      }
-      .right-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: translateX(#{1920 * $s});
-        opacity: 0;
-      }
-      .left-enter-active, .left-leave-active {
-        transition: transform 0.4s ease, opacity 0.3s ease;
-      }
-      .left-enter {
-        transform: translateX(#{1920 * $s});
-        opacity: 0;
-      }
-      .left-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: translateX(#{-1920 * $s});
-        opacity: 0;
-      }
-    }
-  }
-  .bixby-suggestions {
-    position: absolute;
-    top: calc(100% - #{135 * $s});
-    height: 135 * $s;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    .text-suggestion {
-      position: relative;
-      left: 132 * $s;
-      top: -3 * $s;
-      font-size: 32 * $s;
-      .text {
-        font-size: 31 * $s;
-        font-family: TTNormsRegular;
-      }
-      .suggestions {
-        font-size: 31 * $s;
-        font-family: TTNormsBold;
-      }
-    }
-    .pagination-dots {
-      position: absolute;
-      right: 70 * $s;
-      display: flex;
-      width: 84 * $s;
-      justify-content: space-between;
-      .dots {
-        height: 10* $s;
-        width: 10* $s;
-        border-radius: 50%;
-        background-color: rgba(0,0,0,0.2);
-        &.selected {
-          background-color: rgba(0,0,0,1)
+      .right-corner {
+        position: relative;
+        flex: 3.6;
+        transition: flex 0.3s ease;
+        height: 100%;
+        .right-wrapper {
+          position: relative;
+          top: 100 * $s;
+          width: 100%;
+          height: 820 * $s; 
+          .list {
+            position: absolute;
+            width: auto;
+            height: 100%; 
+            display: flex;
+            .grid-wrapper {
+              width: 532 * $s;
+              height: 100%;
+              margin-left: 50 * $s;          
+            }
+          }
         }
       }
     }
-    &.show-enter {
-      opacity: 0;
-    }
-    &.show-leave-to {
-      opacity: 0;
-    }
-    &.show-enter-active{
-      transition: height 0.3s ease, opacity 0.3s ease;
-    }
-    &.show-leave-active {
-      transition: height 0.3s ease, opacity 0.3s ease;
+    &.voice-enabled {
+      .left-corner {
+        flex: 5.2;
+        .video-feeds {
+          transform: scale(1)!important;
+          transform-origin: 0 0;
+        }
+        .metadata {
+          transform: translateY(#{0 * $s})!important;
+        }
+        .up-next {
+          opacity: 1!important;
+        }
+      }
+      .right-corner {
+        flex: 4.5;
+      }
+      &.full {
+        .upperDeck {
+          height: 430 * $s;
+        }
+        .wrapper {
+          flex-wrap: nowrap;
+          width: 100%;
+          top: 35 * $s;
+        }
+        .left-corner {
+          flex: 1;
+          .video-feeds {
+            transform: scale(1);
+            height: 325 * $s;
+            transform-origin: 0 0;
+            flex: 0.7;
+          }
+          .metadata {
+            transform: translate(#{30 * $s}, #{0 * $s});
+            left: 50 * $s;
+            flex: 0.7;
+          }
+          .up-next {
+            opacity: 1;
+            transform: translate(#{150 * $s}, #{20 * $s});
+            flex: 1;
+          }
+        }
+         .right-corner {
+           flex: 0;
+           display: none;
+         }
+      }
     }
   }
+
 }
 </style>

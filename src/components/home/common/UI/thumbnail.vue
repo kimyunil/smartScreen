@@ -167,7 +167,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '../../../mixins/scss/main';
+@import '../../../../mixins/scss/main';
 .thumbnail {
   position: relative;
   width: 100%;

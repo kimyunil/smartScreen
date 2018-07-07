@@ -13,6 +13,22 @@ export default {
     },
   },
   getters: {
+    GET_HOME_GRIDS(state) {
+      const dataJson = state.data.homescreen;
+      const grid = dataJson.grids;
+      const gridList = [];
+      for (let i = 0; i < grid.length; i += 1) {
+        const key = grid[i];
+        const gridItem = dataJson[key];
+        gridList[i] = dataJson[key];
+        gridList[i].listItems = [];
+        for (let j = 0; j < gridItem.content.length; j += 1) {
+          const subkey = gridItem.content[j];
+          gridList[i].listItems[j] = gridItem[subkey];
+        }
+      }
+      return gridList;
+    },
     GET_FORYOU_LIST(state) {
       const foryou = state.data.navs.details.for_you.data;
       const grid = foryou.gridlist;
