@@ -1,7 +1,7 @@
 <template>
-  <div class="home" style="background-image:url('/static/Images/home/homeUI/screen2.jpg')">
-    <div class="dashboard" :class="{'voice-enabled':isRemoteEnabled}">
-      <div class="upperDeck">
+  <div class="home" style="background-image:url('/static/Images/home/homeUI/screenshot.jpg')">
+    <div class="dashboard">
+      <div class="upperDeck" :class="{'voice-enabled':isRemoteEnabled}">
         <div class="left-corner">
             <div class="wrapper">
               <div class="video-feeds">
@@ -34,14 +34,22 @@
           </div>
         </div>
       </div>
+      <div class="lowerDeck">
+        <div class="headings">
+          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title">
+            {{item.title}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
-import drivers from '../common/drivers';
+// import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 import gridpage from './common/UI/gridpage';
+import movies from './foryou';
 
 export default {
   name: 'home',
@@ -57,7 +65,8 @@ export default {
       'isRemoteEnabled',
     ]),
     ...mapGetters('home', {
-        gridDetails: 'GET_HOME_GRIDS',
+      gridDetails: 'GET_HOME_GRIDS',
+      navItems: 'GET_NAVS',
     }),
   },
   methods: {
@@ -118,6 +127,7 @@ export default {
   },
   components: {
     gridpage,
+    movies,
   },
   watch: {
     nav_selected(old, nw) {
@@ -147,7 +157,7 @@ export default {
     height: 100%;
     // background: rgb(248,248,248);
     .upperDeck {
-      position: absolute;
+      position: relative;
       width: 100%;
       height: 1000 * $s;
       display: flex;
@@ -160,7 +170,7 @@ export default {
           position: relative;
           width: 778 * $s;
           top: 100 * $s;
-          left: 125 * $s;
+          left: 115 * $s;
           flex-wrap: wrap;
           height: auto;
           display: flex;
@@ -203,6 +213,7 @@ export default {
           .up-next {
             position: relative;
             opacity: 0;
+            transition: opacity 0.3s ease;
             .up-title {
               font-family: TTNormsBold;
               color: rgba(80,80,80,1);
@@ -232,70 +243,94 @@ export default {
           position: relative;
           top: 100 * $s;
           width: 100%;
-          height: 820 * $s; 
+          height: 820 * $s;
           .list {
             position: absolute;
             width: auto;
-            height: 100%; 
+            height: 100%;
             display: flex;
             .grid-wrapper {
               width: 532 * $s;
               height: 100%;
-              margin-left: 50 * $s;          
+              margin-left: 50 * $s;    
             }
           }
         }
       }
-    }
-    &.voice-enabled {
-      .left-corner {
-        flex: 5.2;
-        .video-feeds {
-          transform: scale(1)!important;
-          transform-origin: 0 0;
-        }
-        .metadata {
-          transform: translateY(#{0 * $s})!important;
-        }
-        .up-next {
-          opacity: 1!important;
-        }
-      }
-      .right-corner {
-        flex: 4.5;
-      }
-      &.full {
-        .upperDeck {
-          height: 430 * $s;
-        }
-        .wrapper {
-          flex-wrap: nowrap;
-          width: 100%;
-          top: 35 * $s;
-        }
+      &.voice-enabled {
         .left-corner {
-          flex: 1;
+          flex: 5.2;
           .video-feeds {
-            transform: scale(1);
-            height: 325 * $s;
+            transform: scale(1)!important;
             transform-origin: 0 0;
-            flex: 0.7;
           }
           .metadata {
-            transform: translate(#{30 * $s}, #{0 * $s});
-            left: 50 * $s;
-            flex: 0.7;
+            transform: translateY(#{0 * $s})!important;
           }
           .up-next {
-            opacity: 1;
-            transform: translate(#{150 * $s}, #{20 * $s});
-            flex: 1;
+            opacity: 1!important;
           }
         }
-         .right-corner {
-           flex: 0;
-           display: none;
-         }
+        .right-corner {
+          flex: 4.5;
+        }
+        &.full {
+          .upperDeck {
+            height: 430 * $s;
+          }
+          .wrapper {
+            flex-wrap: nowrap;
+            width: 100%;
+            top: 35 * $s;
+          }
+          .left-corner {
+            flex: 1;
+            .video-feeds {
+              transform: scale(1);
+              height: 325 * $s;
+              transform-origin: 0 0;
+              flex: 0.7;
+            }
+            .metadata {
+              transform: translate(#{30 * $s}, #{0 * $s});
+              left: 50 * $s;
+              flex: 0.7;
+            }
+            .up-next {
+              opacity: 1;
+              transform: translate(#{150 * $s}, #{20 * $s});
+              flex: 1;
+            }
+          }
+          .right-corner {
+            flex: 0;
+            display: none;
+          }
+        }
+      }
+    }
+    .lowerDeck {
+      position: relative;
+      top: 0;
+      width: 100%;
+      height: auto;
+      background: rgba(216,216,216,0.3);
+      .headings {
+        height: 80 * $s;
+        display: flex;
+        left: 144 * $s;
+        position: absolute;
+        width: auto;
+        .nav-button {
+          padding: 0 56 * $s;
+          box-sizing: content-box;
+          font-family: TTNormsBold;
+          margin-right: 70 * $s;
+          font-size: 24 * $s;
+          color: rgba(80,80,80,0.3);
+          display: flex;
+          align-items: center;
+        }
       }
     }
   }

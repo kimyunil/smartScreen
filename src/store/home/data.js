@@ -5,11 +5,11 @@ import tvshows from './tvshows';
 
 export default {
   navs: {
-    items: ['for_you', 'health', 'tvshows', 'apps', 'music', 'movies'],
+    items: ['tvshows', 'health', 'movies', 'for_you', 'apps', 'music'],
     selectedIdx: 0,
     details: {
       for_you: {
-        title: 'FOR YOU',
+        title: 'NBA PLAYOFFS',
         template: 'foryou',
         data: foryou,
       },
