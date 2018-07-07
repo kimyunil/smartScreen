@@ -1,7 +1,7 @@
 <template>
-  <div class="home" style="background-image:url('/static/Images/home/homeUI/screenshot.jpg')">
-    <div class="dashboard">
-      <div class="upperDeck" :class="{'voice-enabled':isRemoteEnabled}">
+  <div class="home" style="ba ckground-image:url('/static/Images/home/homeUI/screenshot.jpg')">
+    <div class="dashboard" :class="{'voice-enabled':isRemoteEnabled}">
+      <div class="upperDeck">
         <div class="left-corner">
             <div class="wrapper">
               <div class="video-feeds">
@@ -37,9 +37,11 @@
       <div class="lowerDeck">
         <div class="headings">
           <div class="nav-button" v-for="(item, index) in navItems" :key="item.title">
-            {{item.title}}
+            <div class="focus_bg"></div>
+            <span>{{item.title}}</span>
           </div>
         </div>
+        <contentlist class="contentlist"></contentlist>
       </div>
     </div>
   </div>
@@ -49,7 +51,7 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 // import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 import gridpage from './common/UI/gridpage';
-import movies from './foryou';
+import contentlist from './contentlist';
 
 export default {
   name: 'home',
@@ -67,6 +69,7 @@ export default {
     ...mapGetters('home', {
       gridDetails: 'GET_HOME_GRIDS',
       navItems: 'GET_NAVS',
+      nav_selected: 'GET_SELECTED_NAV',
     }),
   },
   methods: {
@@ -127,7 +130,7 @@ export default {
   },
   components: {
     gridpage,
-    movies,
+    contentlist,
   },
   watch: {
     nav_selected(old, nw) {
@@ -155,7 +158,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    // background: rgb(248,248,248);
+    background: rgb(242,242,242);
     .upperDeck {
       position: relative;
       width: 100%;
@@ -257,7 +260,48 @@ export default {
           }
         }
       }
-      &.voice-enabled {
+    }
+    .lowerDeck {
+      position: relative;
+      top: 0;
+      width: 100%;
+      height: auto;
+      background: rgba(216,216,216,0.3);
+      .headings {
+        height: 80 * $s;
+        display: flex;
+        left: 144 * $s;
+        position: relative;
+        width: 1710 * $s;
+        justify-content: space-between;
+        .nav-button {
+          box-sizing: content-box;
+          font-family: TTNormsBold;
+          font-size: 24 * $s;
+          color: rgba(80,80,80,0.3);
+          display: flex;
+          position: relative;
+          align-items: center;
+          .focus_bg {
+            position: absolute;
+            left: -40 * $s;
+            top: -20 * $s;
+            width: calc(100% + #{80 * $s});
+            height: calc(100% + #{40 * $s});
+          }
+          span {
+            position: relative;
+            z-index: 222;
+          }
+        }
+      }
+      .contentlist {
+        position: relative;
+        margin-top: 60 * $s;
+      }
+    }
+    &.voice-enabled {
+      .upperDeck {
         .left-corner {
           flex: 5.2;
           .video-feeds {
@@ -273,11 +317,13 @@ export default {
         }
         .right-corner {
           flex: 4.5;
+          background-color: rgba(231,231,231,1);
         }
-        &.full {
-          .upperDeck {
-            height: 430 * $s;
-          }
+      }
+      &.full {
+        .upperDeck {
+          background: rgba(245,245,245,1);
+          height: 430 * $s;
           .wrapper {
             flex-wrap: nowrap;
             width: 100%;
@@ -307,31 +353,18 @@ export default {
             display: none;
           }
         }
-      }
-    }
-    .lowerDeck {
-      position: relative;
-      top: 0;
-      width: 100%;
-      height: auto;
-      background: rgba(216,216,216,0.3);
-      .headings {
-        height: 80 * $s;
-        display: flex;
-        left: 144 * $s;
-        position: absolute;
-        width: auto;
-        .nav-button {
-          padding: 0 56 * $s;
-          box-sizing: content-box;
-          font-family: TTNormsBold;
-          margin-right: 70 * $s;
-          font-size: 24 * $s;
-          color: rgba(80,80,80,0.3);
-          display: flex;
-          align-items: center;
+        .lowerDeck {
+          background: rgba(216,216,216,1);
+          .headings {
+            top: 20 * $s;
+            .nav-button {
+              font-size: 30 * $s;
+              color: rgba(80,80,80,0.6);
+            }
+          }
         }
       }
+
     }
   }
 

@@ -190,9 +190,9 @@ export default {
       display: inline-block;
       height: 100%;
       vertical-align: top;
-      width: 534 * $s;
+      width: 529 * $s;
       height: 421 * $s;
-      margin-right: 44 * $s;
+      margin-right: 23 * $s;
       // overflow: hidden;
       .focus-div {
         position: absolute;
@@ -207,7 +207,7 @@ export default {
       .thumb-img {
         position: relative;
         width: 100%;
-        height: 290 * $s;
+        height: 298 * $s;
         border-radius: 10 * $s;
         background-size: 100% 100%;
         .progress {
