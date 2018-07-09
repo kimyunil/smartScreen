@@ -2,15 +2,13 @@
   <div class="foryou">
     <div class="grid-container"
       :class="{'shrink':isRemoteEnabled, 'squeeze-header': (isRemoteEnabled && !active)}"
-      @transitionend="shrinkTransitionCB"
-      :style="translateY"
     >
         <!-- </template> -->
-        <div class="grid-list" v-if="isRemoteEnabled">
+        <div class="grid-list">
           <template v-for="(subCat, index) in gridlist">
             <div class="grid-templates template subcategory-template"  :key="index">
               <div class="title" :class="[{'elevate': (rowIdx === index)}]">{{subCat.title}}</div>
-              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index)" class="subCategoryList" @movefocus="movefocus"/>
+              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </template>
         </div>
@@ -25,16 +23,20 @@ import Messages from '../../services/Messages';
 
 export default {
   mounted() {
-    this.chkSlideShow();
     Messages.$on('button_down', this.handleKeyDown);
-    this.$nextTick(() => {
-      this.slideWidth = this.$el.querySelector('.slideshow-wrapper').offsetWidth;
-    });
+    this.updateVOffset();
   },
   destroyed() {
-    this.stopSlideShow();
     this.toggleSuggetion(true);
     Messages.$off('button_down', this.handleKeyDown);
+  },
+  props: {
+    scroll: {
+      type: Function,
+    },
+    translate: {
+      type: Number,
+    },
   },
   computed: {
     ...mapState([
@@ -48,34 +50,7 @@ export default {
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
       gridlist: 'GET_FORYOU_LIST',
-      suggest: 'GET_SUGGESTIONS',
     }),
-    inlineTranslate() {
-      let idx = this.index - this.pageIdx;
-      if (this.slideshow) idx = 0;
-      return { transform: `translateX(${((idx * this.slideWidth) * 100) / window.innerWidth}vw)` };
-    },
-    getGrids() {
-      const arr = [];
-      for (let i = 0; i < this.grids.length; i += 1) {
-        const idx = ((this.index + i) % this.grids.length);
-        arr[i] = this.grids[idx];
-      }
-      return arr;
-    },
-    grids() {
-      const gridPages = this.cat_grid(0);
-      return gridPages;
-    },
-    translateY() {
-      return { transform: `translateY(${((this.translate * 100) / window.innerWidth)}vw)` };
-    },
-    gridFocus() {
-      if (this.active && (this.focus === 'grid')) {
-        return true;
-      }
-      return false;
-    },
   },
   methods: {
     ...mapActions({
@@ -87,30 +62,26 @@ export default {
     }),
     ...mapMutations('home', {
       updatePageIdx: 'UPDATE_PAGE_IDX',
+      setfocus: 'SET_HOME_FOCUS',
     }),
     setLeft(idx) {
       return ((((idx - this.index) * this.slideWidth) * 100) / window.innerWidth);
     },
-    chkSlideShow() {
-      this.toggleSuggetion(true);
-      if (this.isRemoteEnabled) {
-        this.stopSlideShow(true);
-      } else {
-        this.startSlideShow();
-      }
+    updateVOffset() {
+      this.$nextTick(() => {
+        const temps = this.$el.querySelectorAll('.template');
+        for (let i = 0; i < temps.length; i += 1) {
+          this.voffset[i] = {};
+          this.voffset[i].top = temps[i].offsetTop;
+          this.voffset[i].height = temps[i].offsetHeight;
+        }
+      });
     },
     selectedGridItem(item) {
       console.log(item);
       if (item.details.action) {
         this.launch(item.details.action);
       }
-    },
-    shrinkTransitionCB() {
-      // if (this.isRemoteEnabled) {
-      //   this.slideshow = false;
-      // } else {
-      //   this.slideshow = true;
-      // }
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -124,9 +95,8 @@ export default {
                 this.scroll('==', offset * -1);
               }
             } else {
-              this.rowIdx = -1;
               this.scroll('==', 0);
-              this.focus = 'grid';
+              this.setfocus(0);
             }
           }
           break;
@@ -134,15 +104,13 @@ export default {
           break;
         case 'DOWN':
           if (this.isRemoteEnabled) {
-            if (this.focus !== 'grid') {
-              if (this.rowIdx < this.gridlist.length - 1) {
-                this.rowIdx += 1;
-                // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
-                console.log(this.voffset[this.rowIdx].top);
-                // if (this.translate + offset > 1080) {
-                this.scroll('==', this.voffset[this.rowIdx].top * -1);
-                // }
-              }
+            if (this.rowIdx < this.gridlist.length - 1) {
+              this.rowIdx += 1;
+              // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
+              console.log(this.voffset[this.rowIdx].top);
+              // if (this.translate + offset > 1080) {
+              this.scroll('==', this.voffset[this.rowIdx].top * -1);
+              // }
             }
           }
           break;
@@ -174,6 +142,9 @@ export default {
       }, this.timeout);
       // this.index = 3;
     },
+    movefocus() {
+      // callback function:::::
+    },
     stopSlideShow() {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -183,51 +154,6 @@ export default {
       this.pageIdx = this.index;
       this.slideshow = false;
       this.updateVOffset();
-    },
-    updateVOffset() {
-      this.$nextTick(() => {
-        const temps = this.$el.querySelectorAll('.template');
-        for (let i = 0; i < temps.length; i += 1) {
-          this.voffset[i] = {};
-          this.voffset[i].top = temps[i].offsetTop;
-          this.voffset[i].height = temps[i].offsetHeight;
-        }
-      });
-    },
-    scroll(dir, delta) {
-      console.log(dir, delta);
-      if (dir === 'up') {
-        this.translate += delta;
-      } else if (dir === 'down') {
-        this.translate -= delta;
-      } else {
-        this.translate = delta;
-      }
-    },
-    movefocus(param) {
-      if (param.from === 'grid') {
-        if (param.dir === 'left') {
-          if (this.pageIdx > 0) {
-            this.pageIdx -= 1;
-            this.colIdx = 1;
-            // this.index = this.pageIdx;
-          }
-        } else if (param.dir === 'right') {
-          if (this.pageIdx < this.grids.length - 1) {
-            this.pageIdx += 1;
-            this.colIdx = 0;
-            // this.index = this.pageIdx;
-          }
-        } else if (param.dir === 'up') {
-          this.$emit('movefocus', { dir: 'up', from: 'content' });
-        } else if (param.dir === 'down') {
-          this.rowIdx = 0;
-          this.scroll('==', this.voffset[this.rowIdx].top * -1);
-          this.$nextTick(() => {
-            this.focus = 'apps';
-          });
-        }
-      }
     },
   },
   data() {
@@ -242,9 +168,8 @@ export default {
       videoEnabled: false,
       focus: 'grid',
       pageIdx: 0,
-      rowIdx: -1,
+      rowIdx: 0,
       index: 0,
-      translate: 0,
       appIdx: 0,
       slideshow: true,
     };
@@ -254,20 +179,6 @@ export default {
     lgrid,
   },
   watch: {
-    rowIdx() {
-      console.log('rowIdx Watching');
-      if (this.rowIdx >= 0) this.$emit('showHeader', false);
-      else this.$emit('showHeader', true);
-    },
-    timeout() {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-      this.$nextTick(() => {
-        if (!this.isRemoteEnabled) {
-          this.startSlideShow();
-        }
-      });
-    },
     index(val) {
       this.updatePageIdx(val);
     },
@@ -297,7 +208,6 @@ export default {
     // height: 807 * $s;
     // overflow: hidden;
     left:0;
-    transition: transform 0.3s ease;
     .grid-list {
       position: static;
       transition: transform 0.4s ease;

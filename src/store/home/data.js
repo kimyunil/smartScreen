@@ -1,17 +1,19 @@
-import foryou from './foryou';
-import movies from './movies';
-import health from './health';
-import tvshows from './tvshows';
+import nba from './gridlistData/nba';
+import apps from './gridlistData/apps';
+import movies from './gridlistData/movies';
+import music from './gridlistData/music';
+import health from './gridlistData/health';
+import tvshows from './gridlistData/tvshows';
 
 export default {
   navs: {
-    items: ['tvshows', 'health', 'movies', 'for_you', 'apps', 'music'],
-    selectedIdx: 0,
+    items: ['tvshows', 'health', 'movies', 'nba', 'apps', 'music'],
+    focus: 0, // 0 heading, 1 gridlist
     details: {
-      for_you: {
+      nba: {
         title: 'NBA PLAYOFFS',
         template: 'foryou',
-        data: foryou,
+        data: nba,
       },
       health: {
         title: 'HEALTH & WELLNESS',
@@ -26,7 +28,7 @@ export default {
       apps: {
         title: 'APPS',
         template: 'health',
-        data: health,
+        data: apps,
       },
       movies: {
         title: 'MOVIES',
@@ -36,13 +38,13 @@ export default {
       music: {
         title: 'MUSIC',
         template: 'health',
-        data: health,
+        data: music,
       },
     },
   },
   homescreen: {
-    grids: ['grid1'],
-    grid1 : {
+    grids: ['grid1', 'grid2'],
+    grid1: {
       title: 'grid-1',
       content: ['hulu', 'sponsor', 'npr'],
       nav: [
@@ -95,56 +97,52 @@ export default {
         },
       },
     },
-    grid2 : {
+    grid2: {
       title: 'grid-1',
-      content: ['hulu', 'sponsor', 'npr'],
+      content: ['youtube', 'hbo', 'hulu'],
       nav: [
         ['tile', 'tile'],
         ['thumbnail1', 'thumbnail2'],
       ],
-      hulu: {
+      youtube: {
         type: 'tile',
         template: 'tile',
         contentType: 'simple',
         details: {
-          full: 'partial',
-          action: {
-            category: 'hulu',
-            subcategory: 'home',
-            content: 'handmaids',
-          },
-          topLeftText: '<span class="bold-top-text">Continue Watching</span>',
-          bottomText: '<span style="color: rgba(255,97,97,1);">Stranger Things</span>',
-          tile: '/static/Images/home/tile/morning/tile1.png',
-          logo: '/static/Images/home/foryou/slidesIcons/netflix.png',
-          logoType: 'rect',
-          img: '',
+          full: true,
+          tile: '/static/Images/home/tile/morning/tile3.png',
+          bottomText: '<span class="bold-text">Fnatic vs. Flash Wolves</span>',
+          logo: '/static/Images/home/foryou/slidesIcons/youtube.png',
+          extraImg: ['/static/Images/home/foryou/slidesIcons/6pm.png'],
+          logoType: 'rect-3',
+          img: '/static/Images/home/page1/poster.png',
         },
       },
-      npr: {
+      hbo: {
         type: 'thumbnail2',
         template: 'thumbnail',
-        contentType: 'cp',
+        contentType: 'cp-type-1',
         details: {
-          full: true,
-          bottomText: '<span>Rehab <br><span style="color: rgba(255,97,97,1);">10 Sessions</span></span>',
+          full: 'full',
           icon: '',
-          logo: '/static/Images/home/foryou/slidesIcons/headspace.png',
-          img: '/static/Images/home/thumbnail/morning/thumbnail1.png',
+          bottomText: '',
+          logoType: 'text-big',
+          logo: '/static/Images/home/foryou/slidesIcons/hbo.png',
+          img: '/static/Images/home/thumbnail/morning/thumbnail4.png',
         },
       },
-      sponsor: {
+      hulu: {
+        full: true,
         type: 'thumbnail1',
         template: 'thumbnail',
-        contentType: 'cp',
+        contentType: 'cp-type-1',
         details: {
-          full: 'partial',
           icon: '',
-          topLeftText: '<span class="bold-top-text">sponsored</span>',
-          bottomText: '<span>Your <span style="color: rgba(255,97,97,1);">Daily Mix</span></span>',
-          logoType: 'sqr-2',
-          logo: '/static/Images/home/foryou/slidesIcons/spotify.png',
-          img: '/static/Images/home/thumbnail/morning/thumbnail2.png',
+          bottomText: '',
+          full: 'full',
+          logoType: 'text-big',
+          logo: '/static/Images/home/foryou/slidesIcons/hulu.png',
+          img: '/static/Images/home/thumbnail/morning/thumbnail3.png',
         },
       },
     },

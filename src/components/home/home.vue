@@ -1,17 +1,21 @@
 <template>
   <div class="home" style="ba ckground-image:url('/static/Images/home/homeUI/screenshot.jpg')">
-    <div class="dashboard" :class="{'voice-enabled':isRemoteEnabled}">
+    <div class="dashboard" :class="[{ 'voice-enabled':isRemoteEnabled }, moreClass]" :style="{'transform': `translateY(${transDash})`}">
       <div class="upperDeck">
-        <div class="left-corner">
+        <div class="left-corner" :class="{'selected': (navId === 'leftposter')}">
             <div class="wrapper">
-              <div class="video-feeds">
-                <div class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
-              </div>
-              <div class="metadata">
-                  <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+              <div class="focus_bg">
+                <div class="highlight"></div>
+                <div class="video-feeds">
+                  <div class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
+                </div>
+                <div class="metadata">
+                    <div class="focus_bg_partial"></div>
+                    <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                    </div>
+                    <div class="text" v-html="sponsored.text">
                   </div>
-                  <div class="text" v-html="sponsored.text">
-                 </div>
+                </div>
               </div>
               <div class="up-next">
                 <div class="up-title">
@@ -26,22 +30,21 @@
         </div>
         <div class="right-corner">
           <div class="right-wrapper">
-              <div class="list">
-                <template v-for="(grid, index) in gridDetails">
-                  <gridpage class="grid-wrapper" :details="grid" :colIdx="0" :focus="false" :key="index"></gridpage>
+              <div class="list" :style="translateX">
+                  <transition name="fade" v-if="!isRemoteEnabled">
+                    <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
+                  </transition>
+                <template v-for="(grid, index) in reoderedGrid" v-if="isRemoteEnabled">
+                  <gridpage class="grid-wrapper gridsele" :details="grid" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
                 </template>
               </div>
           </div>
         </div>
       </div>
       <div class="lowerDeck">
-        <div class="headings">
-          <div class="nav-button" v-for="(item, index) in navItems" :key="item.title">
-            <div class="focus_bg"></div>
-            <span>{{item.title}}</span>
-          </div>
+        <div class="deck-wrapper">
+          <homescreen :enabled="(navId === 'lowerdeck')"></homescreen>
         </div>
-        <contentlist class="contentlist"></contentlist>
       </div>
     </div>
   </div>
@@ -51,13 +54,14 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 // import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 import gridpage from './common/UI/gridpage';
-import contentlist from './contentlist';
+import homescreen from './homeScreen';
 
 export default {
   name: 'home',
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.resetVoiceTimer();
+    this.toggleInterval(true);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -66,24 +70,81 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
+    ...mapState('home', [
+      'showMore',
+      'navId',
+    ]),
+    translateX() {
+      return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
+    },
+    moreClass() {
+      if (this.showMore === 'partial' || this.showMore === 'fullhome') {
+        return ['show-more'];
+      }
+      return [];
+    },
     ...mapGetters('home', {
       gridDetails: 'GET_HOME_GRIDS',
       navItems: 'GET_NAVS',
-      nav_selected: 'GET_SELECTED_NAV',
     }),
+    reoderedGrid() {
+      const arr = [];
+      const len = this.gridDetails.length;
+      for (let i = 0; i < this.gridDetails.length; i += 1) {
+        const index = (i + this.slideIdx) % len;
+        arr[i] = this.gridDetails[index];
+      }
+      return arr;
+    },
+    currentGrid() {
+      return this.gridDetails[this.slideIdx];
+    },
   },
   methods: {
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
+    ...mapMutations('home', {
+      toggleMoreData: 'TOGGLE_MORE_DATA',
+      setfocus: 'SET_FOCUS',
+    }),
+    toggleInterval(bool) {
+      if (bool) {
+        clearInterval(this.slideshowID);
+        this.slideshowID = setInterval(() => {
+          if (this.slideIdx + 1 === this.gridDetails.length) {
+            this.slideIdx = (this.slideIdx + 1) % this.gridDetails.length;
+          } else {
+            this.slideIdx += 1;
+          }
+          console.log(this.slideIdx);
+        }, 3000);
+      } else {
+        clearInterval(this.slideshowID);
+      }
+    },
     ...mapActions({
       resetVoiceTimer: 'RESET_VOICE_TIMER',
     }),
     movefocus(param) {
-      if (param.from === 'header') {
-        this.focus = 'content';
-      } else if (param.from === 'content') {
-        this.focus = 'header';
+      if (param.from === 'grid') {
+        if (param.dir === 'left') {
+          if (this.gridIdx === 0) {
+            this.setfocus('leftposter');
+          } else {
+            this.gridIdx -= 1;
+          }
+        } else if (param.dir === 'right') {
+          if (this.gridIdx < this.gridDetails.length - 1) {
+            this.gridIdx += 1;
+          }
+        } else if (param.dir === 'down') {
+          this.setfocus('lowerdeck');
+        }
+        if (param.rowIdx !== 'undefined') {
+          this.rowVal = param.rowIdx;
+        }
+        this.translate = this.$el.querySelectorAll('.gridsele')[this.gridIdx].offsetLeft * -1;
       }
     },
     headerVisible(bool) {
@@ -98,12 +159,26 @@ export default {
         case 'UP':
           break;
         case 'RIGHT':
+          if (this.navId === 'leftposter') {
+            this.setfocus('rightgrid');
+          } else if (this.navId === 'leftposter') {
+            if (this.gridIdx < this.gridDetails.length - 1) {
+              this.gridIdx += 1;
+            }
+          }
           break;
         case 'DOWN':
+          if (this.navId === 'leftposter') {
+            this.setfocus('lowerdeck');
+          }
           break;
         case 'LEFT':
           break;
-        case 'BACK':
+        case 'EIGHT':
+          this.toggleMoreData('fullhome');
+          break;
+        case 'NINE':
+          this.toggleMoreData('partial');
           break;
         default:
           break;
@@ -113,6 +188,13 @@ export default {
   data() {
     return {
       remote: true,
+      transDash: 0,
+      slideIdx: 0,
+      colVal: 0,
+      rowVal: 0,
+      translate: 0,
+      gridIdx: 0,
+      slideshowID: null,
       sponsored: {
         poster: '/static/Images/home/homeUI/poster.png',
         icon: '/static/Images/home/homeUI/source.png',
@@ -130,16 +212,29 @@ export default {
   },
   components: {
     gridpage,
-    contentlist,
+    homescreen,
   },
   watch: {
-    nav_selected(old, nw) {
-      if (!this.isRemoteEnabled) {
-        this.direction = '';
-      } else if (old > nw) {
-        this.direction = 'left';
+    isRemoteEnabled(val) {
+      if (!val) {
+        if (this.active) {
+          this.toggleInterval(true);
+        }
       } else {
-        this.direction = 'right';
+        this.toggleInterval(false);
+      }
+    },
+    showMore(val) {
+      if (val === 'fullhome') {
+        const upperDeckEle = this.$el.querySelector('.upperDeck');
+        if (upperDeckEle) {
+          this.$nextTick(() => {
+            this.transDash = `${((upperDeckEle.offsetHeight * -1) * 100) / window.innerWidth}vw`;
+            console.log(this.transDash);
+          });
+        }
+      } else {
+        this.transDash = 0;
       }
     },
   },
@@ -171,46 +266,64 @@ export default {
         height: 100%;
         .wrapper {
           position: relative;
-          width: 778 * $s;
+          width: 1090 * $s;
           top: 100 * $s;
           left: 115 * $s;
           flex-wrap: wrap;
           height: auto;
           display: flex;
-          .video-feeds {
+          .focus_bg {
             position: relative;
-            width: 778 * $s;
-            height: 436 * $s;
-            transition: transform 0.3s ease;
-            transform: scale(1.4);
-            transform-origin: 0 0;
-            .poster {
-              position: relative;
-              width: 100%;
-              background-size: 100% 100%;
-              height: 100%;
-            }
-          }
-          .metadata {
-            position: relative;
-            width: 778 * $s;
+            left: 0;
+            top: 0;
+            width: auto;
             height: auto;
-            transition: transform 0.3s ease;
-            margin-bottom: 50 * $s;
-            transform: translateY(#{190 * $s});
-            .source-icon {
-              position: relative;
-              height: 60 * $s;
-              width: 60 * $s;
-              background-size: 100% 100%;
+            display: flex;
+            flex-direction: column;
+            .highlight {
+              position: absolute;
+              left: -20 * $s;
+              top: -20 * $s;
+              border-radius: 10 * $s;
+              width: calc(100% + #{40 * $s});
+              height: calc(100% + #{40 * $s});
+              background: white;
+              box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
             }
-            .text {
+            .video-feeds {
               position: relative;
-              width: 100%;
-              text-align: left;
-              font-family: TTNormsBold;
-              color: rgba(80,80,80,1);
-              font-size: 48 * $s;
+              width: 1090 * $s;
+              height: 615 * $s;
+              transition: transform 0.3s ease;
+              .poster {
+                position: relative;
+                width: 100%;
+                border-radius: 10 * $s;
+                z-index: 999;
+                background-size: 100% 100%;
+                height: 100%;
+              }
+            }
+            .metadata {
+              position: relative;
+              width: 767 * $s;
+              height: auto;
+              transition: transform 0.3s ease;
+              margin-bottom: 50 * $s;
+              .source-icon {
+                position: relative;
+                height: 60 * $s;
+                width: 60 * $s;
+                background-size: 100% 100%;
+              }
+              .text {
+                position: relative;
+                width: 100%;
+                text-align: left;
+                font-family: TTNormsBold;
+                color: rgba(80,80,80,1);
+                font-size: 48 * $s;
+              }
             }
           }
           .up-next {
@@ -236,12 +349,24 @@ export default {
             }
           }
         }
+        &.selected {
+          .focus_bg {
+            border-radius: 10 * $s;
+            .poster {
+              transform: scale(1.04);
+              transform-origin: bottom;
+              border-radius: 0 * $s!important;
+              // box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
+            }
+          }
+        }
       }
       .right-corner {
         position: relative;
         flex: 3.6;
         transition: flex 0.3s ease;
         height: 100%;
+        overflow: hidden;
         .right-wrapper {
           position: relative;
           top: 100 * $s;
@@ -251,11 +376,27 @@ export default {
             position: absolute;
             width: auto;
             height: 100%;
+            margin-left: 50 * $s;
             display: flex;
+            transition: transform 0.3s ease;
             .grid-wrapper {
+              position: relative;
               width: 532 * $s;
               height: 100%;
-              margin-left: 50 * $s;    
+              margin-right: 50 * $s;
+              &.slideshow {
+                position: absolute;
+              }
+              &.fade-enter-active, &.fade-leave-active {
+                transition: transform 1.2s ease, opacity 0.4s ease;
+              }
+              &.fade-leave-to {
+                opacity: 0;
+              }
+              &.fade-enter {
+                transform: translateX(#{50 * $s});
+                opacity: 0;
+              }
             }
           }
         }
@@ -266,50 +407,25 @@ export default {
       top: 0;
       width: 100%;
       height: auto;
-      background: rgba(216,216,216,0.3);
-      .headings {
-        height: 80 * $s;
-        display: flex;
-        left: 144 * $s;
-        position: relative;
-        width: 1710 * $s;
-        justify-content: space-between;
-        .nav-button {
-          box-sizing: content-box;
-          font-family: TTNormsBold;
-          font-size: 24 * $s;
-          color: rgba(80,80,80,0.3);
-          display: flex;
-          position: relative;
-          align-items: center;
-          .focus_bg {
-            position: absolute;
-            left: -40 * $s;
-            top: -20 * $s;
-            width: calc(100% + #{80 * $s});
-            height: calc(100% + #{40 * $s});
-          }
-          span {
-            position: relative;
-            z-index: 222;
-          }
-        }
-      }
-      .contentlist {
-        position: relative;
-        margin-top: 60 * $s;
+      .deck-wrapper {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        background: rgba(216,216,216,0.3);
       }
     }
     &.voice-enabled {
       .upperDeck {
         .left-corner {
           flex: 5.2;
-          .video-feeds {
-            transform: scale(1)!important;
-            transform-origin: 0 0;
-          }
-          .metadata {
-            transform: translateY(#{0 * $s})!important;
+          .wrapper {
+            .video-feeds {
+              width: 778 * $s;
+              height: 436 * $s;
+            }
+            .metadata {
+              transform: translateY(#{0 * $s})!important;
+            }
           }
           .up-next {
             opacity: 1!important;
@@ -320,7 +436,7 @@ export default {
           background-color: rgba(231,231,231,1);
         }
       }
-      &.full {
+      &.show-more {
         .upperDeck {
           background: rgba(245,245,245,1);
           height: 430 * $s;
@@ -331,16 +447,18 @@ export default {
           }
           .left-corner {
             flex: 1;
-            .video-feeds {
-              transform: scale(1);
-              height: 325 * $s;
-              transform-origin: 0 0;
-              flex: 0.7;
-            }
-            .metadata {
-              transform: translate(#{30 * $s}, #{0 * $s});
-              left: 50 * $s;
-              flex: 0.7;
+            .focus_bg {
+              width: 1169 * $s;
+              flex-direction: row;
+              .video-feeds {
+                transform: scale(1);
+                height: 325 * $s;
+                transform-origin: 0 0;
+              }
+              .metadata {
+                // transform: translate(#{30 * $s}, #{0 * $s});
+                left: 50 * $s;
+              }
             }
             .up-next {
               opacity: 1;
@@ -354,13 +472,8 @@ export default {
           }
         }
         .lowerDeck {
-          background: rgba(216,216,216,1);
-          .headings {
-            top: 20 * $s;
-            .nav-button {
-              font-size: 30 * $s;
-              color: rgba(80,80,80,0.6);
-            }
+          .deck-wrapper {
+            background: rgba(216,216,216,1);
           }
         }
       }

@@ -185,7 +185,7 @@ export default {
     .content-metadata {
       position: absolute;
       height: auto;
-      top: 68%;
+      top: 75%;
       width: 100%;
       font-size: 48 * $s;
       .meta-icon {

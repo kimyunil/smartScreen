@@ -33,6 +33,9 @@ export default {
     colIdx: {
       type: Number,
     },
+    rowIdx: {
+      type: Number,
+    },
     focus: {
       type: Boolean,
       required: true,
@@ -151,13 +154,13 @@ export default {
           if (this.col > 0) {
             const val = this.checkLeft(this.col);
             if (val === -1) {
-              this.$emit('movefocus', { dir: 'left', from: 'grid' });
+              this.$emit('movefocus', { dir: 'left', from: 'grid', rowIdx: this.row });
               // emit change
             } else {
               this.col = val;
             }
           } else {
-            this.$emit('movefocus', { dir: 'left', from: 'grid' });
+            this.$emit('movefocus', { dir: 'left', from: 'grid', rowIdx: this.row });
           }
           break;
         case 'RIGHT':
@@ -165,12 +168,12 @@ export default {
             const val = this.checkRight(this.col);
             if (val === -1) {
               // emit change
-              this.$emit('movefocus', { dir: 'right', from: 'grid' });
+              this.$emit('movefocus', { dir: 'right', from: 'grid', rowIdx: this.row });
             } else {
               this.col = val;
             }
           } else {
-            this.$emit('movefocus', { dir: 'right', from: 'grid' });
+            this.$emit('movefocus', { dir: 'right', from: 'grid', rowIdx: this.row });
           }
           break;
         case 'SELECT':
@@ -189,9 +192,9 @@ export default {
     },
   },
   watch: {
-    colIdx(val) {
+    rowIdx(val) {
       if (this.focus) {
-        this.col = val;
+        this.row = val;
       }
     },
   },
@@ -209,9 +212,10 @@ export default {
     display: grid;
     height: 100%;
     &.grid-1 {
-      grid-template-rows: 55% 45%; //total is 100%
+      grid-template-rows: 50% 45%; //total is 100%
       // grid-template-rows: 50% 50%;
       grid-column-gap: 50 * $s;
+      grid-row-gap: 30 * $s;
       grid-template-areas:
       "tile tile"
       "thumbnail1 thumbnail2";
