@@ -2,7 +2,7 @@ export default {
   gridlist: ['now', 'upcoming', 'contWatch', 'music', 'apps', 'avengers'],
   now: {
     items: ['espn', 'cnn', 'ytube1', 'ytube2'],
-    title: 'On Now Healtgh',
+    title: 'On Now Health',
     name: 'now',
     itemType: 'sqrThumb',
     espn: {

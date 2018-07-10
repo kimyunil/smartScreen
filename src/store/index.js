@@ -239,7 +239,10 @@ const store = new Vuex.Store({
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
       switch (payload.category) {
         case 'millenials':
-            dispatch('UPDATE_MILLENIALS', payload);
+          if (state.viewStack[state.viewStack.length - 1] !== 'home') {
+            dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
+          }
+           dispatch('UPDATE_MILLENIALS', payload);
           break;
         case 'home': {
           commit('home/select_nav', payload.subcategory);
@@ -294,6 +297,10 @@ const store = new Vuex.Store({
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'fitbit' });
           break;
         }
+        case 'youtube': {
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'youtube' });
+          break;
+        }
         case 'spotifyhome': {
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotifyhome' });
           break;
@@ -308,7 +315,7 @@ const store = new Vuex.Store({
         }
         case 'movies': {
           commit('result/SET_RESULT', payload);
-          dispatch('SWITCH_COMPONENT', { replace: true, name: 'result' });
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'result' });
           break;
         }
         case 'back': {

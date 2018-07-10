@@ -23,6 +23,15 @@ export default {
       drivers: ['Hey Bixby, play Strawberry Swing'],
       img: '/static/Images/screenshot/spotify.png',
     },
+    youtube: {
+      vType: 'screenshot',
+      type: 'app',
+      suggestion: false,
+      sayWod: 'Try saying',
+      theme: 'dark',
+      drivers: ['Hey Bixby, play Strawberry Swing'],
+      img: '/static/Images/screenshot/youtube.jpg',
+    },
     fitbit: {
       vType: 'screenshot',
       type: 'app',
