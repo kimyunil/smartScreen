@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :style="translateY">
+  <div class="wrapper" :style="translateY" :class="{'scrollDown': (!isRemoteEnabled && scrollVert === 1), 'scrollUp': (!isRemoteEnabled && scrollVert === 2)}">
     <div class="headings" :class="[activeClass]">
         <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="{'selected': selectedIdx === index && enabled && !focus}">
         <div class="focus_bg"></div>
@@ -32,6 +32,7 @@ export default {
   },
   data() {
     return {
+      scrollVert: 0,
       translate: 0,
     };
   },
@@ -40,6 +41,9 @@ export default {
       navItems: 'GET_NAVS',
       focus: 'HOME_FOCUS',
     }),
+    ...mapState([
+      'isRemoteEnabled',
+    ]),
     ...mapState('home', [
       'selectedIdx',
     ]),
@@ -91,11 +95,45 @@ export default {
           }
           break;
         case 'EIGHT':
+          if (this.scrollVert === 1) {
+            this.scrollVert = 2;
+          } else if (this.scrollVert === 2) {
+            this.scrollVert = 1;
+          } else if (this.scrollVert === 0) {
+            this.scrollVert = 1;
+          }
           break;
         case 'NINE':
           break;
         default:
           break;
+      }
+    },
+  },
+  watch: {
+    scrollVert(val) {
+      const el = this.$el;
+      if (val === 1) {
+        console.log(this.translate);
+        this.anim = el.animate([
+          // keyframes
+          { transform: `translateY(${this.translate}px)` }, 
+          { transform: 'translateY(-100%)' }
+        ], { 
+          // timing options
+          duration: 10000,
+          fill: 'forwards'
+        });
+      } else if (val === 2) {
+         this.anim = el.animate([
+          // keyframes
+          { transform: `translateY(-100%)` }, 
+          { transform: `translateY(${this.translate}px)` }
+        ], { 
+          // timing options
+          duration: 10000,
+          fill: 'forwards'
+        });
       }
     },
   },
@@ -112,6 +150,11 @@ export default {
     width: 100%;
     height: auto;
     transition: transform 0.3s ease;
+    &.scrollDown {
+      animation-name: scrollV Dwn;
+      animation-duration: 10s;
+      animation-fill-mode: forwards;
+    }
     .headings {
       height: 80 * $s;
       display: flex;
@@ -166,6 +209,9 @@ export default {
         position: relative;
         margin-top: 60 * $s;
       }
+    }
+    @keyframes scrollVDwn {
+    to {transform: translateY(-100%);}
     }
   }
 </style>

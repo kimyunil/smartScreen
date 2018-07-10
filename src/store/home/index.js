@@ -4,9 +4,9 @@ export default {
   namespaced: true,
   state: {
     data,
-    selectedIdx: 1,
+    selectedIdx: 0,
     navId: 'leftposter', // leftposter, rightgrid, lowerdeck
-    showMore: 'initial', // partial, fullhome
+    showMore: 'boot', // initial partial, fullhome
     timeout: 30000,
   },
   props: {

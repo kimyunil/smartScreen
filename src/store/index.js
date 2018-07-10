@@ -194,6 +194,22 @@ const store = new Vuex.Store({
         }
       }
     },
+    UPDATE_MILLENIALS({ state }, payload) {
+      if (payload.subcategory === 'showmore') {
+        if (state.home.showMore === 'boot') {
+          state.home.showMore = 'initial';
+        } else if (state.home.showMore === 'initial') {
+          state.home.showMore = 'partial';
+          state.home.navId = 'lowerdeck';
+        } else if (state.home.showMore === 'partial') {
+          state.home.showMore = 'fullhome';
+        }
+      } else if (payload.subcategory === 'contentType') {
+        state.home.showMore = 'fullhome';
+        state.home.navId = 'lowerdeck';
+        state.home.selectedIdx = payload.idx
+      }
+    },
     CONFIG_UPDATE({ state, dispatch }, payload) {
       switch (payload.subcategory) {
         case 'wakeup':
@@ -222,6 +238,9 @@ const store = new Vuex.Store({
     },
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
       switch (payload.category) {
+        case 'millenials':
+            dispatch('UPDATE_MILLENIALS', payload);
+          break;
         case 'home': {
           commit('home/select_nav', payload.subcategory);
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {

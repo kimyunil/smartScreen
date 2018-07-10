@@ -1,11 +1,11 @@
 <template>
   <div class="home" style="ba ckground-image:url('/static/Images/home/homeUI/screenshot.jpg')">
-    <div class="dashboard" :class="[{ 'voice-enabled':isRemoteEnabled }, moreClass]" :style="{'transform': `translateY(${transDash})`}">
+    <div class="dashboard" :class="[{ 'voice-enabled': showMore === 'initial' }, moreClass]" :style="{'transform': `translateY(${transDash})`}">
       <div class="upperDeck">
-        <div class="left-corner" :class="{'selected': (navId === 'leftposter')}">
+        <div class="left-corner">
             <div class="wrapper">
               <div class="focus_bg">
-                <div class="highlight"></div>
+                <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
                   <div class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
                 </div>
@@ -31,10 +31,10 @@
         <div class="right-corner">
           <div class="right-wrapper">
               <div class="list" :style="translateX">
-                  <transition name="fade" v-if="!isRemoteEnabled">
+                  <transition name="fade" v-if="showMore === 'boot'">
                     <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                   </transition>
-                <template v-for="(grid, index) in reoderedGrid" v-if="isRemoteEnabled">
+                <template v-for="(grid, index) in reoderedGrid" v-else>
                   <gridpage class="grid-wrapper gridsele" :details="grid" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
                 </template>
               </div>
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="lowerDeck">
-        <div class="deck-wrapper">
+        <div class="deck-wrapper" v-if="showMore !== 'boot'">
           <homescreen :enabled="(navId === 'lowerdeck')"></homescreen>
         </div>
       </div>
@@ -78,8 +78,12 @@ export default {
       return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
     },
     moreClass() {
-      if (this.showMore === 'partial' || this.showMore === 'fullhome') {
-        return ['show-more'];
+      if (this.showMore === 'initial') {
+        return ['voice-enabled'];
+      } else if (this.showMore === 'partial') {
+        return ['show-more', 'voice-enabled'];
+      } else if (this.showMore === 'fullhome') {
+        return ['show-more', 'voice-enabled'];
       }
       return [];
     },
@@ -233,6 +237,8 @@ export default {
             console.log(this.transDash);
           });
         }
+      } else if (val === 'initial') {
+        this.toggleInterval(false);
       } else {
         this.transDash = 0;
       }

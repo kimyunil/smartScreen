@@ -2,11 +2,11 @@
   <div class="screensaver" :class="{'enabled': sleep, 'blur': !active}">
     <div class="backdrop">
     </div>
-      <!--<div class="time">
+      <div class="time">
           {{time}}
       </div>
       <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
-      </div> -->
+      </div>
   </div>
 </template>
 <script>
@@ -215,7 +215,7 @@ export default {
   overflow: hidden;
   position: absolute;
   background-size: 100%;
-  // background-image: url('./static/Images/background.png');
+  background-image: url('/static/Images/home/background.png');
   .backdrop {
     position: absolute;
     left: 0;
