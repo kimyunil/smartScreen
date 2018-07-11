@@ -298,7 +298,7 @@ const store = new Vuex.Store({
           break;
         }
         case 'youtube': {
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'youtube' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'youtube', transition: 'blur' });
           break;
         }
         case 'spotifyhome': {
@@ -313,9 +313,12 @@ const store = new Vuex.Store({
           });
           break;
         }
+        case 'ytplayer':
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'ytplayer', transition: 'blur' });
+          break;
         case 'movies': {
           commit('result/SET_RESULT', payload);
-          dispatch('SWITCH_COMPONENT', { replace: false, name: 'result' });
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'result', transition: 'blur' });
           break;
         }
         case 'back': {

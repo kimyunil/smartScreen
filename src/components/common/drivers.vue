@@ -29,7 +29,7 @@ export default {
     },
     loop: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     sayWord: {
       type: String,

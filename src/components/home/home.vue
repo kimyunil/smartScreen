@@ -1,24 +1,24 @@
 <template>
   <div class="home" style="background-image:url('/static/Images/home/bg.png')">
-    <div class="dashboard" :class="[{ 'voice-enabled': showMore === 'initial' }, moreClass]" :style="{'transform': `translateY(${transDash})`}">
+    <div class="dashboard" :class="[{ 'voice-enabled': showMore === 'initial' }, moreClass]">
       <div class="upperDeck">
         <div class="left-corner">
             <div class="wrapper">
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="vidAutoplay && showMore === 'boot' && active">
+                  <div class="video" v-if="vidAutoplay && (showMore === 'boot' || showMore === 'initial') && active">
                     <video :src="sponsored.videoUrl" autoplay loop/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
                 </div>
-                <div class="metadata">
-                    <div class="focus_bg_partial"></div>
-                    <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                  <div class="metadata">
+                      <div class="focus_bg_partial"></div>
+                      <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                      </div>
+                      <div class="text" v-html="sponsored.text">
                     </div>
-                    <div class="text" v-html="sponsored.text">
                   </div>
-                </div>
               </div>
               <div class="up-next">
                 <div class="up-title">
@@ -30,22 +30,33 @@
                  </div>
               </div>
             </div>
-        </div>
-        <div class="right-corner">
-          <div class="right-wrapper">
-              <div class="list" :style="translateX">
-                  <transition name="fade" v-if="showMore === 'boot'">
-                    <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
-                  </transition>
-                <template v-for="(grid, index) in reoderedGrid" v-else>
-                  <gridpage class="grid-wrapper gridsele" :details="grid" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
-                </template>
+            <transition name="fade">
+              <div class="metadata-twice" v-if="showMore === 'partial' || showMore === 'fullhome' ">
+                <div class="focus_bg_partial"></div>
+                <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                </div>
+                <div class="text" v-html="sponsored.text">
               </div>
-          </div>
+            </div>
+          </transition>
         </div>
+        <transition name="slide-r">
+          <div class="right-corner" v-if="showMore === 'boot' || showMore === 'initial'">
+            <div class="right-wrapper">
+                <div class="list" :style="translateX">
+                    <transition name="fade" v-if="showMore === 'boot'">
+                      <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
+                    </transition>
+                  <template v-for="(grid, index) in reoderedGrid" v-else>
+                    <gridpage class="grid-wrapper gridsele" :details="grid" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
+                  </template>
+                </div>
+            </div>
+          </div>
+        </transition>
       </div>
       <div class="lowerDeck" v-if="showMore !== 'boot'">
-        <div class="deck-wrapper">
+        <div class="deck-wrapper" :style="{'transform': `translateY(${transDash})`}">
           <homescreen :enabled="(navId === 'lowerdeck')"></homescreen>
         </div>
       </div>
@@ -74,9 +85,13 @@ export default {
     Messages.$on('button_down', this.handleKeyDown);
     this.resetVoiceTimer();
     this.toggleInterval(true);
+    if (this.showMore === 'fullhome') {
+      this.slidehome();
+    }
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+    this.toggleInterval(false);
   },
   computed: {
     ...mapState([
@@ -96,7 +111,7 @@ export default {
       } else if (this.showMore === 'partial') {
         return ['show-more', 'voice-enabled'];
       } else if (this.showMore === 'fullhome') {
-        return ['show-more', 'voice-enabled'];
+        return ['show-more', 'voice-enabled', 'fullhome'];
       }
       return [];
     },
@@ -135,7 +150,7 @@ export default {
             this.slideIdx += 1;
           }
           console.log(this.slideIdx);
-        }, 3000);
+        }, 10000);
       } else {
         clearInterval(this.slideshowID);
       }
@@ -166,6 +181,15 @@ export default {
     },
     headerVisible(bool) {
       this.showHeader = bool;
+    },
+    slidehome() {
+      this.$nextTick(() => {
+        const upperDeckEle = this.$el.querySelector('.upperDeck');
+        if (upperDeckEle) {
+          this.transDash = `${((upperDeckEle.offsetHeight * -1) * 100) / window.innerWidth}vw`;
+          console.log(this.transDash);
+        }
+      });
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -243,15 +267,14 @@ export default {
         this.toggleInterval(false);
       }
     },
+    active(val) {
+      if (val) {
+        this.toggleInterval(false);
+      }
+    },
     showMore(val) {
       if (val === 'fullhome') {
-        const upperDeckEle = this.$el.querySelector('.upperDeck');
-        if (upperDeckEle) {
-          this.$nextTick(() => {
-            this.transDash = `${((upperDeckEle.offsetHeight * -1) * 100) / window.innerWidth}vw`;
-            console.log(this.transDash);
-          });
-        }
+        this.slidehome();
       } else if (val === 'initial') {
         this.toggleInterval(false);
       } else {
@@ -278,12 +301,12 @@ export default {
     .upperDeck {
       position: relative;
       width: 100%;
+      transition: height 0.8s ease;
       height: 1000 * $s;
-      display: flex;
       .left-corner {
-        position: relative;
-        transition: flex 0.3s ease;
-        flex: 6.4;
+        position: absolute;
+        width: 64%;
+        transition: width 0.8s ease;
         height: 100%;
         .wrapper {
           position: relative;
@@ -299,8 +322,8 @@ export default {
             top: 0;
             width: auto;
             height: auto;
-            display: flex;
-            flex-direction: column;
+            // display: flex;
+            // flex-direction: column;
             .highlight {
               position: absolute;
               left: -20 * $s;
@@ -312,11 +335,13 @@ export default {
               box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
             }
             .video-feeds {
-              position: relative;
+              position: absolute;
               width: 1090 * $s;
               height: 615 * $s;
-              transition: transform 0.3s ease;
+              transition: width 0.3s ease, height 0.3s ease;
               border-radius: 10 * $s;
+              transform-origin: 0 0;
+              transition: transform 0.8s ease;
               overflow: hidden;
               .poster {
                 position: relative;
@@ -341,7 +366,8 @@ export default {
               }
             }
             .metadata {
-              position: relative;
+              position: absolute;
+              top: 630 * $s;
               width: 767 * $s;
               height: auto;
               transition: transform 0.3s ease;
@@ -363,8 +389,9 @@ export default {
             }
           }
           .up-next {
-            position: relative;
+            position: absolute;
             opacity: 0;
+            top: 680 * $s;
             transition: opacity 0.3s ease;
             .up-title {
               font-family: TTNormsBold;
@@ -396,13 +423,45 @@ export default {
             }
           }
         }
+      .metadata-twice {
+          position: absolute;
+          top: 30 * $s;
+          left: 740 * $s;
+          width: 530 * $s;
+          height: auto;
+          .source-icon {
+            position: relative;
+            height: 60 * $s;
+            width: 60 * $s;
+            background-size: 100% 100%;
+          }
+          .text {
+            position: relative;
+            width: 100%;
+            text-align: left;
+            font-family: TTNormsBold;
+            color: rgba(80,80,80,1);
+            font-size: 48 * $s;
+          }
+          &.fade-enter-active, &.fade-leave-active {
+            transition: transform 0.3s ease 0.4s, opacity 0.4s ease 0.4s;
+          }
+          &.fade-leave-to {
+            opacity: 0;
+          }
+          &.fade-enter {
+            transform: translateY(#{-20 * $s});
+            opacity: 0;
+          }
+        }
       }
       .right-corner {
-        position: relative;
-        flex: 3.6;
-        transition: flex 0.3s ease;
+        position: absolute;
+        width: 36%;
+        left: 64%;
+        top: 0;
         height: 100%;
-        overflow: hidden;
+        transition: transform 0.8s ease;
         .right-wrapper {
           position: relative;
           top: 100 * $s;
@@ -446,30 +505,36 @@ export default {
       .deck-wrapper {
         position: absolute;
         width: 100%;
+        background-image:url('/static/Images/lowebg.png');
         height: auto;
-        background: rgba(216,216,216,0.3);
+        transition: transform 0.3s ease;
+        background-color: rgba(216,216,216,0.3);
       }
     }
     &.voice-enabled {
       .upperDeck {
         .left-corner {
-          flex: 5.2;
+          width: 52%;
           .wrapper {
             .video-feeds {
-              width: 778 * $s;
-              height: 436 * $s;
+              transition: transform 0.8s ease;
+              transform: scale(0.69)
             }
             .metadata {
-              transform: translateY(#{0 * $s})!important;
+              transition: transform 0.8s ease;
+              transform: translateY(#{-179 * $s});
             }
           }
           .up-next {
+            transition: opacity 0.8s ease;
             opacity: 1!important;
           }
         }
         .right-corner {
-          flex: 4.5;
-          background-color: rgba(231,231,231,1);
+          width: 48%;
+          transform: translateX(#{ -230 * $s });
+          background:url('/static/Images/lowebg.png');
+          background-repeat: repeat;
         }
       }
       &.show-more {
@@ -477,42 +542,43 @@ export default {
           // background: rgba(245,245,245,1);
           height: 430 * $s;
           .wrapper {
-            flex-wrap: nowrap;
+            transition: top 0.8s ease;
             width: 100%;
             top: 35 * $s;
           }
           .left-corner {
-            flex: 1;
+            width: 100%;
             .focus_bg {
               width: 1169 * $s;
-              flex-direction: row;
               .video-feeds {
-                transform: scale(1);
-                height: 325 * $s;
-                transform-origin: 0 0;
+                // transition: width 0.8s ease 0.8s, height 0.8s ease 0.8s;
+                // width: 580 * $s;
+                // height: 325 * $s;
+                transform: scale(0.52);
+                
               }
               .metadata {
-                // transform: translate(#{30 * $s}, #{0 * $s});
-                left: 50 * $s;
+                opacity: 0;
               }
             }
             .up-next {
               opacity: 1;
-              transform: translate(#{150 * $s}, #{20 * $s});
-              flex: 1;
+              // transition: transform 0.2s ease 0.4s;
+              transform: translate(#{ 1263 * $s }, #{-660 * $s });
             }
           }
           .right-corner {
-            flex: 0;
-            display: none;
+            // flex: 0;
+            // display: none;
           }
         }
         .lowerDeck {
           position: relative;
           width: 100%;
+          z-index: 9999;
           height: 100%;
           .deck-wrapper {
-            background: rgba(216,216,216,0.3);
+            background-color: rgba(216,216,216,0.3);
           }
         }
       }
@@ -547,6 +613,15 @@ export default {
         }
       }
     }
+  }
+  .slide-r-enter-active, .slide-r-leave-active {
+    transition: transform 0.5s ease!important;
+  }
+  .slide-r-leave-to {
+    transform: translateX(#{1000 * $s})!important;
+  }
+  .slide-r-enter {
+    transform: translateX(#{200 * $s})!important;
   }
 }
 </style>

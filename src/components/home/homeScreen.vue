@@ -119,7 +119,7 @@ export default {
           { transform: `translateY(${this.translate}px)` },
           { transform: 'translateY(-100%)' },
         ], {
-          duration: 10000,
+          duration: 50000,
           fill: 'forwards',
         });
       } else if (val === 2) {
@@ -127,7 +127,7 @@ export default {
           { transform: 'translateY(-100%)' },
           { transform: `translateY(${this.translate}px)` },
         ], {
-          duration: 10000,
+          duration: 50000,
           fill: 'forwards',
         });
       }

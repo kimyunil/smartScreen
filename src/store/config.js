@@ -45,6 +45,10 @@ export default {
       type: 'app',
       suggestion: false,
     },
+    ytplayer: {
+      type: 'app',
+      suggestion: false,
+    },
     volume: {
       type: 'system',
       suggestion: false,
