@@ -6,12 +6,16 @@
           {{time}}
       </div>
       <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
+       
       </div>
+      <span class="day">{{day[0]}}, {{ day[1]}}</span>
+      <drivers v-if="sleep" :theme="'light'" :drivers="suggestions" :sayWord="'Say'" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
 import moment from 'moment';
 import { mapActions, mapState, mapMutations } from 'vuex';
+import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 
 export default {
@@ -20,7 +24,9 @@ export default {
     window.getWeatherImg = this.getWeatherImg;
     Messages.$on('button_down', this.handleKeyDown);
     this.time = moment().format('LT');
+    this.day = moment().format('LLLL').split(',');
     this.interval = setInterval(() => {
+      this.day = moment().format('LLLL').split(',');
       this.time = moment().format('LT');
     }, 1000);
     Messages.$on('horizon-weather.forecast', this.handleForecast);
@@ -41,6 +47,7 @@ export default {
     ...mapState([
       'info',
       'sleep',
+      'isRemoteEnabled',
     ]),
   },
   destroyed() {
@@ -196,6 +203,8 @@ export default {
   data() {
     return {
       interval: null,
+      day: '',
+      suggestions: ['Hey Bixby &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   “Play music on Spotify” &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  “Play yoga videos on Youtube” &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   “What’s the weather today”'],
       timeOut: null,
       weather: null,
       time: '',
@@ -204,6 +213,7 @@ export default {
   watch: {
   },
   components: {
+    drivers,
   },
 };
 </script>
@@ -232,24 +242,39 @@ export default {
     width: auto;
     height:auto;
     padding: 50 * $s;
-    font-size: 120 * $s;
-    color:white;
-    font-family: SamsungOneUI600;
+    font-size: 200 * $s;
+    color:rgba(80,80,80,1);
+    font-family: TTNormsMedium;
     transition: color 0.3s ease;
   }
   .weather {
     position: absolute;
-    top: 200 * $s;
+    top: 250 * $s;
     // top: relative;
     width: 130 * $s;
+    background-repeat: no-repeat;
+    // text-align: left;
     height: 130  *$s;
-    background-size: 100% 100%;
+    background-size: 130 * $s 130 * $s;
     padding: 50 * $s;
     left: 50 * $s;
     font-size: 60 * $s;
     color:white;
     transition: color 0.3s ease;
     font-family: SamsungOneUI600;
+  }
+  .day {
+    position: absolute;
+    top: 285 * $s;
+    // top: relative;
+    left: 180 * $s;
+     font-family: TTNormsMedium;
+     font-size: 40 * $s;
+     color:rgba(80,80,80,1);
+    background-repeat: no-repeat;
+    // text-align: left;
+    height: 130  *$s;
+    transition: color 0.3s ease;
   }
   &.enabled {
     .backdrop {
@@ -259,7 +284,7 @@ export default {
       color: grey;
     }
     .time {
-      color: grey;
+      color:rgba(80,80,80,1);
     }
   }
   &.blur {
