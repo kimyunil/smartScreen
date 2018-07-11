@@ -555,7 +555,6 @@ export default {
                 // width: 580 * $s;
                 // height: 325 * $s;
                 transform: scale(0.52);
-                
               }
               .metadata {
                 opacity: 0;

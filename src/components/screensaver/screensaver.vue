@@ -6,7 +6,6 @@
           {{time}}
       </div>
       <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
-       
       </div>
       <span class="day">{{day[0]}}, {{ day[1]}}</span>
       <drivers v-if="sleep" :theme="'light'" :drivers="suggestions" :sayWord="'Say'" :toggle="!isRemoteEnabled" ></drivers>

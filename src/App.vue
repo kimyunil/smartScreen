@@ -30,7 +30,7 @@ export default {
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
     }
-     this.switch_comp({ replace: true, name: 'screensaver' });
+    this.switch_comp({ replace: true, name: 'screensaver' });
   },
   destroyed() {
     globalListener.destroyed();
