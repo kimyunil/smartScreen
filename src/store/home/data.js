@@ -64,7 +64,7 @@ export default {
             content: 'handmaids',
           },
           topLeftText: '',
-          bottomText: '<span><span style="color: rgba(255,97,97,1);">Sasha Sloan</span> - <span>Norma</span></span></span>',
+          bottomText: '<span><span style="color: rgba(255,97,97,1);">Sasha Sloan</span> - <span>Normal</span></span></span>',
           tile: '/static/Images/home/homeUI/tile/tile.png',
           logo: '/static/Images/home/homeUI/icons/vevo.png',
           logoType: 'rect',

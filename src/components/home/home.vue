@@ -7,7 +7,10 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
+                  <div class="video" v-if="vidAutoplay && showMore === 'boot' && active">
+                    <video :src="sponsored.videoUrl" autoplay loop/>
+                  </div>
+                  <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
                 </div>
                 <div class="metadata">
                     <div class="focus_bg_partial"></div>
@@ -78,6 +81,7 @@ export default {
   computed: {
     ...mapState([
       'isRemoteEnabled',
+      'vidAutoplay',
     ]),
     ...mapState('home', [
       'showMore',
@@ -209,6 +213,7 @@ export default {
       gridIdx: 0,
       slideshowID: null,
       sponsored: {
+        videoUrl: '/resources/videos/smartscreen/poster-video.mp4',
         poster: '/static/Images/home/homeUI/poster.png',
         icon: '/static/Images/home/homeUI/source.png',
         text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span><span>',
@@ -311,13 +316,28 @@ export default {
               width: 1090 * $s;
               height: 615 * $s;
               transition: transform 0.3s ease;
+              border-radius: 10 * $s;
+              overflow: hidden;
               .poster {
                 position: relative;
                 width: 100%;
-                border-radius: 10 * $s;
                 z-index: 999;
                 background-size: 100% 100%;
                 height: 100%;
+              }
+              .video {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                video {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                }
               }
             }
             .metadata {
