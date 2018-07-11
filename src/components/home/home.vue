@@ -1,5 +1,5 @@
 <template>
-  <div class="home" style="ba ckground-image:url('/static/Images/home/homeUI/screenshot.jpg')">
+  <div class="home" style="background-image:url('/static/Images/home/bg.png')">
     <div class="dashboard" :class="[{ 'voice-enabled': showMore === 'initial' }, moreClass]" :style="{'transform': `translateY(${transDash})`}">
       <div class="upperDeck">
         <div class="left-corner">
@@ -41,9 +41,18 @@
           </div>
         </div>
       </div>
-      <div class="lowerDeck">
-        <div class="deck-wrapper" v-if="showMore !== 'boot'">
+      <div class="lowerDeck" v-if="showMore !== 'boot'">
+        <div class="deck-wrapper">
           <homescreen :enabled="(navId === 'lowerdeck')"></homescreen>
+        </div>
+      </div>
+      <div class="driver" v-else>
+        <drivers :theme="'light'" :drivers="currentGrid.suggest" :toggle="!isRemoteEnabled" :loop="true"></drivers>
+        <div class="pagination">
+          <template v-for="(grid, index) in gridDetails">
+            <div :key="index" class = "circle" :class="{'selected': slideIdx === index}">
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -51,7 +60,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
-// import drivers from '../common/drivers';
+import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 import gridpage from './common/UI/gridpage';
 import homescreen from './homeScreen';
@@ -216,6 +225,7 @@ export default {
   },
   components: {
     gridpage,
+    drivers,
     homescreen,
   },
   watch: {
@@ -259,7 +269,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background: rgb(242,242,242);
+    // background: rgb(242,242,242);
     .upperDeck {
       position: relative;
       width: 100%;
@@ -444,7 +454,7 @@ export default {
       }
       &.show-more {
         .upperDeck {
-          background: rgba(245,245,245,1);
+          // background: rgba(245,245,245,1);
           height: 430 * $s;
           .wrapper {
             flex-wrap: nowrap;
@@ -478,14 +488,45 @@ export default {
           }
         }
         .lowerDeck {
+          position: relative;
+          width: 100%;
+          height: 100%;
           .deck-wrapper {
-            background: rgba(216,216,216,1);
+            background: rgba(216,216,216,0.3);
           }
         }
       }
 
     }
-  }
+    .driver {
+      position: absolute;
+      bottom: 0 * $s;
 
+      height: 100 * $s;
+      width: 100%;
+      .pagination {
+        position: absolute;
+        right: 120  * $s;
+        height: 100%;
+        top: -30%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        .circle {
+          position: relative;
+          margin-left: 20 * $s;
+          width: 12 * $s;
+          border-radius: 50%;
+          height: 12 * $s;
+          background-color:rgba(80,80,80, 0.2);
+          transition: background-color 0.3s ease;
+          &.selected {
+            background-color:rgba(80,80,80, 1);
+          }
+        }
+      }
+    }
+  }
 }
 </style>

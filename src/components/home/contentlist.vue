@@ -7,7 +7,7 @@
         <div class="grid-list">
           <template v-for="(subCat, index) in gridlist">
             <div class="grid-templates template subcategory-template"  :key="index">
-              <div class="title" :class="[{'elevate': (rowIdx === index)}]">{{subCat.title}}</div>
+              <div class="title" :class="[{'elevate': (rowIdx === index && active)}]">{{subCat.title}}</div>
               <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </template>
@@ -270,11 +270,11 @@ export default {
           .title {
             text-align: left;
             height: 50 * $s;
-            font-family:Helvetica;
-            font-size: 36 * $s;
-            color: rgb(44,44,44);
+            font-family: TTNormsMedium;
+            font-size: 28 * $s;
+            color: rgb(80,80,80);
             &.elevate {
-              transform: translateY(#{-30  *$s});
+              transform: translateY(#{-15  *$s});
             }
           }
           .subCategoryList {

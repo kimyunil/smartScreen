@@ -207,7 +207,7 @@ const store = new Vuex.Store({
       } else if (payload.subcategory === 'contentType') {
         state.home.showMore = 'fullhome';
         state.home.navId = 'lowerdeck';
-        state.home.selectedIdx = payload.idx
+        state.home.selectedIdx = payload.idx;
       }
     },
     CONFIG_UPDATE({ state, dispatch }, payload) {
@@ -242,7 +242,7 @@ const store = new Vuex.Store({
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {
             dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
           }
-           dispatch('UPDATE_MILLENIALS', payload);
+          dispatch('UPDATE_MILLENIALS', payload);
           break;
         case 'home': {
           commit('home/select_nav', payload.subcategory);

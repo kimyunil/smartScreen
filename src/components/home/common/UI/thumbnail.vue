@@ -236,7 +236,7 @@ export default {
       }
       .meta-text {
         position: relative;
-        width: 90%;
+        width: 100%;
         color: black;
         text-align:left;
         color: rgba(80,80,80,1);
@@ -245,6 +245,8 @@ export default {
       }
     }
     &.full-wrapper {
+      border-radius: 10 * $s;
+      overflow: hidden;
       .content-tile {
         height: 100%;
       }
@@ -265,6 +267,8 @@ export default {
         }
       }
       &.partial-wrapper {
+        border-radius: 10 * $s;
+        overflow:hidden;
         .image-container {
           position: absolute;
           top: 0;
@@ -276,10 +280,9 @@ export default {
           height: 100%;
           overflow: hidden;
           box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
-          border-radius: 10 * $s;
-          border-width: 20 * $s;
+          border-radius: 20 * $s;
           .content-tile {
-            border-radius:0;
+            border-radius: 120 * $s;
           }
         }
       }

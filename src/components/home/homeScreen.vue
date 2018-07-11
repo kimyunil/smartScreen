@@ -116,23 +116,19 @@ export default {
       if (val === 1) {
         console.log(this.translate);
         this.anim = el.animate([
-          // keyframes
-          { transform: `translateY(${this.translate}px)` }, 
-          { transform: 'translateY(-100%)' }
-        ], { 
-          // timing options
+          { transform: `translateY(${this.translate}px)` },
+          { transform: 'translateY(-100%)' },
+        ], {
           duration: 10000,
-          fill: 'forwards'
+          fill: 'forwards',
         });
       } else if (val === 2) {
-         this.anim = el.animate([
-          // keyframes
-          { transform: `translateY(-100%)` }, 
-          { transform: `translateY(${this.translate}px)` }
-        ], { 
-          // timing options
+        this.anim = el.animate([
+          { transform: 'translateY(-100%)' },
+          { transform: `translateY(${this.translate}px)` },
+        ], {
           duration: 10000,
-          fill: 'forwards'
+          fill: 'forwards',
         });
       }
     },
