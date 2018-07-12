@@ -444,7 +444,10 @@ export default {
             color: rgba(80,80,80,1);
             font-size: 48 * $s;
           }
-          &.fade-enter-active, &.fade-leave-active {
+          &.fade-leave-active {
+            transition: opacity 0.1s ease;
+          }
+          &.fade-enter-active{
             transition: transform 0.3s ease 0.4s, opacity 0.4s ease 0.4s;
           }
           &.fade-leave-to {
