@@ -26,7 +26,7 @@ export default {
       title: '',
       details: {
         action1: {
-          img: './static/Images/results/action/top_actions.jpg.png',
+          img: './static/Images/results/action/top_actions.jpg',
           suggestions: ['Hey Bixby, show me more'],
           sayWord: 'Say',
         },

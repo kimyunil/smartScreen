@@ -330,6 +330,7 @@ const store = new Vuex.Store({
         case 'result-idx':
           commit('result/SKIP_RESULT', payload.subcategory);
           break;
+        case 'topaction':
         case 'youtubetrend':
           commit('result/SET_RESULT', payload);
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'result', transition: 'blur' });
