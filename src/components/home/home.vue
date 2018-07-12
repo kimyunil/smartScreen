@@ -43,7 +43,7 @@
         <transition name="slide-r">
           <div class="right-corner" v-if="showMore === 'boot' || showMore === 'initial'">
             <div class="right-wrapper">
-                <div class="list" :style="translateX">
+                <div class="list" :style="translateX" :class="{'browse': (showMore === 'initial' && panning)}">
                     <transition name="fade" v-if="showMore === 'boot'">
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
@@ -100,6 +100,7 @@ export default {
     ]),
     ...mapState('home', [
       'showMore',
+      'panning',
       'navId',
     ]),
     translateX() {
@@ -183,13 +184,13 @@ export default {
       this.showHeader = bool;
     },
     slidehome() {
-      this.$nextTick(() => {
+      setTimeout(() => {
         const upperDeckEle = this.$el.querySelector('.upperDeck');
         if (upperDeckEle) {
           this.transDash = `${((upperDeckEle.offsetHeight * -1) * 100) / window.innerWidth}vw`;
           console.log(this.transDash);
         }
-      });
+      }, 2000);
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -467,6 +468,7 @@ export default {
           top: 100 * $s;
           width: 100%;
           height: 820 * $s;
+          overflow:hidden;
           .list {
             position: absolute;
             width: auto;
@@ -493,7 +495,17 @@ export default {
                 opacity: 0;
               }
             }
+            &.browse {
+              animation-name: example;
+              animation-duration: 30s;
+              animation-direction: alternate;
+              animation-iteration-count: infinite;
+            }
           }
+        }
+        @keyframes example {
+            from {transform: translateX(#{0%});}
+            to {transform: translateX(#{-55%});}
         }
       }
     }

@@ -208,6 +208,14 @@ const store = new Vuex.Store({
         state.home.showMore = 'fullhome';
         state.home.navId = 'lowerdeck';
         state.home.selectedIdx = payload.idx;
+      } else if (payload.subcategory === 'browse') {
+        if (state.home.showMore === 'initial') {
+          state.home.panning = !state.home.panning;
+        }
+      } else if (payload.subcategory === 'partial') {
+        state.home.showMore = 'partial';
+        state.home.navId = 'lowerdeck';
+        state.home.selectedIdx = payload.idx;
       }
     },
     CONFIG_UPDATE({ state, dispatch }, payload) {
@@ -246,6 +254,7 @@ const store = new Vuex.Store({
           break;
         case 'home': {
           commit('home/select_nav', payload.subcategory);
+          state.home.showMore = 'boot';
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {
             dispatch('SWITCH_COMPONENT', { replace: true, name: 'home' });
           }
@@ -297,10 +306,6 @@ const store = new Vuex.Store({
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'fitbit' });
           break;
         }
-        case 'youtube': {
-          dispatch('SWITCH_COMPONENT', { replace: true, name: 'youtube', transition: 'blur' });
-          break;
-        }
         case 'spotifyhome': {
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotifyhome' });
           break;
@@ -313,8 +318,21 @@ const store = new Vuex.Store({
           });
           break;
         }
+        case 'hboplayer':
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'hboplayer', transition: 'blur' });
+          break;
+        case 'vevo':
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'vevo', transition: 'blur' });
+          break;
         case 'ytplayer':
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'ytplayer', transition: 'blur' });
+          break;
+        case 'result-idx':
+          commit('result/SKIP_RESULT', payload.subcategory);
+          break;
+        case 'youtubetrend':
+          commit('result/SET_RESULT', payload);
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'result', transition: 'blur' });
           break;
         case 'movies': {
           commit('result/SET_RESULT', payload);

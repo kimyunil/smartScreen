@@ -49,6 +49,14 @@ export default {
       type: 'app',
       suggestion: false,
     },
+    vevo: {
+      type: 'app',
+      suggestion: false,
+    },
+    hboplayer: {
+      type: 'app',
+      suggestion: false,
+    },
     volume: {
       type: 'system',
       suggestion: false,

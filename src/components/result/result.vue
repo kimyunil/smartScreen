@@ -33,7 +33,7 @@ export default {
     Messages.$on('button_down', this.handleKeyDown);
     this.addSlideShow();
     this.homeTimer = setTimeout(() => {
-      this.switch_comp({ replace: true, name: 'home' });
+      // this.switch_comp({ replace: true, name: 'home' });
     }, 6000);
   },
   destroyed() {
@@ -175,10 +175,11 @@ export default {
       position: absolute;
       right: 70 * $s;
       display: flex;
-      width: 84 * $s;
+      // width: 84 * $s;
       justify-content: space-between;
       .dots {
         height: 10* $s;
+        margin-right: 30 * $s;
         width: 10* $s;
         border-radius: 50%;
         background-color: rgba(0,0,0,0.2);

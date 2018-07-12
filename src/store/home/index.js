@@ -5,6 +5,7 @@ export default {
   state: {
     data,
     selectedIdx: 0,
+    panning: false,
     navId: 'leftposter', // leftposter, rightgrid, lowerdeck
     showMore: 'boot', // initial partial, fullhome
     timeout: 30000,

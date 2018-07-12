@@ -24,7 +24,9 @@ import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
 import volume from './system/volume';
 import result from './result/result';
+import hboplayer from './hboplayer/hboplayer';
 import ytplayer from './ytplayer/ytplayer';
+import vevo from './vevo/vevo';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -163,9 +165,11 @@ export default {
     volume,
     result,
     spotify,
+    hboplayer,
     screensaver,
     ytplayer,
     musicPlayer,
+    vevo,
     screenshot,
     // result,
   },

@@ -21,6 +21,33 @@ export default {
         },
       },
     },
+    topaction: {
+      list: ['action1'],
+      title: '',
+      details: {
+        action1: {
+          img: './static/Images/results/action/top_actions.jpg.png',
+          suggestions: ['Hey Bixby, show me more'],
+          sayWord: 'Say',
+        },
+      },
+    },
+    youtubetrend: {
+      list: ['action1', 'action2'],
+      title: '',
+      details: {
+        action1: {
+          img: './static/Images/results/youtub/youtubepag1.png',
+          sayWord: 'Say',
+          suggestions: ['Hey Bixby, sort by the newest videos'],
+        },
+        action2: {
+          sayWord: 'Say',
+          img: './static/Images/results/youtub/yotubepage2.png',
+          suggestions: ['Hey Bixby, sort by the newest videos'],
+        },
+      },
+    },
     ghost: {
       list: ['ghost1'],
       title: 'GHOSTBUSTERS',
