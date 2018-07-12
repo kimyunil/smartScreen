@@ -27,6 +27,7 @@ export default {
     Messages.$on('smartscreen.setup', this.setupScreen);
     Messages.$on('button_down', this.handleButton);
     Messages.send('smartscreen.setupscreen', { from: 'smartscreen' });
+    // window.sessionStorage.setItem('oobe', 'true');
     if (window.sessionStorage.getItem('oobe') !== null) {
       this.setUpcomplete(true);
     }
@@ -74,6 +75,7 @@ export default {
     handleButton(param) {
       console.log('param key: ', param);
       if (param === 'PLAY' && this.setupInProcess) {
+        window.sessionStorage.setItem('oobe', 'true');
         this.setupInProcess = false;
         this.switch_comp({ replace: true, name: 'home' });
         this.setUpcomplete(true);
