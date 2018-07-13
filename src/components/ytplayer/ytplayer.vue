@@ -48,7 +48,7 @@ export default {
       console.log('player:::');
       if (param.from === 'splash') {
         this.showSplash = false;
-        this.setPlayer({ url: '/resources/videos/smartscreen/Movies_2_COCO.mp4' });
+        this.setPlayer({ url: '/resources/videos/smartscreen/new/youtube.mp4' });
       }
     },
     handleKeyDown(type) {

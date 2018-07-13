@@ -48,7 +48,7 @@ export default {
       console.log('player:::');
       if (param.from === 'splash') {
         this.showSplash = false;
-        this.setPlayer({ url: '/resources/videos/smartscreen/Movies_3_Black_Panther.mp4' });
+        this.setPlayer({ url: '/resources/videos/smartscreen/new/ant-man.mp4' });
       }
     },
     handleKeyDown(type) {
