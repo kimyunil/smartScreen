@@ -43,7 +43,7 @@
         <transition name="slide-r">
           <div class="right-corner" v-if="showMore === 'boot' || showMore === 'initial'">
             <div class="right-wrapper">
-                <div class="list" :style="translateX" :class="{'browse': (showMore === 'initial' && panning)}">
+                <div class="list" :style="translateX">
                     <transition name="fade" v-if="showMore === 'boot'">
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
@@ -240,13 +240,13 @@ export default {
       sponsored: {
         videoUrl: '/resources/videos/smartscreen/poster-video.mp4',
         poster: '/static/Images/home/homeUI/poster.png',
-        icon: '/static/Images/home/homeUI/source.png',
+        icon: '/static/Images/home/homeUI/icons/gia.png',
         text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span><span>',
       },
       upnext: {
         title: 'COMING UP NEXT',
         icon: '/static/Images/home/homeUI/upnext-icon.png',
-        text: '<span>The Bicultural Blackness of <br> the <span style="color:rgb(255,96,93)">Royal Wedding</span><span>',
+        text: '<span> <span style="color:rgb(255,96,93)">The Art of Home Cooking -</span><br><span>Week 1. Sustainable Eating</span><span>',
       },
       direction: 'left',
       index: 0,
@@ -259,6 +259,30 @@ export default {
     homescreen,
   },
   watch: {
+    panning(val) {
+      if (this.showMore === 'initial') {
+        const el = this.$el.querySelector('.right-wrapper .list');
+        if (val) {
+          if (this.anim) {
+            this.anim.play();
+          } else {
+            this.anim = el.animate([
+              { transform: 'translateX(0px)' },
+              { transform: 'translateX(-50%)' },
+            ], {
+              duration: 15000,
+              iterations: Infinity,
+              direction: 'alternate',
+            });
+            this.anim.play();
+          }
+        } else {
+          if (this.anim) {
+            this.anim.pause();
+          }
+        }
+      }
+    },
     isRemoteEnabled(val) {
       if (!val) {
         if (this.active) {
@@ -280,6 +304,12 @@ export default {
         this.toggleInterval(false);
       } else {
         this.transDash = 0;
+      }
+      if (val !== 'inital') {
+        if (this.anim) {
+          this.anim.cancel();
+          this.anim = null;
+        }
       }
     },
   },
@@ -375,8 +405,8 @@ export default {
               margin-bottom: 50 * $s;
               .source-icon {
                 position: relative;
-                height: 60 * $s;
-                width: 60 * $s;
+                height: 36 * $s;
+                width: 72 * $s;
                 background-size: 100% 100%;
               }
               .text {
@@ -403,6 +433,8 @@ export default {
             .upnext-icon {
               position: relative;
               height: 60 * $s;
+              background-size: 150 * $s 60 * $s;
+              background-repeat: no-repeat;
               width: 200 * $s;
             }
             .text {
@@ -426,14 +458,14 @@ export default {
         }
       .metadata-twice {
           position: absolute;
-          top: 30 * $s;
+          top: 50 * $s;
           left: 740 * $s;
           width: 530 * $s;
           height: auto;
           .source-icon {
             position: relative;
-            height: 60 * $s;
-            width: 60 * $s;
+            height: 36 * $s;
+            width: 72 * $s;
             background-size: 100% 100%;
           }
           .text {
@@ -548,7 +580,7 @@ export default {
         .right-corner {
           width: 48%;
           transform: translateX(#{ -230 * $s });
-          background:url('/static/Images/lowebg.png');
+          background:url('/static/Images/home/homeUI/shadow.png');
           background-repeat: repeat;
         }
       }

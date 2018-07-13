@@ -185,12 +185,12 @@ export default {
     .content-metadata {
       position: absolute;
       height: auto;
-      top: 75%;
+      top: 70%;
       width: 100%;
       font-size: 48 * $s;
       .meta-icon {
         position: relative;
-        height: 30 * $s;
+        height: 40 * $s;
         display: flex;
         justify-content: space-between;
         background-size:50 * $s 150 * $s;
@@ -204,6 +204,7 @@ export default {
       .meta-text {
         position: relative;
         width: 90%;
+        top: 10  * $s;
         color: black;
         text-align:left;
         color: rgba(80,80,80,1);

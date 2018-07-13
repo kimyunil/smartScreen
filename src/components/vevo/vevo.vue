@@ -1,10 +1,12 @@
 <template>
-  <div class="ytplayer-wrapper">
+  <div class="vevo-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="details" @exit="exitCB"></splash>
-      <component v-else :is="'player'" :active="!showSplash&&active" class="ytplayer-content" :name="'ytplayer'">
-    </component>
     </transition>
+    <div class="vevo-content" v-if="name === 'player' && !showSplash">
+      <player :key="'vevo'" :active="!showSplash&&!killPlayer" class="vevo-content" :name="'vevo'">
+      </player>
+    </div>
   </div>
 </template>
 <script>
@@ -14,7 +16,7 @@ import player from '../common/player';
 import Messages from '../../services/Messages';
 
 export default {
-  name: 'ytplayer',
+  name: 'vevo',
   created() {
   },
   mounted() {
@@ -25,11 +27,18 @@ export default {
     }, 3000);
   },
   destroyed() {
+    // hack
+    this.$el.querySelector('video').muted = true;
+    setTimeout(() => {
+      this.$el.querySelector('video').src = '';
+    }, 1000);
     Messages.$off('button_down', this.handleKeyDown);
   },
   data() {
     return {
       showSplash: true,
+      killPlayer: false,
+      name: 'player',
       details: {
         splashBG: '/static/Images/app/vevo.png',
       },
@@ -72,12 +81,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '../../mixins/scss/main';
-.ytplayer-wrapper {
+.vevo-wrapper {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  .ytplayer-content {
+  .vevo-content {
     position: absolute;
     width: 100%;
     height: 100%;

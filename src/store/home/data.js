@@ -45,7 +45,7 @@ export default {
   homescreen: {
     grids: ['grid1', 'grid2', 'grid3'],
     grid1: {
-      suggest: ['Hey Bixby, show me more...'],
+      suggest: ['Hey Bixby, show me more'],
       title: 'grid-1',
       content: ['hulu', 'sponsor', 'npr'],
       nav: [
@@ -100,7 +100,7 @@ export default {
     },
     grid2: {
       title: 'grid-1',
-      suggest: ['Hey Bixby, show me more...'],
+      suggest: ['Hey Bixby, show me more'],
       content: ['body', 'hulu', 'hbo'],
       nav: [
         ['tile', 'tile'],
@@ -157,7 +157,7 @@ export default {
     },
     grid3: {
       title: 'grid-1',
-      suggest: ['Hey Bixby, show me more...'],
+      suggest: ['Hey Bixby, show me more'],
       content: ['body', 'traffic', 'weather'],
       nav: [
         ['tile', 'tile'],

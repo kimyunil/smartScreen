@@ -2,8 +2,8 @@
   <div class="ytplayer-wrapper">
     <transition name="fade">
       <splash v-if="showSplash" :details="details" @exit="exitCB"></splash>
-      <component v-else :is="'player'" :active="!showSplash&&active" class="ytplayer-content" :name="'ytplayer'">
-    </component>
+      <player v-else :active="!showSplash&&active" class="ytplayer-content" :name="'ytplayer'">
+      </player>
     </transition>
   </div>
 </template>
@@ -25,6 +25,11 @@ export default {
     }, 3000);
   },
   destroyed() {
+    // hack
+    this.$el.querySelector('video').muted = true;
+    setTimeout(() => {
+      this.$el.querySelector('video').src = '';
+    }, 1000);
     Messages.$off('button_down', this.handleKeyDown);
   },
   data() {

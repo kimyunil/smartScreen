@@ -27,7 +27,7 @@ export default {
       details: {
         action1: {
           img: './static/Images/results/action/top_actions.jpg',
-          suggestions: ['Hey Bixby, show me more'],
+          suggestions: ['“Hey Bixby, show me more“'],
           sayWord: 'Say',
         },
       },
@@ -39,12 +39,12 @@ export default {
         action1: {
           img: './static/Images/results/youtub/youtubepag1.png',
           sayWord: 'Say',
-          suggestions: ['Hey Bixby, sort by the newest videos'],
+          suggestions: ['“Hey Bixby, sort by the newest videos“'],
         },
         action2: {
           sayWord: 'Say',
           img: './static/Images/results/youtub/yotubepage2.png',
-          suggestions: ['Hey Bixby, sort by the newest videos'],
+          suggestions: ['“Hey Bixby, sort by the newest videos“'],
         },
       },
     },

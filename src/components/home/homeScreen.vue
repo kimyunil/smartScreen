@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :style="translateY" :class="{'scrollDown': (!isRemoteEnabled && scrollVert === 1), 'scrollUp': (!isRemoteEnabled && scrollVert === 2)}">
+  <div class="wrapper" :style="translateY">
     <div class="headings" :class="[activeClass]">
         <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="{'selected': selectedIdx === index && enabled && !focus}">
         <div class="focus_bg"></div>
@@ -32,7 +32,6 @@ export default {
   },
   data() {
     return {
-      scrollVert: 0,
       translate: 0,
     };
   },
@@ -46,6 +45,8 @@ export default {
     ]),
     ...mapState('home', [
       'selectedIdx',
+      'panning',
+      'showMore',
     ]),
     activeClass() {
       if (this.enabled) {
@@ -95,13 +96,6 @@ export default {
           }
           break;
         case 'EIGHT':
-          if (this.scrollVert === 1) {
-            this.scrollVert = 2;
-          } else if (this.scrollVert === 2) {
-            this.scrollVert = 1;
-          } else if (this.scrollVert === 0) {
-            this.scrollVert = 1;
-          }
           break;
         case 'NINE':
           break;
@@ -111,25 +105,36 @@ export default {
     },
   },
   watch: {
-    scrollVert(val) {
-      const el = this.$el;
-      if (val === 1) {
-        console.log(this.translate);
-        this.anim = el.animate([
-          { transform: `translateY(${this.translate}px)` },
-          { transform: 'translateY(-100%)' },
-        ], {
-          duration: 50000,
-          fill: 'forwards',
-        });
-      } else if (val === 2) {
-        this.anim = el.animate([
-          { transform: 'translateY(-100%)' },
-          { transform: `translateY(${this.translate}px)` },
-        ], {
-          duration: 50000,
-          fill: 'forwards',
-        });
+    panning(val) {
+      if (this.showMore === 'fullhome') {
+        const el = this.$el;
+        if (val) {
+          if (this.anim) {
+            this.anim.play();
+          } else {
+            this.anim = el.animate([
+              { transform: `translateY(${this.translate}px)` },
+              { transform: 'translateY(-100%)' },
+            ], {
+              duration: 50000,
+              iterations: Infinity,
+              direction: 'alternate',
+            });
+            this.anim.play();
+          }
+        } else {
+          if (this.anim) {
+            this.anim.pause();
+          }
+        }
+      }
+    },
+    showMore() {
+      if (this.showMore !== 'fullhome') {
+        if (this.anim) {
+          this.anim.cancel();
+          this.anim = null;
+        }
       }
     },
   },

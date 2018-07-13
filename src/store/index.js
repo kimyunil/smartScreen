@@ -209,7 +209,7 @@ const store = new Vuex.Store({
         state.home.navId = 'lowerdeck';
         state.home.selectedIdx = payload.idx;
       } else if (payload.subcategory === 'browse') {
-        if (state.home.showMore === 'initial') {
+        if (state.home.showMore === 'initial' || state.home.showMore === 'fullhome') {
           state.home.panning = !state.home.panning;
         }
       } else if (payload.subcategory === 'partial') {
