@@ -7,8 +7,8 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="false && (showMore === 'boot' || showMore === 'initial') && active">
-                    <video :src="sponsored.videoUrl" autoplay loop/>
+                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial') && active">
+                    <video :src="sponsored.videoUrl" autoplay loop muted/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
                 </div>
