@@ -85,7 +85,6 @@
       <template v-if="itemType === 'sqrThumb'">
         <div class="sqrThumb item" v-for="(item, $index) in items" :key="item.title"
         :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]"
-        
         >
           <div class="focus-div" v-if="focus && $index === index"></div>
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
@@ -321,7 +320,7 @@ export default {
           position: absolute;
           top: 0 * $s;
           left: -25px;
-        }        
+        }
         margin-left: 20 * $s;
       }
       &.selected {

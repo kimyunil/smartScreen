@@ -43,13 +43,15 @@
         <transition name="slide-r">
           <div class="right-corner" v-if="showMore === 'boot' || showMore === 'initial'">
             <div class="right-wrapper">
-                <div class="list" :style="translateX">
+                <div class="list">
                     <transition name="fade" v-if="showMore === 'boot'">
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
-                  <template v-for="(grid, index) in reoderedGrid" v-else>
-                    <gridpage class="grid-wrapper gridsele" :details="grid" :style="computedStyle(index)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
-                  </template>
+                    <div class="innerlist" :style="translateX" v-else>
+                      <template v-for="(grid, idx) in dgridArr">
+                        <gridpage v-if="(index - 2) <= idx"class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
+                      </template>
+                    </div>
                 </div>
             </div>
           </div>
@@ -84,13 +86,14 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.resetVoiceTimer();
+    this.dgridArr = this.gridDetails;
     this.toggleInterval(true);
-    if (this.showMore === 'fullhome') {
-    }
+    this.setpanning(false);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
     this.toggleInterval(false);
+    this.setpanning(false);
   },
   computed: {
     ...mapState([
@@ -144,6 +147,27 @@ export default {
       const left = (((530 + 50) * index) * 100) / window.innerWidth;
       console.log(index);
       return { left : `${left}vw` };
+    },
+    setpanning(start) {
+      this.dgridArr = [];
+      for (let i = 0; i < this.gridDetails.length; i+=1) {
+        this.dgridArr[i] = this.gridDetails[i];
+      }
+      this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
+      if (start) {
+        this.transID = setInterval(() => {
+          this.translate -= 10;
+          if (this.translate % 580 === 0) {
+            this.index += 1;
+            const index = this.index % this.gridDetails.length;
+            this.$set(this.dgridArr, this.dgridArr.length, this.gridDetails[index]);
+          }
+        }, 500);
+        this.index = this.slideIdx;
+      } else {
+        clearInterval(this.transID);
+        this.transID = null;
+      }
     },
     toggleInterval(bool) {
       if (bool) {
@@ -224,7 +248,9 @@ export default {
   },
   data() {
     return {
+      dgridArr: [],
       remote: true,
+      index: 0,
       transDash: 0,
       slideIdx: 0,
       colVal: 0,
@@ -244,7 +270,6 @@ export default {
         text: '<span> <span style="color:rgb(255,96,93)">The Art of Home Cooking -</span><br><span>Week 1. Sustainable Eating</span><span>',
       },
       direction: 'left',
-      index: 0,
       focus: 'content',
     };
   },
@@ -256,24 +281,13 @@ export default {
   watch: {
     panning(val) {
       if (this.showMore === 'initial') {
-        const el = this.$el.querySelector('.right-wrapper .list');
         if (val) {
-          if (this.anim) {
-            this.anim.play();
-          } else {
-            this.anim = el.animate([
-              { transform: 'translateX(0px)' },
-              { transform: 'translateX(-50%)' },
-            ], {
-              duration: 15000,
-              iterations: Infinity,
-              direction: 'alternate',
-            });
-            this.anim.play();
-          }
+          this.setpanning(true);
         } else {
-          if (this.anim) {
-            this.anim.pause();
+          if (!this.transID) {
+            this.setpanning(true);
+          } else {
+            this.setpanning(false);
           }
         }
       }
@@ -294,16 +308,13 @@ export default {
     },
     showMore(val) {
       if (val === 'fullhome') {
+        this.setpanning(false);
+        this.translate = 0;
       } else if (val === 'initial') {
         this.toggleInterval(false);
       } else {
-        this.transDash = 0;
-      }
-      if (val !== 'inital') {
-        if (this.anim) {
-          this.anim.cancel();
-          this.anim = null;
-        }
+        this.setpanning(false);
+        this.translate = 0;
       }
     },
   },
@@ -504,7 +515,7 @@ export default {
             height: 100%;
             margin-left: 50 * $s;
             display: flex;
-            transition: transform 0.3s ease;
+            transition: transform 0.8s linear;
             .grid-wrapper {
               position: relative;
               width: 532 * $s;
@@ -534,6 +545,12 @@ export default {
               animation-duration: 30s;
               animation-direction: alternate;
               animation-iteration-count: infinite;
+            }
+            .innerlist {
+              position: relative;
+              width: auto;
+              height: 100%;
+              transition: transform 1.0s linear;
             }
           }
         }
