@@ -7,6 +7,7 @@ export default {
     resultData: {
       title: '',
       idx: -1,
+      stopSlide: false,
       slides: [],
       data: null,
     },
@@ -18,6 +19,7 @@ export default {
       state.resultData.idx = t;
     },
     SKIP_RESULT(state, skip) {
+      state.resultData.stopSlide = true;
       if (skip === 'next') {
         state.resultData.idx = (state.resultData.idx + 1) % state.resultData.slides.length;
       } else if (skip === 'prev') {
@@ -29,6 +31,7 @@ export default {
       }
     },
     SET_RESULT(state, payload) {
+      state.resultData.stopSlide = false;
       const movieDB = state.data.movies[payload.subcategory];
       if (movieDB) {
         state.resultData.slides = [];

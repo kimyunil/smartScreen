@@ -2,7 +2,7 @@
   <div class="smart-screen">
     <div class="backdrop" :class="{'blur': topView !== 'screensaver'}">
     </div>
-    <transition-group :name="transition" tag="div" class="component" :duration="5000">
+    <transition-group :name="transition" tag="div" class="component" :duration="{enter: 5000, leave: 1500}">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="gConfig.components[comps].vType === 'screenshot' ? 'screenshot': comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>

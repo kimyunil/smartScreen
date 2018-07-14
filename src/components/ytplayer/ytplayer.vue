@@ -27,9 +27,6 @@ export default {
   destroyed() {
     // hack
     this.$el.querySelector('video').muted = true;
-    setTimeout(() => {
-      this.$el.querySelector('video').src = '';
-    }, 1000);
     Messages.$off('button_down', this.handleKeyDown);
   },
   data() {

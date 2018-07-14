@@ -22,29 +22,44 @@ export default {
       },
     },
     topaction: {
-      list: ['action1'],
+      list: ['action1', 'action2', 'action3'],
       title: '',
       details: {
         action1: {
-          img: './static/Images/results/action/top_actions.jpg',
-          suggestions: ['“Hey Bixby, show me more“'],
+          img: './static/Images/results/action/action_movies_01.jpg',
+          suggestions: ['“Hey Bixby, next page“'],
+          sayWord: 'Say',
+        },
+        action2: {
+          img: './static/Images/results/action/action_movies_02.jpg',
+          suggestions: ['“Hey Bixby, sort by the top rated“'],
+          sayWord: 'Say',
+        },
+        action3: {
+          img: './static/Images/results/action/action_movies_03.jpg',
+          suggestions: ['“Hey Bixby, tell me more about Deadpool“'],
           sayWord: 'Say',
         },
       },
     },
     youtubetrend: {
-      list: ['action1', 'action2'],
+      list: ['action1', 'action2', 'action3'],
       title: '',
       details: {
         action1: {
           img: './static/Images/results/youtub/youtubepag1.png',
           sayWord: 'Say',
-          suggestions: ['“Hey Bixby, sort by the newest videos“'],
+          suggestions: ['“Hey Bixby, next page“'],
         },
         action2: {
           sayWord: 'Say',
           img: './static/Images/results/youtub/yotubepage2.png',
-          suggestions: ['“Hey Bixby, sort by the newest videos“'],
+          suggestions: ['“Hey Bixby, show me more“'],
+        },
+        action3: {
+          sayWord: 'Say',
+          img: './static/Images/results/youtub/youtubepag3.png',
+          suggestions: ['“Hey Bixby, sort by the newest“'],
         },
       },
     },

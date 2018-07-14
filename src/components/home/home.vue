@@ -7,7 +7,7 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="vidAutoplay && (showMore === 'boot' || showMore === 'initial') && active">
+                  <div class="video" v-if="false && (showMore === 'boot' || showMore === 'initial') && active">
                     <video :src="sponsored.videoUrl" autoplay loop/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
@@ -48,7 +48,7 @@
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
                   <template v-for="(grid, index) in reoderedGrid" v-else>
-                    <gridpage class="grid-wrapper gridsele" :details="grid" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
+                    <gridpage class="grid-wrapper gridsele" :details="grid" :style="computedStyle(index)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === index)" :key="index" @movefocus="movefocus"></gridpage>
                   </template>
                 </div>
             </div>
@@ -141,6 +141,11 @@ export default {
       toggleMoreData: 'TOGGLE_MORE_DATA',
       setfocus: 'SET_FOCUS',
     }),
+    computedStyle(index) {
+      const left = (((530 + 50) * index) * 100) / window.innerWidth;
+      console.log(index);
+      return { left : `${left}vw` };
+    },
     toggleInterval(bool) {
       if (bool) {
         clearInterval(this.slideshowID);
@@ -528,6 +533,11 @@ export default {
               &.fade-enter {
                 transform: translateX(#{50 * $s});
                 opacity: 0;
+              }
+              &.gridsele {
+                position: absolute;
+                width: 532 * $s;
+                height: 100%;
               }
             }
             &.browse {

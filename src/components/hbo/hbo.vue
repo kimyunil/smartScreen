@@ -28,6 +28,9 @@ export default {
     Messages.$on('button_down', this.handleKeyDown);
   },
   destroyed() {
+    if (this.$el.querySelector('video')) {
+      this.$el.querySelector('video').muted = true;
+    }
     Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {

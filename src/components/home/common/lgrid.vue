@@ -41,7 +41,7 @@
         </div>
       </template>
       <template v-if="itemType === 'sqrtile'">
-        <div class="sqrtile item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+        <div class="sqrtile item" :data-title="item.next" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}, {'next': item.next !== undefined}]">
           <div class="focus-div" v-if="focus && $index === index"></div>
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
             <div class = "progress" v-if = "item.progress">
@@ -83,7 +83,10 @@
         </div>
       </template>
       <template v-if="itemType === 'sqrThumb'">
-        <div class="sqrThumb item" v-for="(item, $index) in items" :key="item.title" :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]">
+        <div class="sqrThumb item" v-for="(item, $index) in items" :key="item.title"
+        :class="[{'shrink': isRemoteEnabled},{'selected': focus && $index === index}]"
+        
+        >
           <div class="focus-div" v-if="focus && $index === index"></div>
           <div class="thumb-img" :style="{'background-image': `url('${item.thumbnail}')`}">
             <div class = "progress" v-if = "item.progress">
@@ -286,8 +289,8 @@ export default {
         position: relative;
         color: rgba(80,80,80,1);
         span {
-        font-family: SamsungOneUI400;
-        font-size: 26 * $s;
+        font-family: TTNormsMedium;
+        font-size: 28 * $s;
         color: rgba(80,80,80,1);
         }
       }
@@ -296,6 +299,30 @@ export default {
         div {
           margin: 4 * $s 0;
         }
+      }
+      &.next {
+        &:after {
+          content: attr(data-title);
+          font-family: TTNormsMedium;
+          font-size: 28 * $s;
+          color: rgba(80,80,80,1);
+          position: absolute;
+          top: -50 * $s;
+          left: 0px;
+        }
+        &:before {
+          content: '';
+          width: 2 * $s;
+          background-color: rgba(151,151,151,0.3);
+          font-family: TTNormsMedium;
+          font-size: 28 * $s;
+          height:437 * $s;
+          color: rgba(80,80,80,1);
+          position: absolute;
+          top: 0 * $s;
+          left: -25px;
+        }        
+        margin-left: 20 * $s;
       }
       &.selected {
         .thumb-img {
@@ -388,8 +415,8 @@ export default {
         position: relative;
         color: rgba(80,80,80,1);
         span {
-        font-family: SamsungOneUI400;
-        font-size: 26 * $s;
+        font-family: TTNormsMedium;
+        font-size: 28 * $s;
         color: rgba(80,80,80,1);
         }
       }
@@ -486,8 +513,8 @@ export default {
         position: relative;
         color: rgba(80,80,80,1);
         span {
-        font-family: SamsungOneUI400;
-        font-size: 26 * $s;
+        font-family: TTNormsMedium;
+        font-size: 28 * $s;
         color: rgba(80,80,80,1);
         }
       }

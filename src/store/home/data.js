@@ -45,7 +45,7 @@ export default {
   homescreen: {
     grids: ['grid1', 'grid2', 'grid3'],
     grid1: {
-      suggest: ['Hey Bixby, show me more'],
+      suggest: ['Hey Bixby, tell me more about today’s weather'],
       title: 'grid-1',
       content: ['hulu', 'sponsor', 'npr'],
       nav: [
@@ -100,7 +100,7 @@ export default {
     },
     grid2: {
       title: 'grid-1',
-      suggest: ['Hey Bixby, show me more'],
+      suggest: ['Hey Bixby, play my Daily Mix'],
       content: ['body', 'hulu', 'hbo'],
       nav: [
         ['tile', 'tile'],
@@ -136,7 +136,7 @@ export default {
           topLeftText: '<span class="bold-top-text">sponsored</span>',
           bottomText: '<span>Tennis Channel <br> ATP Final </span>',
           logoType: 'sqr-2',
-          logo: '/static/Images/home/homeUI/icons/youtube.png',
+          logo: '/static/Images/home/homeUI/icons/gia-2.png',
           img: '/static/Images/home/homeUI/thumb/thumb4.png',
         },
       },

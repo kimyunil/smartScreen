@@ -47,6 +47,7 @@ export default {
     ]),
     ...mapState('result', {
       index: state => state.resultData.idx,
+      stopSlide: state => state.resultData.stopSlide,
       slides: state => state.resultData.slides,
       resultDB: state => state.resultData.data,
       title: state => state.resultData.title,
@@ -104,6 +105,11 @@ export default {
   watch: {
     slides() {
       this.addSlideShow();
+    },
+    stopSlide(val) {
+      if (val) {
+        this.stopSlideShow();
+      }
     },
   },
   components: {
