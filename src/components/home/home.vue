@@ -7,7 +7,7 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="false && (showMore === 'boot' || showMore === 'initial') && active">
+                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial') && active">
                     <video :src="sponsored.videoUrl" autoplay loop/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
@@ -56,8 +56,8 @@
         </transition>
       </div>
       <div class="lowerDeck" v-if="showMore !== 'boot'">
-        <div class="deck-wrapper" :style="{'transform': `translateY(${transDash})`}">
-          <homescreen :enabled="(navId === 'lowerdeck')"></homescreen>
+        <div class="deck-wrapper">
+          <homescreen :enabled="(showMore === 'partial' || showMore === 'fullhome')"></homescreen>
         </div>
       </div>
       <div class="driver" v-else>
@@ -86,7 +86,6 @@ export default {
     this.resetVoiceTimer();
     this.toggleInterval(true);
     if (this.showMore === 'fullhome') {
-      this.slidehome();
     }
   },
   destroyed() {
@@ -187,15 +186,6 @@ export default {
     },
     headerVisible(bool) {
       this.showHeader = bool;
-    },
-    slidehome() {
-      setTimeout(() => {
-        const upperDeckEle = this.$el.querySelector('.upperDeck');
-        if (upperDeckEle) {
-          this.transDash = `${((upperDeckEle.offsetHeight * -1) * 100) / window.innerWidth}vw`;
-          console.log(this.transDash);
-        }
-      }, 2000);
     },
     handleKeyDown(type) {
       if (!this.active) return;
@@ -304,7 +294,6 @@ export default {
     },
     showMore(val) {
       if (val === 'fullhome') {
-        this.slidehome();
       } else if (val === 'initial') {
         this.toggleInterval(false);
       } else {
@@ -555,8 +544,10 @@ export default {
       }
     }
     .lowerDeck {
-      position: relative;
-      top: 0;
+      position: absolute;
+      top: 1080 * $s;
+      transform: translateY(#{-80 * $s});
+      transition: transform 0.8s ease;
       width: 100%;
       height: auto;
       .deck-wrapper {
@@ -629,13 +620,19 @@ export default {
           }
         }
         .lowerDeck {
-          position: relative;
+          position: absolute;
           width: 100%;
           z-index: 9999;
+          transform: translateY(#{-650 * $s});
           height: 100%;
           .deck-wrapper {
             background-color: rgba(216,216,216,0.3);
           }
+        }
+      }
+      &.fullhome {
+        .lowerDeck {
+          transform: translateY(#{-1080 * $s});
         }
       }
 
