@@ -179,13 +179,13 @@ export default {
     }
     .pagination-dots {
       position: absolute;
-      right: 70 * $s;
+      right: 100 * $s;
       display: flex;
       // width: 84 * $s;
       justify-content: space-between;
       .dots {
         height: 10* $s;
-        margin-right: 30 * $s;
+        margin-right: 15 * $s;
         width: 10* $s;
         border-radius: 50%;
         background-color: rgba(0,0,0,0.2);
