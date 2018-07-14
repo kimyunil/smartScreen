@@ -7,7 +7,7 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial') && active">
+                  <div class="video" v-if="false && (showMore === 'boot' || showMore === 'initial') && active">
                     <video :src="sponsored.videoUrl" autoplay loop/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
@@ -657,7 +657,7 @@ export default {
     .driver {
       position: absolute;
       bottom: 0 * $s;
-
+      left: -15* $s;
       height: 100 * $s;
       width: 100%;
       .pagination {

@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-    <drivers :theme="'light'" :drivers="currSlide.suggestions" :sayWord="currSlide.sayWord" :toggle="!isRemoteEnabled" ></drivers>
+    <drivers :theme="'light'" :drivers="currSlide.suggestions" class="bixby-suggestion" :sayWord="currSlide.sayWord" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
@@ -206,6 +206,9 @@ export default {
     &.show-leave-active {
       transition: opacity 0.1s ease;
     }
+  }
+  .bixby-suggestion {
+    left: -15 * $s;
   }
 }
 </style>
