@@ -122,10 +122,8 @@ export default {
             });
             this.anim.play();
           }
-        } else {
-          if (this.anim) {
-            this.anim.pause();
-          }
+        } else if (this.anim) {
+          this.anim.pause();
         }
       }
     },

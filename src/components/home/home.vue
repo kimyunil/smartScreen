@@ -49,7 +49,7 @@
                     </transition>
                     <div class="innerlist" :style="translateX" v-else>
                       <template v-for="(grid, idx) in dgridArr">
-                        <gridpage v-if="(index - 2) <= idx"class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
+                        <gridpage v-if="(index - 2) <= idx" class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
                       </template>
                     </div>
                 </div>
@@ -146,11 +146,11 @@ export default {
     computedStyle(index) {
       const left = (((530 + 50) * index) * 100) / window.innerWidth;
       console.log(index);
-      return { left : `${left}vw` };
+      return { left: `${left}vw` };
     },
     setpanning(start) {
       this.dgridArr = [];
-      for (let i = 0; i < this.gridDetails.length; i+=1) {
+      for (let i = 0; i < this.gridDetails.length; i += 1) {
         this.dgridArr[i] = this.gridDetails[i];
       }
       this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
@@ -283,12 +283,10 @@ export default {
       if (this.showMore === 'initial') {
         if (val) {
           this.setpanning(true);
+        } else if (!this.transID) {
+          this.setpanning(true);
         } else {
-          if (!this.transID) {
-            this.setpanning(true);
-          } else {
-            this.setpanning(false);
-          }
+          this.setpanning(false);
         }
       }
     },
@@ -695,3 +693,4 @@ export default {
   }
 }
 </style>
+
