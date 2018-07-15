@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-    <drivers :theme="'light'" :drivers="currSlide.suggestions" :sayWord="currSlide.sayWord" :toggle="!isRemoteEnabled" ></drivers>
+    <drivers :theme="'light'" :drivers="currSlide.suggestions" class="bixby-suggestion" :sayWord="currSlide.sayWord" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
@@ -33,7 +33,7 @@ export default {
     Messages.$on('button_down', this.handleKeyDown);
     this.addSlideShow();
     this.homeTimer = setTimeout(() => {
-      this.switch_comp({ replace: true, name: 'home' });
+      // this.switch_comp({ replace: true, name: 'home' });
     }, 6000);
   },
   destroyed() {
@@ -47,6 +47,7 @@ export default {
     ]),
     ...mapState('result', {
       index: state => state.resultData.idx,
+      stopSlide: state => state.resultData.stopSlide,
       slides: state => state.resultData.slides,
       resultDB: state => state.resultData.data,
       title: state => state.resultData.title,
@@ -104,6 +105,11 @@ export default {
   watch: {
     slides() {
       this.addSlideShow();
+    },
+    stopSlide(val) {
+      if (val) {
+        this.stopSlideShow();
+      }
     },
   },
   components: {
@@ -173,12 +179,13 @@ export default {
     }
     .pagination-dots {
       position: absolute;
-      right: 70 * $s;
+      right: 100 * $s;
       display: flex;
-      width: 84 * $s;
+      // width: 84 * $s;
       justify-content: space-between;
       .dots {
         height: 10* $s;
+        margin-right: 15 * $s;
         width: 10* $s;
         border-radius: 50%;
         background-color: rgba(0,0,0,0.2);
@@ -199,6 +206,9 @@ export default {
     &.show-leave-active {
       transition: opacity 0.1s ease;
     }
+  }
+  .bixby-suggestion {
+    left: -15 * $s;
   }
 }
 </style>

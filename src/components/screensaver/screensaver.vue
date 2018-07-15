@@ -1,17 +1,20 @@
 <template>
   <div class="screensaver" :class="{'enabled': sleep, 'blur': !active}">
-    <div class="backdrop">
+    <div class="backdrop" v-if="!isBixbyActive">
     </div>
-      <!--<div class="time">
+      <div class="time" v-if="sleep">
           {{time}}
       </div>
-      <div class="weather" v-if="info.todays !== null" :style="{'background-image': `url('${info.todays.img}')`}">
-      </div> -->
+      <div class="weather" v-if="info.todays !== null && sleep">
+      </div>
+      <span class="day" v-if="sleep">{{day[0]}}, {{ day[1]}}</span>
+      <drivers v-if="sleep" :theme="'light'" :drivers="suggestions" :sayWord="'Say'" :toggle="!isRemoteEnabled" ></drivers>
   </div>
 </template>
 <script>
 import moment from 'moment';
 import { mapActions, mapState, mapMutations } from 'vuex';
+import drivers from '../common/drivers';
 import Messages from '../../services/Messages';
 
 export default {
@@ -19,9 +22,15 @@ export default {
   mounted() {
     window.getWeatherImg = this.getWeatherImg;
     Messages.$on('button_down', this.handleKeyDown);
-    this.time = moment().format('LT');
+    this.time = moment().format('LT').replace('PM', '');
+    this.time = this.time.replace('AM', '');
+    this.time = this.time.replace('PM', '');
+    this.day = moment().format('LLLL').split(',');
     this.interval = setInterval(() => {
+      this.day = moment().format('LLLL').split(',');
       this.time = moment().format('LT');
+      this.time = this.time.replace('AM', '');
+      this.time = this.time.replace('PM', '');
     }, 1000);
     Messages.$on('horizon-weather.forecast', this.handleForecast);
     Messages.$on('horizon-news.get-articles-result', this.getArticle);
@@ -41,6 +50,8 @@ export default {
     ...mapState([
       'info',
       'sleep',
+      'isBixbyActive',
+      'isRemoteEnabled',
     ]),
   },
   destroyed() {
@@ -196,6 +207,8 @@ export default {
   data() {
     return {
       interval: null,
+      day: '',
+      suggestions: ['Hey Bixby &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   “Play music on Spotify” &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  “Play yoga videos on Youtube” &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   “What’s the weather today”'],
       timeOut: null,
       weather: null,
       time: '',
@@ -204,6 +217,7 @@ export default {
   watch: {
   },
   components: {
+    drivers,
   },
 };
 </script>
@@ -215,7 +229,7 @@ export default {
   overflow: hidden;
   position: absolute;
   background-size: 100%;
-  // background-image: url('./static/Images/background.png');
+  background-image: url('/static/Images/home/background.png');
   .backdrop {
     position: absolute;
     left: 0;
@@ -225,31 +239,50 @@ export default {
     height: 100%;
     background: rgba(0,0,0,1);
     transition: opacity 0.4s ease;
+    // background-image: url('/static/standy.jpg');
+    // background-size: 100%;
   }
   .time {
     position: absolute;
     top: 0;
+    left: 50 * $s;
+    padding: 80 * $s;
     width: auto;
     height:auto;
-    padding: 50 * $s;
-    font-size: 120 * $s;
-    color:white;
-    font-family: SamsungOneUI600;
+    font-size: 200 * $s;
+    color:rgba(80,80,80,1);
+    font-family: TTNormsMedium;
     transition: color 0.3s ease;
   }
   .weather {
     position: absolute;
-    top: 200 * $s;
+    top: 270 * $s;
     // top: relative;
     width: 130 * $s;
+    background-repeat: no-repeat;
+    // text-align: left;
     height: 130  *$s;
-    background-size: 100% 100%;
-    padding: 50 * $s;
-    left: 50 * $s;
+    background-size: 73 * $s 59 * $s;
+    background-position: center center;
+    left: 100 * $s;
     font-size: 60 * $s;
     color:white;
     transition: color 0.3s ease;
     font-family: SamsungOneUI600;
+    background-image: url('/static/Images/weather.png');
+  }
+  .day {
+    position: absolute;
+    top: 318 * $s;
+    // top: relative;
+    left: 225 * $s ;
+     font-family: TTNormsMedium;
+     font-size: 40 * $s;
+     color:rgba(80,80,80,1);
+    background-repeat: no-repeat;
+    // text-align: left;
+    height: 130  *$s;
+    transition: color 0.3s ease;
   }
   &.enabled {
     .backdrop {
@@ -259,7 +292,7 @@ export default {
       color: grey;
     }
     .time {
-      color: grey;
+      color:rgba(80,80,80,1);
     }
   }
   &.blur {
@@ -267,10 +300,10 @@ export default {
       // opacity: 0;
     }
     .weather {
-      opacity: 0;
+      // opacity: 0;
     }
     .time {
-      opacity: 0;
+      // opacity: 0;
     }
   }
 }

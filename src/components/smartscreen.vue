@@ -2,7 +2,7 @@
   <div class="smart-screen">
     <div class="backdrop" :class="{'blur': topView !== 'screensaver'}">
     </div>
-    <transition-group :name="transition" tag="div" class="component">
+    <transition-group :name="transition" tag="div" class="component" :duration="{enter: 5000, leave: 1500}">
       <template v-for="(comps, index) in viewStack">
         <component :active="topView === comps && !isBixbyActive && active" :style="{'z-index': (index + 1)}" :is="gConfig.components[comps].vType === 'screenshot' ? 'screenshot': comps" :key="comps" @exit="exitCB" @return="returnCB"></component>
       </template>
@@ -24,6 +24,9 @@ import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
 import volume from './system/volume';
 import result from './result/result';
+import hboplayer from './hboplayer/hboplayer';
+import ytplayer from './ytplayer/ytplayer';
+import vevo from './vevo/vevo';
 // import result from './result/result';
 import Messages from '../services/Messages';
 
@@ -162,8 +165,11 @@ export default {
     volume,
     result,
     spotify,
+    hboplayer,
     screensaver,
+    ytplayer,
     musicPlayer,
+    vevo,
     screenshot,
     // result,
   },
@@ -238,6 +244,22 @@ export default {
   }
   .slide-enter {
     transform: translateX(#{200 * $s});
+    opacity: 0;
+  }
+
+  .blur-enter-active {
+    transition: transform 1.5s ease 0.5s, opacity 0.5s ease;
+  }
+  .blur-leave-active {
+    transition: transform 0.4s ease, filter 0.3s ease;
+  }
+  .blur-leave-to {
+    filter: blur(30);
+    -webkit-filter: blur(30px);
+    transform :translateY(#{50 * $s});
+  }
+  .blur-enter {
+    transform :translateY(#{1080 * $s});
     opacity: 0;
   }
 }

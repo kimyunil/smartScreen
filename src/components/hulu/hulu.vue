@@ -29,6 +29,9 @@ export default {
     // this.setPlayer({ url: '/resources/videos/HBO_Family/maze_runner_scorch.mp4' });
   },
   destroyed() {
+    if (this.$el.querySelector('video')) {
+      this.$el.querySelector('video').muted = true;
+    }
     Messages.$off('button_down', this.handleKeyDown);
   },
   computed: {

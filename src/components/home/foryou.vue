@@ -5,32 +5,6 @@
       @transitionend="shrinkTransitionCB"
       :style="translateY"
     >
-        <div class="grid-templates grid-templates-slideshow"  :style="inlineTranslate" :class="[{'translateAnim': !slideshow}]">
-            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids"
-             :style="{'left': `${setLeft(idx)}vw`}"
-            v-if="!slideshow && index > idx">
-              <grid :colIdx="colIdx" v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
-                ref="previous"
-              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
-              @movefocus="movefocus" @select="selectedGridItem"
-              />
-            </div>
-          <transition :name="transitionName">
-              <div class="slideshow-wrapper" :key="index">
-                <grid :colIdx="colIdx" v-show="grids[index].template !== 'ignore'" class="grid-wrapper"
-                :focus="(gridFocus && pageIdx === index)" :details="grids[index]" :videoActive="videoEnabled"
-                @movefocus="movefocus" @select="selectedGridItem"
-                />
-              </div>
-          </transition>
-            <div class="slideshow-wrapper" :key="idx" :data-key="idx" v-for="(page, idx) in getGrids" v-if="!slideshow & index < idx">
-              <grid :colIdx="colIdx" v-show="grids[idx].template !== 'ignore'" class="grid-wrapper"
-              :style="{'left': `${setLeft(idx)}vw`}"
-              :focus="(gridFocus && pageIdx === idx)" :details="grids[idx]" :videoActive="videoEnabled"
-              @movefocus="movefocus" @select="selectedGridItem"
-              />
-            </div>
-        </div>
         <!-- </template> -->
         <div class="grid-list" v-if="isRemoteEnabled">
           <template v-for="(subCat, index) in gridlist">

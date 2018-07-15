@@ -6,7 +6,7 @@
             <div class="text-suggestion" v-for="suggest in drivers" :key="suggest">
               <div class="speakerIcon"></div>
               <div class="text"> {{sayWord}}</div>
-              <div class="suggestions">"{{suggest}}"</div>
+              <div class="suggestions" v-html="suggest"></div>
             </div>
           </template>
           <template v-else>
@@ -29,7 +29,7 @@ export default {
     },
     loop: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     sayWord: {
       type: String,
