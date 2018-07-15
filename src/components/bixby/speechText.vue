@@ -41,7 +41,7 @@ export default {
       color: white;
       text-align: left;
       font-size: 64 * $s;
-      font-family: SamsungOneUI200;
+      font-family: TTNormsMedium;
     }
  }
 

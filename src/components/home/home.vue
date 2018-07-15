@@ -7,8 +7,8 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial') && active">
-                    <video :src="sponsored.videoUrl" autoplay loop muted/>
+                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial')">
+                    <video :src="sponsored.videoUrl" autoplay loop/>
                   </div>
                   <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
                 </div>
@@ -86,16 +86,30 @@ export default {
   mounted() {
     Messages.$on('button_down', this.handleKeyDown);
     this.resetVoiceTimer();
-    this.dgridArr = this.gridDetails;
+    // this.dgridArr = this.gridDetails;
     this.toggleInterval(true);
     this.setpanning(false);
+    for (let i = 0; i < this.gridDetails.length; i += 1) {
+      this.dgridArr[i] = this.gridDetails[i];
+    }
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
     this.toggleInterval(false);
     this.setpanning(false);
+    const video = this.$el.querySelector('.video-feeds video');
+    if (video) {
+      video.muted = true;
+      setTimeout(() => {
+        video.src = '';
+      }, 800);
+    }
   },
   computed: {
+    ...mapState('source', {
+      volume: state => state.player.volume,
+      muted: state => state.player.muted,
+    }),
     ...mapState([
       'isRemoteEnabled',
       'vidAutoplay',
@@ -144,25 +158,22 @@ export default {
       setfocus: 'SET_FOCUS',
     }),
     computedStyle(index) {
-      const left = (((530 + 50) * index) * 100) / window.innerWidth;
-      console.log(index);
+      const left = (((this.$el.querySelector('.grid-wrapper').offsetWidth + 50) * index) * 100) / window.innerWidth;
+      // console.log(index);
       return { left: `${left}vw` };
     },
     setpanning(start) {
-      this.dgridArr = [];
-      for (let i = 0; i < this.gridDetails.length; i += 1) {
-        this.dgridArr[i] = this.gridDetails[i];
-      }
       this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
+      const t = parseInt(this.gridWidth / 100, 10) * 100;
       if (start) {
         this.transID = setInterval(() => {
           this.translate -= 10;
-          if (this.translate % 580 === 0) {
-            this.index += 1;
+          if (this.translate % t === 0) {
             const index = this.index % this.gridDetails.length;
+            this.index += 1;
             this.$set(this.dgridArr, this.dgridArr.length, this.gridDetails[index]);
           }
-        }, 500);
+        }, 200);
         this.index = this.slideIdx;
       } else {
         clearInterval(this.transID);
@@ -279,6 +290,16 @@ export default {
     homescreen,
   },
   watch: {
+    volume(val) {
+      const video = this.$el.querySelector('.video-feeds video');
+      if (!video) return;
+      video.volume = (val * 1) / 20;
+    },
+    muted(val) {
+      const video = this.$el.querySelector('.video-feeds video');
+      if (!video) return;
+      video.muted = val;
+    },
     panning(val) {
       if (this.showMore === 'initial') {
         if (val) {
@@ -312,6 +333,10 @@ export default {
         this.toggleInterval(false);
       } else {
         this.setpanning(false);
+        this.toggleInterval(true);
+        for (let i = 0; i < this.gridDetails.length; i += 1) {
+          this.dgridArr[i] = this.gridDetails[i];
+        }
         this.translate = 0;
       }
     },
@@ -548,7 +573,7 @@ export default {
               position: relative;
               width: auto;
               height: 100%;
-              transition: transform 1.0s linear;
+              transition: transform 0.2s linear;
             }
           }
         }
