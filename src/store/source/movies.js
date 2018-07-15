@@ -45,7 +45,7 @@ export default {
           img: '',
         },
       },
-      url: '/resources/videos/continue04_handmaid.mp4',
+      url: '/resources/videos/smartscreen/Tale.mp4',
     },
   },
 };
