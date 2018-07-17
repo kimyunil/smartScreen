@@ -108,23 +108,25 @@ export default {
     panning(val) {
       if (this.showMore === 'fullhome') {
         const el = this.$el;
-        if (val) {
-          if (this.anim) {
+        if (this.anim) {
+          if (this.anim.playState === 'paused') {
             this.anim.play();
+          } else if (this.anim.playState === 'running'){
+            this.anim.pause();
           } else {
-            this.anim = el.animate([
-              { transform: `translateY(${this.translate}px)` },
-              { transform: 'translateY(-100%)' },
-            ], {
-              duration: 50000,
-              iterations: Infinity,
-              direction: 'alternate',
-            });
             this.anim.play();
           }
-        } else if (this.anim) {
-          this.anim.pause();
+        } else {
+          this.anim = el.animate([
+            { transform: `translateY(${this.translate}px)` },
+            { transform: 'translateY(-100%)' },
+          ], {
+            duration: 15000,
+            fill: 'forwards',
+          });
+          this.anim.play();
         }
+        // window.anim = this.anim;
       }
     },
     showMore() {

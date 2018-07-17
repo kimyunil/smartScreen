@@ -17,6 +17,15 @@ export default {
     },
   },
   getters: {
+    SPONSOR_DATA(state) {
+      const list = [];
+      const details = state.data.sponsors;
+      const item = details.items;
+      for (let i = 0; i < item.length; i += 1) {
+        list[i] = details[item[i]];
+      }
+      return list;
+    },
     HOME_FOCUS(state) {
       return state.data.navs.focus;
     },
@@ -111,6 +120,9 @@ export default {
     },
   },
   mutations: {
+    UPDATE_SPONSOR_IDX(state, idx) {
+      state.data.sponsors.idx = idx;
+    },
     TOGGLE_MORE_DATA(state, showMore) {
       state.showMore = showMore;
     },

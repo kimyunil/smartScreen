@@ -32,6 +32,7 @@ export default {
     ytube2: {
       title: 'Dunkirk',
       gist: '2017  ·  R ·  1h 46m',
+      next: 'POPULAR FREE MOVIES',
       subtitle: '6:00 - 8:00PM',
       logo: '/static/Images/home/foryou/icons/hulu.png',
       thumbnail: '/static/Images/home/movies/assets/free/item4.png',

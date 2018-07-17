@@ -39,7 +39,7 @@ export default {
       title: 'Roseanne',
       gist: 'S10 E9  ·  Knee Deep',
       progress: '50',
-      next: 'New Episode',
+      next: 'NEW EPISODE',
       progressColor: 'white',
       subtitle: '6:00 - 8:00PM',
       logo: '/static/Images/home/foryou/icons/hulu.png',

@@ -7,15 +7,18 @@
               <div class="focus_bg">
                 <!-- <div class="highlight"></div> -->
                 <div class="video-feeds">
-                  <div class="video" v-if="true && (showMore === 'boot' || showMore === 'initial')">
-                    <video :src="sponsored.videoUrl" autoplay loop/>
-                  </div>
-                  <div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>
+                  <transition name="fade">
+                    <div class="video" v-if="true && (showMore !== 'fullhome')">
+                      <video :src="sponsored.videoUrl" autoplay @ended="videoEndCB"/>
+                    </div>
+                    <!--<div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>-->
+                  </transition>
                 </div>
                   <div class="metadata">
                       <div class="focus_bg_partial"></div>
-                      <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
-                      </div>
+                        <div class="source-icon" v-if="sponsored.icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                        </div>
+                        <div class="icon-text" v-else v-html="sponsored.iconTitle"></div>
                       <div class="text" v-html="sponsored.text">
                     </div>
                   </div>
@@ -33,8 +36,9 @@
             <transition name="fade">
               <div class="metadata-twice" v-if="showMore === 'partial' || showMore === 'fullhome' ">
                 <div class="focus_bg_partial"></div>
-                <div class="source-icon" :style="{'background-image':`url(${sponsored.icon})`}">
-                </div>
+                  <div class="source-icon" v-if="sponsored.icon" :style="{'background-image':`url(${sponsored.icon})`}">
+                  </div>
+                  <div class="icon-text" v-else v-html="sponsored.iconTitle"></div>
                 <div class="text" v-html="sponsored.text">
               </div>
             </div>
@@ -114,11 +118,15 @@ export default {
       'isRemoteEnabled',
       'vidAutoplay',
     ]),
-    ...mapState('home', [
-      'showMore',
-      'panning',
-      'navId',
-    ]),
+    ...mapState('home', {
+      showMore: 'showMore',
+      panning: 'panning',
+      navId: 'navId',
+      sponsorIdx: state => state.data.sponsors.idx,
+    }),
+    sponsored() {
+      return this.sponsors[this.sponsorIdx];
+    },
     translateX() {
       return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
     },
@@ -134,6 +142,7 @@ export default {
     },
     ...mapGetters('home', {
       gridDetails: 'GET_HOME_GRIDS',
+      sponsors: 'SPONSOR_DATA',
       navItems: 'GET_NAVS',
     }),
     reoderedGrid() {
@@ -155,8 +164,14 @@ export default {
     }),
     ...mapMutations('home', {
       toggleMoreData: 'TOGGLE_MORE_DATA',
+      updateSponsor: 'UPDATE_SPONSOR_IDX',
       setfocus: 'SET_FOCUS',
     }),
+    videoEndCB() {
+      const idx = (this.sponsorIdx + 1) % this.sponsors.length;
+      this.updateSponsor(idx);
+      alert();
+    },
     computedStyle(index) {
       const left = (((this.$el.querySelector('.grid-wrapper').offsetWidth + 50) * index) * 100) / window.innerWidth;
       // console.log(index);
@@ -164,17 +179,18 @@ export default {
     },
     setpanning(start) {
       this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
-      const t = parseInt(this.gridWidth / 100, 10) * 100;
+      const t = parseInt(this.gridWidth, 10);
+      console.log(t);
       if (start) {
+        clearInterval(this.transID);
         this.transID = setInterval(() => {
-          this.translate -= 10;
+          this.translate -= 1;
           if (this.translate % t === 0) {
             const index = this.index % this.gridDetails.length;
             this.index += 1;
-            this.$set(this.dgridArr, this.dgridArr.length, this.gridDetails[index]);
+            this.$set(this.dgridArr, this.dgridArr.length, this.dummyGrid[index]);
           }
-        }, 200);
-        this.index = this.slideIdx;
+        }, 50);
       } else {
         clearInterval(this.transID);
         this.transID = null;
@@ -226,7 +242,8 @@ export default {
       if (!this.active) return;
       switch (type) {
         case 'EXTRA':
-          this.updateMode(!this.isRemoteEnabled);
+          const idx = (this.sponsorIdx + 1) % this.sponsors.length;
+          this.updateSponsor(idx);
           break;
         case 'UP':
           break;
@@ -269,12 +286,6 @@ export default {
       translate: 0,
       gridIdx: 0,
       slideshowID: null,
-      sponsored: {
-        videoUrl: '/resources/videos/smartscreen/poster-video.mp4',
-        poster: '/static/Images/home/homeUI/poster.png',
-        icon: '/static/Images/home/homeUI/icons/gia.png',
-        text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span><span>',
-      },
       upnext: {
         title: 'COMING UP NEXT',
         icon: '/static/Images/home/homeUI/upnext-icon.png',
@@ -300,11 +311,9 @@ export default {
       if (!video) return;
       video.muted = val;
     },
-    panning(val) {
+    panning() {
       if (this.showMore === 'initial') {
-        if (val) {
-          this.setpanning(true);
-        } else if (!this.transID) {
+        if (!this.transID) {
           this.setpanning(true);
         } else {
           this.setpanning(false);
@@ -331,6 +340,15 @@ export default {
         this.translate = 0;
       } else if (val === 'initial') {
         this.toggleInterval(false);
+        const len = this.gridDetails.length;
+        this.dummyGrid = [];
+        this.dgridArr = [];
+        for (let i = 0; i < len; i += 1) {
+          const index = (i + this.slideIdx) % len;
+          this.dummyGrid[i] = this.gridDetails[index];
+          this.dgridArr[i] = this.gridDetails[index];
+        }
+        this.index = 0;
       } else {
         this.setpanning(false);
         this.toggleInterval(true);
@@ -402,6 +420,18 @@ export default {
               transform-origin: 0 0;
               transition: transform 0.8s ease;
               overflow: hidden;
+              &.fade-leave-active {
+                transition: opacity 0.5s ease;
+              }
+              &.fade-enter-active{
+                transition: opacity 0.4s ease;
+              }
+              &.fade-leave-to {
+                opacity: 0;
+              }
+              &.fade-enter {
+                opacity: 0;
+              }
               .poster {
                 position: relative;
                 width: 100%;
@@ -427,7 +457,7 @@ export default {
             .metadata {
               position: absolute;
               top: 630 * $s;
-              width: 767 * $s;
+              width: 867 * $s;
               height: auto;
               transition: transform 0.3s ease;
               margin-bottom: 50 * $s;
@@ -437,9 +467,20 @@ export default {
                 width: 72 * $s;
                 background-size: 100% 100%;
               }
+              .icon-text {
+                position: relative;
+                height: 36 * $s;
+                text-align: left;
+                // width: 72 * $s;
+                background-size: 100% 100%;
+                font-size: 26 * $s;
+                font-family: TTNormsBold;
+                color: rgba(80,80,80,1);
+              }
               .text {
                 position: relative;
                 width: 100%;
+                margin-bottom: 5 * $s;
                 text-align: left;
                 font-family: TTNormsBold;
                 color: rgba(80,80,80,1);
@@ -462,6 +503,7 @@ export default {
               position: relative;
               height: 60 * $s;
               background-size: 150 * $s 60 * $s;
+              left: -6 * $s;
               background-repeat: no-repeat;
               width: 200 * $s;
             }
@@ -488,13 +530,23 @@ export default {
           position: absolute;
           top: 50 * $s;
           left: 740 * $s;
-          width: 530 * $s;
+          width: 460 *  $s;
           height: auto;
           .source-icon {
             position: relative;
             height: 36 * $s;
             width: 72 * $s;
             background-size: 100% 100%;
+          }
+          .icon-text {
+            position: relative;
+            height: 36 * $s;
+            // width: 72 * $s;
+            text-align: left;
+            background-size: 100% 100%;
+            font-size: 26 * $s;
+            font-family: TTNormsBold;
+            color: rgba(80,80,80,1);
           }
           .text {
             position: relative;

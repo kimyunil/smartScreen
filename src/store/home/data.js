@@ -42,10 +42,32 @@ export default {
       },
     },
   },
+  sponsors: {
+    idx: 0,
+    items: ['sp1', 'sp2', 'sp3'],
+    sp1: {
+      videoUrl: '/resources/videos/smartscreen/new/yoga.mp4',
+      poster: '/static/Images/home/homeUI/poster.png',
+      icon: '/static/Images/home/homeUI/icons/gia.png',
+      text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span></span>',
+    },
+    sp2: {
+      videoUrl: '/resources/videos/smartscreen/new/cook.mp4',
+      poster: '/static/Images/home/homeUI/poster.png',
+      icon: '/static/Images/home/homeUI/icons/food.png',
+      text: '<span>How To Cook<span style="color:rgb(255,96,93)"> Perfect Eggs</span> </br><span>Every Time</span></span>',
+    },
+    sp3: {
+      videoUrl: '/resources/videos/smartscreen/new/music.mp4',
+      poster: '/static/Images/home/homeUI/poster.png',
+      iconTitle: 'MUSIC VIDEO',
+      text: '<span><span style="color:rgb(255,96,93)">CAN’T STOP THE FEELING!</span> </br><span>(From DreamWorks Animation\'s <span style="color:rgb(255,96,93)">\'Trolls\')</span></span></span>',
+    },
+  },
   homescreen: {
-    grids: ['grid1', 'grid2', 'grid3'],
+    grids: ['grid3', 'grid1', 'grid2'],
     grid1: {
-      suggest: ['Hey Bixby, tell me more about today’s weather'],
+      suggest: ['Hey Bixby, play my Daily Mix'],
       title: 'grid-1',
       content: ['hulu', 'sponsor', 'npr'],
       nav: [
@@ -72,7 +94,7 @@ export default {
         },
       },
       npr: {
-        type: 'thumbnail2',
+        type: 'thumbnail1',
         template: 'thumbnail',
         contentType: 'cp',
         details: {
@@ -84,7 +106,7 @@ export default {
         },
       },
       sponsor: {
-        type: 'thumbnail1',
+        type: 'thumbnail2',
         template: 'thumbnail',
         contentType: 'cp',
         details: {
@@ -100,7 +122,7 @@ export default {
     },
     grid2: {
       title: 'grid-1',
-      suggest: ['Hey Bixby, play my Daily Mix'],
+      suggest: ['Hey Bixby, show me more'],
       content: ['body', 'hulu', 'hbo'],
       nav: [
         ['tile', 'tile'],
@@ -127,7 +149,7 @@ export default {
         },
       },
       hbo: {
-        type: 'thumbnail2',
+        type: 'thumbnail1',
         template: 'thumbnail',
         contentType: 'cp',
         details: {
@@ -142,7 +164,7 @@ export default {
       },
       hulu: {
         full: true,
-        type: 'thumbnail1',
+        type: 'thumbnail2',
         template: 'thumbnail',
         contentType: 'cp-type-1',
         details: {
@@ -157,7 +179,7 @@ export default {
     },
     grid3: {
       title: 'grid-1',
-      suggest: ['Hey Bixby, show me more'],
+      suggest: ['Hey Bixby, tell me more about today’s weather'],
       content: ['body', 'traffic', 'weather'],
       nav: [
         ['tile', 'tile'],

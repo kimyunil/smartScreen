@@ -315,7 +315,7 @@ export default {
           background-color: rgba(151,151,151,0.3);
           font-family: TTNormsMedium;
           font-size: 28 * $s;
-          height:437 * $s;
+          height: 420 * $s;
           color: rgba(80,80,80,1);
           position: absolute;
           top: 0 * $s;
