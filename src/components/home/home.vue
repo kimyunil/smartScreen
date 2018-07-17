@@ -170,7 +170,6 @@ export default {
     videoEndCB() {
       const idx = (this.sponsorIdx + 1) % this.sponsors.length;
       this.updateSponsor(idx);
-      alert();
     },
     computedStyle(index) {
       const left = (((this.$el.querySelector('.grid-wrapper').offsetWidth + 50) * index) * 100) / window.innerWidth;
@@ -241,9 +240,10 @@ export default {
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
-        case 'EXTRA':
+        case 'EXTRA': {
           const idx = (this.sponsorIdx + 1) % this.sponsors.length;
           this.updateSponsor(idx);
+        }
           break;
         case 'UP':
           break;

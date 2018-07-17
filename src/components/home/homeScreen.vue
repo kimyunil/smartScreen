@@ -105,13 +105,13 @@ export default {
     },
   },
   watch: {
-    panning(val) {
+    panning() {
       if (this.showMore === 'fullhome') {
         const el = this.$el;
         if (this.anim) {
           if (this.anim.playState === 'paused') {
             this.anim.play();
-          } else if (this.anim.playState === 'running'){
+          } else if (this.anim.playState === 'running') {
             this.anim.pause();
           } else {
             this.anim.play();
