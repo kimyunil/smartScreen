@@ -312,9 +312,9 @@ const store = new Vuex.Store({
         }
         case 'volume': {
           dispatch('source/UPDATE_VOLUME', payload.data);
-          setTimeout(() => {
-            dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
-          });
+          // setTimeout(() => {
+          dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
+          // });
           break;
         }
         case 'hboplayer':
