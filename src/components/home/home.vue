@@ -25,10 +25,10 @@
               </div>
               <div class="up-next">
                 <div class="up-title">
-                  {{upnext.title}}
+                  COMING UP NEXT
                 </div>
-                <div class="upnext-icon" :style="{'background-image':`url(${upnext.icon})`}">
-                </div>
+                <div class="source-icon upnext-icon" v-if="upnext.icon" :style="{'background-image':`url(${upnext.icon})`}"></div>
+                <div class="icon-text" v-else v-html="upnext.iconTitle"></div>
                 <div class="text" v-html="upnext.text">
                  </div>
               </div>
@@ -113,6 +113,7 @@ export default {
     ...mapState('source', {
       volume: state => state.player.volume,
       muted: state => state.player.muted,
+      playerState: state => state.player.playerState,
     }),
     ...mapState([
       'isRemoteEnabled',
@@ -126,6 +127,10 @@ export default {
     }),
     sponsored() {
       return this.sponsors[this.sponsorIdx];
+    },
+    upnext() {
+      const idx = (this.sponsorIdx + 1) % this.sponsors.length;
+      return this.sponsors[idx];
     },
     translateX() {
       return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
@@ -286,11 +291,6 @@ export default {
       translate: 0,
       gridIdx: 0,
       slideshowID: null,
-      upnext: {
-        title: 'COMING UP NEXT',
-        icon: '/static/Images/home/homeUI/upnext-icon.png',
-        text: '<span> <span style="color:rgb(255,96,93)">The Art of Home Cooking -</span><br><span>Week 1. Sustainable Eating</span><span>',
-      },
       direction: 'left',
       focus: 'content',
     };
@@ -301,6 +301,26 @@ export default {
     homescreen,
   },
   watch: {
+    playerState(val) {
+      console.log(val, this.$el.querySelector('video'));
+      if (val === 0) {
+        const video = this.$el.querySelector('.video-feeds video');
+        if (video) {
+          video.play();
+        }
+        // this.clearVoiceTimer();
+        // this.initiateTimer();
+      } else if (val === 1) {
+        const video = this.$el.querySelector('.video-feeds video');
+        if (video) {
+          video.pause();
+        }
+        // clearTimeout(this.timeoutId);
+        // this.resetVoiceTimer();
+        // this.timeoutId = null;
+        // this.fade = false;
+      }
+    },
     volume(val) {
       const video = this.$el.querySelector('.video-feeds video');
       if (!video) return;
@@ -457,7 +477,7 @@ export default {
             .metadata {
               position: absolute;
               top: 630 * $s;
-              width: 867 * $s;
+              width: 727 * $s;
               height: auto;
               transition: transform 0.3s ease;
               margin-bottom: 50 * $s;
@@ -491,25 +511,38 @@ export default {
           .up-next {
             position: absolute;
             opacity: 0;
-            top: 680 * $s;
+            width: 455 * $s;
+            top: 660 * $s;
             transition: opacity 0.3s ease;
             .up-title {
               font-family: TTNormsBold;
               color: rgba(80,80,80,1);
               font-size: 24 * $s;
+              margin-bottom: 30 * $s;
               text-align: left;
             }
-            .upnext-icon {
+            .source-icon {
               position: relative;
-              height: 60 * $s;
-              background-size: 150 * $s 60 * $s;
-              left: -6 * $s;
+              height: 36 * $s;
+              width: 72 * $s;
+              background-size: 70% 70%;
               background-repeat: no-repeat;
-              width: 200 * $s;
+              background-size: left center;
+            }
+            .icon-text {
+              position: relative;
+              height: 36 * $s;
+              text-align: left;
+              // width: 72 * $s;
+              background-size: 100% 100%;
+              font-size: 22 * $s;
+              font-family: TTNormsBold;
+              color: rgba(80,80,80,1);
             }
             .text {
               font-size: 32 * $s;
               text-align: left;
+              width: 100%;
               color: rgba(80,80,80,1);
               font-family: TTNormsBold;
             }
@@ -530,7 +563,7 @@ export default {
           position: absolute;
           top: 50 * $s;
           left: 740 * $s;
-          width: 460 *  $s;
+          width: 540 *  $s;
           height: auto;
           .source-icon {
             position: relative;
@@ -703,7 +736,8 @@ export default {
             .up-next {
               opacity: 1;
               // transition: transform 0.2s ease 0.4s;
-              transform: translate(#{ 1263 * $s }, #{-660 * $s });
+              width: 450 * $s;
+              transform: translate(#{ 1263 * $s }, #{-640 * $s });
             }
           }
           .right-corner {

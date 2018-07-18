@@ -311,7 +311,6 @@ const store = new Vuex.Store({
           break;
         }
         case 'volume': {
-          console.log(payload.data);
           dispatch('source/UPDATE_VOLUME', payload.data);
           setTimeout(() => {
             dispatch('SWITCH_COMPONENT', { replace: false, name: 'volume' });
@@ -354,7 +353,7 @@ const store = new Vuex.Store({
         }
         case 'media':
           // not launching anything for now, may be in future
-          if (state.source.player.active) {
+          if (state.source.player.active || state.viewStack[state.viewStack.length - 1] === 'home') {
             state.source.player.playerState = -1;
             setTimeout(() => {
               state.source.player.playerState = payload.data;

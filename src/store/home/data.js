@@ -55,13 +55,13 @@ export default {
       videoUrl: '/resources/videos/smartscreen/new/cook.mp4',
       poster: '/static/Images/home/homeUI/poster.png',
       icon: '/static/Images/home/homeUI/icons/food.png',
-      text: '<span>How To Cook<span style="color:rgb(255,96,93)"> Perfect Eggs</span> </br><span>Every Time</span></span>',
+      text: '<span>How To Cook<span style="color:rgb(255,96,93)"> Perfect Eggs</span> <span>Every Time</span></span>',
     },
     sp3: {
       videoUrl: '/resources/videos/smartscreen/new/music.mp4',
       poster: '/static/Images/home/homeUI/poster.png',
       iconTitle: 'MUSIC VIDEO',
-      text: '<span><span style="color:rgb(255,96,93)">CAN’T STOP THE FEELING!</span> </br><span>(From DreamWorks Animation\'s <span style="color:rgb(255,96,93)">\'Trolls\')</span></span></span>',
+      text: '<span><span style="color:rgb(255,96,93)">CAN’T STOP THE FEELING!</span> <span>Justin Timberlake</span></span>',
     },
   },
   homescreen: {
@@ -212,8 +212,8 @@ export default {
         details: {
           full: 'full',
           icon: '',
-          topLeftText: '<span class="bold-top-text">sponsored</span>',
-          bottomText: '<span>Tennis Channel <br> ATP Final </span>',
+          topLeftText: '',
+          bottomText: '',
           logoType: 'sqr-2',
           logo: '',
           img: '/static/Images/home/homeUI/thumb/traffic.png',
