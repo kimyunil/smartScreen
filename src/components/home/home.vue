@@ -360,6 +360,7 @@ export default {
         this.translate = 0;
       } else if (val === 'initial') {
         this.toggleInterval(false);
+        this.setpanning(true);
         const len = this.gridDetails.length;
         this.dummyGrid = [];
         this.dgridArr = [];
