@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="content-wrapper">
-      <contentlist class="contentlist" :active="enabled && focus === 1" :scroll="scroll" :translate="translate"></contentlist>
+      <contentlist class="contentlist" @movefocus="movefocus" :active="enabled && focus === 1" :scroll="scroll" :translate="translate"></contentlist>
     </div>
   </div>
 </template>
@@ -59,6 +59,17 @@ export default {
     },
   },
   methods: {
+    movefocus(param) {
+      if (param.from === 'content') {
+        if (param.dir === 'up') {
+          if (this.focus === 1) {
+            this.$nextTick(() => {
+              this.setfocus(0);
+            });
+          }
+        }
+      }
+    },
     scroll(dir, delta) {
       console.log(dir, delta);
       if (dir === 'up') {

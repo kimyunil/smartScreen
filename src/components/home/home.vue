@@ -24,12 +24,18 @@
                   </div>
               </div>
               <div class="up-next">
-                <div class="up-title">
+                <!-- <div class="up-title">
                   COMING UP NEXT
+                </div> -->
+                <div class="next-video">
+                  <span class="sub">UP NEXT</span>
+                  <video :src="upnext.videoUrl" @loadedmetadata="loadVidPoster"></video>
                 </div>
-                <div class="source-icon upnext-icon" v-if="upnext.icon" :style="{'background-image':`url(${upnext.icon})`}"></div>
-                <div class="icon-text" v-else v-html="upnext.iconTitle"></div>
-                <div class="text" v-html="upnext.text">
+                <div class="details">
+                  <div class="source-icon upnext-icon" v-if="upnext.icon" :style="{'background-image':`url(${upnext.icon})`}"></div>
+                  <div class="icon-text" v-else v-html="upnext.iconTitle"></div>
+                  <div class="text" v-html="upnext.text">
+                  </div>
                  </div>
               </div>
             </div>
@@ -98,9 +104,7 @@ export default {
     // this.dgridArr = this.gridDetails;
     this.toggleInterval(true);
     this.setpanning(false);
-    for (let i = 0; i < this.gridDetails.length; i += 1) {
-      this.dgridArr[i] = this.gridDetails[i];
-    }
+    this.setPanGrid(this.gridDetails);
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
@@ -180,6 +184,10 @@ export default {
       updateSponsor: 'UPDATE_SPONSOR_IDX',
       setfocus: 'SET_FOCUS',
     }),
+    loadVidPoster(evt) {
+      const event = evt;
+      event.target.currentTime = 5;
+    },
     videoEndCB() {
       const idx = (this.sponsorIdx + 1) % this.sponsors.length;
       this.updateSponsor(idx);
@@ -189,7 +197,17 @@ export default {
       // console.log(index);
       return { left: `${left}vw` };
     },
+    resetPanning() {
+      this.setpanning(false);
+      this.translate = 0;
+      this.index = 0;
+    },
     setpanning(start) {
+      if (this.isRemoteEnabled) {
+        clearInterval(this.transID);
+        this.transID = null;
+        return;
+      }
       this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
       const t = parseInt(this.gridWidth, 10);
       console.log(t);
@@ -308,6 +326,13 @@ export default {
           break;
       }
     },
+    setPanGrid(grid) {
+      this.refGrid = [];
+      for (let i = 0; i < grid.length; i += 1) {
+        this.dgridArr[i] = grid[i];
+        this.refGrid[i] = grid[i];
+      }
+    },
   },
   data() {
     return {
@@ -374,10 +399,17 @@ export default {
     isRemoteEnabled(val) {
       if (!val) {
         if (this.active) {
-          this.toggleInterval(true);
+          this.slideIdx = this.gridIdx;
+          if (this.showMore === 'boot') {
+            this.toggleInterval(true);
+          } else if (this.showMore === 'initial') {
+            this.setPanGrid(this.reoderedGrid);
+            this.setpanning(true);
+          }
         }
       } else {
         this.toggleInterval(false);
+        this.resetPanning();
       }
     },
     active(val) {
@@ -392,13 +424,13 @@ export default {
       } else if (val === 'initial') {
         this.toggleInterval(false);
         this.setpanning(true);
-        const len = this.gridDetails.length;
+        const len = this.refGrid.length;
         this.dummyGrid = [];
         this.dgridArr = [];
         for (let i = 0; i < len; i += 1) {
           const index = (i + this.slideIdx) % len;
-          this.dummyGrid[i] = this.gridDetails[index];
-          this.dgridArr[i] = this.gridDetails[index];
+          this.dummyGrid[i] = this.refGrid[index];
+          this.dgridArr[i] = this.refGrid[index];
         }
         this.index = 0;
       } else {
@@ -554,33 +586,70 @@ export default {
           .up-next {
             position: absolute;
             opacity: 0;
-            width: 455 * $s;
+            width: 703 * $s;
             top: 660 * $s;
+            height: 170 * $s;
             transition: opacity 0.3s ease;
-            .up-title {
-              font-family: TTNormsBold;
-              color: rgba(80,80,80,1);
-              font-size: 24 * $s;
-              margin-bottom: 30 * $s;
-              text-align: left;
+            .details {
+              position: absolute;
+              width: 350 * $s;
+              left: 350 * $s;
+              height: 170 * $s;
+              // display: inline-block;
+              .up-title {
+                font-family: TTNormsBold;
+                color: rgba(80,80,80,1);
+                font-size: 24 * $s;
+                margin-bottom: 30 * $s;
+                text-align: left;
+              }
+              .source-icon {
+                position: relative;
+                height: 36 * $s;
+                width: 72 * $s;
+                background-size: 70% 70%;
+                background-repeat: no-repeat;
+                background-size: left center;
+              }
+              .icon-text {
+                position: relative;
+                height: 36 * $s;
+                text-align: left;
+                // width: 72 * $s;
+                background-size: 100% 100%;
+                font-size: 22 * $s;
+                font-family: TTNormsBold;
+                color: rgba(80,80,80,1);
+              }
             }
-            .source-icon {
-              position: relative;
-              height: 36 * $s;
-              width: 72 * $s;
-              background-size: 70% 70%;
-              background-repeat: no-repeat;
-              background-size: left center;
-            }
-            .icon-text {
-              position: relative;
-              height: 36 * $s;
-              text-align: left;
-              // width: 72 * $s;
-              background-size: 100% 100%;
-              font-size: 22 * $s;
-              font-family: TTNormsBold;
-              color: rgba(80,80,80,1);
+
+            .next-video {
+              position: absolute;
+              width: 303 * $s;
+              // display: inline-block;
+              height: 170 * $s;
+              border-radius: 10 * $s;
+              background: black;
+              overflow: hidden;
+              .sub {
+                position: absolute;
+                font-size: 22 * $s;
+                background: black;
+                font-family: TTNormsMedium;
+                color: white;
+                z-index: 2;
+                padding: 6 * $s;
+                border-radius: 5 * $s;
+                top: 10 * $s;
+                right: 10 * $s;
+              }
+              video {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                left: 0;
+                top: 0;
+              }
             }
             .text {
               font-size: 32 * $s;
@@ -626,11 +695,11 @@ export default {
           }
           .text {
             position: relative;
-            width: 100%;
+            width: 365 * $s;
             text-align: left;
             font-family: TTNormsBold;
             color: rgba(80,80,80,1);
-            font-size: 48 * $s;
+            font-size: 32 * $s;
           }
           &.fade-leave-active {
             transition: opacity 0.1s ease;
@@ -757,6 +826,12 @@ export default {
           .up-next {
             transition: opacity 0.8s ease;
             opacity: 1!important;
+            .next-video {
+              transform: scale(1.16);
+            }
+            .details {
+              transform: translateX(#{ 25 * $s });
+            }
           }
         }
         .right-corner {
@@ -792,8 +867,9 @@ export default {
             .up-next {
               opacity: 1;
               // transition: transform 0.2s ease 0.4s;
-              width: 450 * $s;
-              transform: translate(#{ 1263 * $s }, #{-640 * $s });
+              width: 703 * $s;
+              vertical-align: top;
+              transform: translate(#{ 1080 * $s }, #{-640 * $s });
             }
           }
           .right-corner {

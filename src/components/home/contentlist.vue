@@ -6,7 +6,7 @@
         <!-- </template> -->
         <div class="grid-list">
           <template v-for="(subCat, index) in gridlist">
-            <div class="grid-templates template subcategory-template"  :key="index">
+            <div class="grid-templates template subcategory-template"  :key="subCat.title">
               <div class="title" :class="[{'elevate': (rowIdx === index && active)}]">{{subCat.title}}</div>
               <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
@@ -96,7 +96,7 @@ export default {
               }
             } else {
               this.scroll('==', 0);
-              this.setfocus(0);
+              this.$emit('movefocus', { from: 'content', dir: 'up' });
             }
           }
           break;
