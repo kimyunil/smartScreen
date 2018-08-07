@@ -155,6 +155,7 @@ export default {
       top: 0;
       width: 100%;
       height: 100%;
+      overflow: hidden;
       .content-tile {
         position: absolute;
         top: 0;
@@ -162,6 +163,7 @@ export default {
         left: 0;
         height: 290 * $s;
         width: 100%;
+        // background-color: red;
         background-size: 100% 100%;
       }
       .video {
@@ -226,9 +228,13 @@ export default {
         box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
         border-radius: 10 * $s;
         overflow: hidden;
+        border-top-left-radius: 10 * $s;
+        border-top-right-radius: 10 * $s;
         border-width: 20 * $s;
         .content-tile {
           border-radius:0;
+          border-top-left-radius: 10 * $s;
+          border-top-right-radius: 10 * $s;
         }
     }
     .content-wrapper {

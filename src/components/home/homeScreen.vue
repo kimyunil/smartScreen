@@ -95,7 +95,10 @@ export default {
             }
           }
           break;
-        case 'EIGHT':
+        case 'UP':
+          if (this.focus === 0) {
+            this.$emit('movefocus', { dir: 'up', from: 'homescreen' });
+          }
           break;
         case 'NINE':
           break;

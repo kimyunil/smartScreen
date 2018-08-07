@@ -26,7 +26,7 @@ const store = new Vuex.Store({
     voiceTimerID: null,
     viewStack: ['screensaver'],
     socketConnected: false,
-    isRemoteEnabled: false,
+    isRemoteEnabled: true,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
     isBixbyActive: false,
     socket: {

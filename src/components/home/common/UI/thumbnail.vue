@@ -246,7 +246,7 @@ export default {
     }
     &.full-wrapper {
       border-radius: 10 * $s;
-      overflow: hidden;
+      // overflow: hidden;
       .content-tile {
         height: 100%;
       }
@@ -268,7 +268,7 @@ export default {
       }
       &.partial-wrapper {
         border-radius: 10 * $s;
-        overflow:hidden;
+        // overflow:hidden;
         .image-container {
           position: absolute;
           top: 0;
@@ -278,11 +278,13 @@ export default {
           width: 100%;
           transform-origin: 60% center;
           height: 100%;
-          overflow: hidden;
+          // overflow: hidden;
           box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
-          border-radius: 20 * $s;
+          border-radius: 10 * $s;
           .content-tile {
-            border-radius: 120 * $s;
+            border-radius: 0 * $s;
+            border-top-left-radius: 10 * $s;
+            border-top-right-radius: 10 * $s;
           }
         }
       }
@@ -406,8 +408,8 @@ export default {
       margin:0 15 * $s;
       position: absolute;
       bottom: 20 * $s;
-      border-radius:20 * $s;
-      overflow: hidden;
+      border-radius:10 * $s;
+      // overflow: hidden;
       background: rgba(255,255,255,0.1);
       .progress {
         position: absolute;

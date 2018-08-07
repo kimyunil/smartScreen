@@ -79,7 +79,9 @@ export default {
       const currType = this.details.nav[this.row][this.col];
       while (col > -1) {
         const next = this.details.nav[this.row][col];
+        console.log(next, currType);
         if (currType !== next) {
+          console.log(col);
           return col;
         }
         col -= 1;
@@ -151,8 +153,10 @@ export default {
           }
           break;
         case 'LEFT':
+          console.log('left:::');
           if (this.col > 0) {
             const val = this.checkLeft(this.col);
+            console.log('left::::', val);
             if (val === -1) {
               this.$emit('movefocus', { dir: 'left', from: 'grid', rowIdx: this.row });
               // emit change

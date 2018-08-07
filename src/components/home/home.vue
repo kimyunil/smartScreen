@@ -1,11 +1,11 @@
 <template>
-  <div class="home" style="background-image:url('/static/Images/home/bg.png')">
+  <div class="home" style="background-image:url('/static/Images/home/bg.png')" :class="{'remote': isRemoteEnabled}">
     <div class="dashboard" :class="[{ 'voice-enabled': showMore === 'initial' }, moreClass]">
       <div class="upperDeck">
         <div class="left-corner">
             <div class="wrapper">
-              <div class="focus_bg">
-                <!-- <div class="highlight"></div> -->
+              <div class="focus_bg" :class="{'focus': (isRemoteEnabled && showMore === 'boot' && navId === 'leftposter')}">
+                <div class="highlight" v-if="(isRemoteEnabled && showMore === 'boot' && navId === 'leftposter')"></div>
                 <div class="video-feeds">
                   <transition name="fade">
                     <div class="video" v-if="true && (showMore !== 'fullhome')">
@@ -51,9 +51,14 @@
                     <transition name="fade" v-if="showMore === 'boot'">
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
-                    <div class="innerlist" :style="translateX" v-else>
+                    <div class="innerlist" :style="translateX" v-else-if="!isRemoteEnabled">
                       <template v-for="(grid, idx) in dgridArr">
-                        <gridpage v-if="(index - 2) <= idx" class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
+                        <gridpage v-if="(index - 2) <= idx" class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="false" :key="idx"></gridpage>
+                      </template>
+                    </div>
+                    <div class="remote-list" :style="rmScroll" v-else-if="showMore === 'initial' && isRemoteEnabled">
+                      <template v-for="(grid, idx) in reoderedGrid">
+                        <gridpage  class="grid-wrapper rmGrid" :details="reoderedGrid[idx]" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
                       </template>
                     </div>
                 </div>
@@ -63,12 +68,12 @@
       </div>
       <div class="lowerDeck" v-if="showMore !== 'boot'">
         <div class="deck-wrapper">
-          <homescreen :enabled="(showMore === 'partial' || showMore === 'fullhome')"></homescreen>
+          <homescreen :enabled="(showMore === 'partial' || showMore === 'fullhome')" @movefocus="movefocus"></homescreen>
         </div>
       </div>
       <div class="driver" v-else>
         <drivers :theme="'light'" :drivers="currentGrid.suggest" :toggle="!isRemoteEnabled" :loop="true"></drivers>
-        <div class="pagination">
+        <div class="pagination" v-if="!isRemoteEnabled">
           <template v-for="(grid, index) in gridDetails">
             <div :key="index" class = "circle" :class="{'selected': slideIdx === index}">
             </div>
@@ -134,6 +139,9 @@ export default {
     },
     translateX() {
       return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
+    },
+    rmScroll() {
+      return { transform: `translateX(${((this.remoteTrans * 100) / window.innerWidth)}vw)` };
     },
     moreClass() {
       if (this.showMore === 'initial') {
@@ -203,6 +211,7 @@ export default {
     toggleInterval(bool) {
       if (bool) {
         clearInterval(this.slideshowID);
+        if (this.isRemoteEnabled) return;
         this.slideshowID = setInterval(() => {
           if (this.slideIdx + 1 === this.gridDetails.length) {
             this.slideIdx = (this.slideIdx + 1) % this.gridDetails.length;
@@ -222,7 +231,10 @@ export default {
       if (param.from === 'grid') {
         if (param.dir === 'left') {
           if (this.gridIdx === 0) {
-            this.setfocus('leftposter');
+            this.toggleMoreData('boot');
+            setTimeout(() => {
+              this.setfocus('leftposter');
+            }, 800);
           } else {
             this.gridIdx -= 1;
           }
@@ -232,11 +244,22 @@ export default {
           }
         } else if (param.dir === 'down') {
           this.setfocus('lowerdeck');
+          this.toggleMoreData('partial');
         }
         if (param.rowIdx !== 'undefined') {
           this.rowVal = param.rowIdx;
         }
-        this.translate = this.$el.querySelectorAll('.gridsele')[this.gridIdx].offsetLeft * -1;
+        this.remoteTrans = this.$el.querySelectorAll('.rmGrid')[this.gridIdx].offsetLeft * -1;
+      } else if (param.from === 'homescreen') {
+        if (this.showMore === 'partial') {
+          if (param.dir === 'up') {
+            this.setfocus('rightgrid');
+            this.toggleMoreData('initial');
+          }
+        } else if (this.showMore === 'fullhome') {
+          this.setfocus('rightgrid');
+          this.toggleMoreData('initial');
+        }
       }
     },
     headerVisible(bool) {
@@ -245,28 +268,35 @@ export default {
     handleKeyDown(type) {
       if (!this.active) return;
       switch (type) {
-        case 'EXTRA': {
-          const idx = (this.sponsorIdx + 1) % this.sponsors.length;
-          this.updateSponsor(idx);
-        }
+        case 'EXTRA':
+          // const idx = (this.sponsorIdx + 1) % this.sponsors.length;
+          // this.updateSponsor(idx);
+          this.updateMode(!this.isRemoteEnabled);
           break;
         case 'UP':
           break;
         case 'RIGHT':
+          if (!this.isRemoteEnabled) return;
           if (this.navId === 'leftposter') {
             this.setfocus('rightgrid');
-          } else if (this.navId === 'leftposter') {
-            if (this.gridIdx < this.gridDetails.length - 1) {
-              this.gridIdx += 1;
-            }
+            this.toggleMoreData('initial');
+          } else if (this.navId === 'rightgrid') {
+            // if (this.gridIdx < this.gridDetails.length - 1) {
+            //   this.gridIdx += 1;
+            // }
           }
           break;
         case 'DOWN':
+          if (!this.isRemoteEnabled) return;
           if (this.navId === 'leftposter') {
             this.setfocus('lowerdeck');
+            this.toggleMoreData('partial');
           }
           break;
         case 'LEFT':
+          break;
+        case 'ONE':
+          this.toggleMoreData('initial');
           break;
         case 'EIGHT':
           this.toggleMoreData('fullhome');
@@ -289,6 +319,7 @@ export default {
       colVal: 0,
       rowVal: 0,
       translate: 0,
+      remoteTrans: 0,
       gridIdx: 0,
       slideshowID: null,
       direction: 'left',
@@ -433,7 +464,7 @@ export default {
               box-shadow: 0 20 * $s 40 * $s 0 rgba(0,0,0,0.5);
             }
             .video-feeds {
-              position: absolute;
+              position: relative;
               width: 1090 * $s;
               height: 615 * $s;
               transition: width 0.3s ease, height 0.3s ease;
@@ -476,8 +507,9 @@ export default {
               }
             }
             .metadata {
-              position: absolute;
-              top: 630 * $s;
+              position: relative;
+              // top: 630 * $s;
+              top: 25 * $s;
               width: 727 * $s;
               height: auto;
               transition: transform 0.3s ease;
@@ -506,6 +538,16 @@ export default {
                 font-family: TTNormsBold;
                 color: rgba(80,80,80,1);
                 font-size: 48 * $s;
+              }
+            }
+            &.focus {
+              .video-feeds {
+                transform: scale(1.034);
+                transform-origin: bottom center;
+                transition: none!important;
+                border-radius: 0 * $s;
+                border-top-left-radius: 10 * $s;
+                border-top-right-radius: 10 * $s;
               }
             }
           }
@@ -614,14 +656,15 @@ export default {
         transition: transform 0.8s ease;
         .right-wrapper {
           position: relative;
-          top: 100 * $s;
+          top: 80 * $s;
+          padding-top: 20 * $s;
           width: 100%;
-          height: 820 * $s;
-          overflow:hidden;
+          height: 890 * $s;
+          overflow-x:hidden;
           .list {
             position: absolute;
             width: auto;
-            height: 100%;
+            height: 820 * $s;
             margin-left: 50 * $s;
             display: flex;
             transition: transform 0.8s linear;
@@ -648,6 +691,11 @@ export default {
                 width: 532 * $s;
                 height: 100%;
               }
+              &.rmGrid {
+                position: relative;
+                width: 532 * $s;
+                height: 100%;
+              }
             }
             &.browse {
               animation-name: example;
@@ -658,6 +706,13 @@ export default {
             .innerlist {
               position: relative;
               width: auto;
+              height: 100%;
+              transition: transform 0.2s linear;
+            }
+            .remote-list {
+              position: absolute;
+              width: auto;
+              display: flex;
               height: 100%;
               transition: transform 0.2s linear;
             }
