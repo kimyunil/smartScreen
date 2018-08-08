@@ -244,14 +244,12 @@ export default {
           duration: time * 1000,
           fill: 'forwards',
         });
+      } else if (this.anim.playState === 'paused') {
+        this.anim.play();
+      } else if (this.anim.playState === 'running') {
+        this.anim.pause();
       } else {
-        if (this.anim.playState === 'paused') {
-          this.anim.play();
-        } else if (this.anim.playState === 'running') {
-          this.anim.pause();
-        } else {
-          this.anim.play();
-        }
+        this.anim.play();
       }
     },
     isRemoteEnabled(val) {

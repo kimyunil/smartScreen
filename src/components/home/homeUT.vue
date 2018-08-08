@@ -452,16 +452,14 @@ export default {
             // });
           }
         }
-      } else {
-        if (this.active) {
-          if (this.showMore === 'boot') {
-            this.setfocus('leftposter');
-          } else if (this.showMore === 'initial') {
-            this.setListType('navigable');
-            this.setfocus('rightgrid');
-          } else if (this.showMore === 'partial') {
-            this.setfocus('lowerdeck');
-          }
+      } else if (this.active) {
+        if (this.showMore === 'boot') {
+          this.setfocus('leftposter');
+        } else if (this.showMore === 'initial') {
+          this.setListType('navigable');
+          this.setfocus('rightgrid');
+        } else if (this.showMore === 'partial') {
+          this.setfocus('lowerdeck');
         }
       }
     },
