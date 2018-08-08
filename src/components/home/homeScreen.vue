@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :style="translateY">
+  <div class="wrapper">
     <div class="headings" :class="[activeClass]">
         <div class="nav-button" v-for="(item, index) in navItems" :key="item.title" :class="{'selected': selectedIdx === index && enabled && !focus}">
         <div class="focus_bg"></div>
@@ -7,7 +7,9 @@
         </div>
     </div>
     <div class="content-wrapper">
-      <contentlist class="contentlist" @movefocus="movefocus" :active="enabled && focus === 1" :scroll="scroll" :translate="translate"></contentlist>
+      <div class="list" :style="translateY">
+        <contentlist class="contentlist" @movefocus="movefocus" :active="enabled && focus === 1" :scroll="scroll" :translate="translate"></contentlist>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +47,8 @@ export default {
     ]),
     ...mapState('home', [
       'selectedIdx',
+      'speed',
+      'listType',
       'panning',
       'showMore',
     ]),
@@ -71,7 +75,6 @@ export default {
       }
     },
     scroll(dir, delta) {
-      console.log(dir, delta);
       if (dir === 'up') {
         this.translate += delta;
       } else if (dir === 'down') {
@@ -84,6 +87,26 @@ export default {
       setnav: 'SET_NAV',
       setfocus: 'SET_HOME_FOCUS',
     }),
+    setpanning(flag) {
+      if (flag) {
+        if (!this.anim) {
+          const listEle = this.$el.querySelectorAll('.grid-templates');
+          const toTranslate = listEle[listEle.length - 1].offsetTop;
+          const el = this.$el.querySelector('.list');
+          const time = (toTranslate / this.speed);
+          this.anim = el.animate([
+            { transform: 'translateY(0px)' },
+            { transform: `translateY(-${(toTranslate * 100) / window.innerWidth}vw)` },
+          ], {
+            duration: time * 1000,
+            fill: 'forwards',
+          });
+        }
+        this.anim.play();
+      } else {
+        this.anim.pause();
+      }
+    },
     handleKeyDown(type) {
       if (!this.active && !this.enabled) return;
       switch (type) {
@@ -119,9 +142,14 @@ export default {
     },
   },
   watch: {
+    selectedIdx() {
+      if (this.anim) {
+        this.anim.cancel();
+        this.anim = null;
+      }
+    },
     panning() {
-      if (this.showMore === 'fullhome') {
-        const el = this.$el;
+      if (this.showMore === 'partial') {
         if (this.anim) {
           if (this.anim.playState === 'paused') {
             this.anim.play();
@@ -131,25 +159,21 @@ export default {
             this.anim.play();
           }
         } else {
-          this.anim = el.animate([
-            { transform: `translateY(${this.translate}px)` },
-            { transform: 'translateY(-100%)' },
-          ], {
-            duration: 15000,
-            fill: 'forwards',
-          });
-          this.anim.play();
+          this.setpanning(true);
         }
         // window.anim = this.anim;
       }
     },
-    showMore() {
-      if (this.showMore !== 'fullhome') {
+    showMore(val) {
+      if (val !== 'fullhome') {
         if (this.anim) {
           this.anim.cancel();
           this.anim = null;
         }
       }
+      // if (val === 'partial' || val === 'fullhome') {
+      //   this.setpanning(true);
+      // }
     },
   },
   components: {
@@ -220,9 +244,16 @@ export default {
       position: relative;
       width: 100%;
       height: 970 * $s;
+      overflow: hidden;
+      .list {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: auto;
+      }
       .contentlist {
         position: relative;
-        margin-top: 60 * $s;
+        margin-top: 30 * $s;
       }
     }
     @keyframes scrollVDwn {

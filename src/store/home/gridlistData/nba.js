@@ -4,6 +4,7 @@ export default {
     items: ['espn', 'cnn', 'ytube1', 'ytube2'],
     title: 'On Now',
     name: 'now',
+    selIdx: 0,
     itemType: 'sqrThumb',
     espn: {
       title: '2018 NHL Playoffs: San Jose',
@@ -42,6 +43,7 @@ export default {
     items: ['twitch', 'ytube1', 'espn', 'amazon'],
     title: 'Upcoming',
     name: 'upcoming',
+    selIdx: 0,
     itemType: 'sqrThumb',
     twitch: {
       title: 'Fnatic vs. Flash Wolves',
@@ -81,6 +83,7 @@ export default {
     items: ['ytube1', 'hulu', 'amazon', 'hulu1'],
     title: 'Continue Watching',
     itemType: 'sqrThumb',
+    selIdx: 0,
     ytube1: {
       title: 'Black Mirror',
       gist: 'Sharks vs. Anaheim Ducks',
@@ -115,6 +118,7 @@ export default {
     itemType: 'recThumb',
     name: 'music',
     title: 'Recent Music',
+    selIdx: 0,
     item1: {
       title: 'A Moment',
       subtitle: 'Odesza',
@@ -161,6 +165,7 @@ export default {
   avengers: {
     items: ['item1', 'item2', 'item3', 'item4'],
     title: 'Avengers',
+    selIdx: 0,
     name: 'avengers',
     itemType: 'sqrThumb',
     item1: {
@@ -191,6 +196,7 @@ export default {
   apps: {
     items: ['netflix', 'hulu', 'amazon', 'spotify', 'youtube', 'espn'],
     itemType: 'sqr',
+    selIdx: 0,
     name: 'apps',
     title: 'Recent Apps',
     netflix: {

@@ -5,7 +5,13 @@ export default {
   state: {
     data,
     selectedIdx: 0,
+    speed: 30, // 30 pix/s
+    slideIdx: 0,
+    partialScroll: false, // for scrolling first list in category
+    gridIdx: 0,
     panning: false,
+    autoScroll: false,
+    listType: 'autoscroll', // autoscroll , navigable
     navId: 'leftposter', // leftposter, rightgrid, lowerdeck
     showMore: 'boot', // initial partial, fullhome
     timeout: 30000,
@@ -56,6 +62,8 @@ export default {
         const gridItem = gridData[key];
         gridList[i] = gridData[key];
         gridList[i].listItems = [];
+        gridList[i].index = gridItem.selIdx;
+        gridList[i].key = key;
         for (let j = 0; j < gridItem.items.length; j += 1) {
           const subkey = gridItem.items[j];
           gridList[i].listItems[j] = gridItem[subkey];
@@ -120,17 +128,54 @@ export default {
     },
   },
   mutations: {
+    IS_SCROLLING(state, val) {
+      state.autoScroll = val;
+    },
+    SET_LIST_TYPE(state, value) {
+      state.listType = value;
+    },
+    SET_HOME_DATA(state, index) {
+      state.data.navs.focus = 1;
+      state.selectedIdx = index;
+      const mkey = state.data.navs.items[index];
+      const gridData = state.data.navs.details[mkey].data;
+      const cKey = gridData.gridlist[0];
+      gridData[cKey].selIdx = 0;
+    },
+    RESET_CAT_IDX(state) {
+      const index = state.selectedIdx;
+      const mkey = state.data.navs.items[index];
+      const gridData = state.data.navs.details[mkey].data;
+      const grid = gridData.gridlist;
+      for (let i = 0; i < grid.length; i += 1) {
+        const key = grid[i];
+        const gridItem = gridData[key];
+        gridItem.selIdx = 0;
+      }
+    },
+    UPDATE_CAT_IDX(state, obj) {
+      const index = state.selectedIdx;
+      const mkey = state.data.navs.items[index];
+      const gridData = state.data.navs.details[mkey].data;
+      gridData[obj.id].selIdx = obj.index;
+    },
     UPDATE_SPONSOR_IDX(state, idx) {
       state.data.sponsors.idx = idx;
     },
     TOGGLE_MORE_DATA(state, showMore) {
       state.showMore = showMore;
     },
+    SET_SLIDE_IDX(state, val) {
+      state.slideIdx = val;
+    },
+    SET_GRID_IDX(state, val) {
+      state.gridIdx = val;
+    },
     SET_HOME_FOCUS(state, idx) {
       state.data.navs.focus = idx;
       if (idx === 1) {
         // make full screen state
-        state.showMore = 'fullhome';
+        // state.showMore = 'fullhome';
       }
     },
     SET_FOCUS(state, id) {

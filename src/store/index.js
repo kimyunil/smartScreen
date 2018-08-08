@@ -13,6 +13,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     gConfig: config,
+    withAutoScroll: false,
     screenshot: '',
     vidAutoplay: false,
     sleep: false,
@@ -26,7 +27,7 @@ const store = new Vuex.Store({
     voiceTimerID: null,
     viewStack: ['screensaver'],
     socketConnected: false,
-    isRemoteEnabled: true,
+    isRemoteEnabled: false,
     suggestions: ['Go to Home', 'Show me News', 'What is the Weather Today?'],
     isBixbyActive: false,
     socket: {
@@ -218,6 +219,63 @@ const store = new Vuex.Store({
         state.home.selectedIdx = payload.idx;
       }
     },
+    UPDATE_MILLENIALS_UT({ state, commit }, payload) {
+      switch (payload.subcategory) {
+        case 'showmemore':
+          if (state.home.showMore === 'boot') {
+            state.home.showMore = 'initial';
+          } else if (state.home.showMore === 'partial') {
+            state.home.panning = !state.home.panning;
+          }
+          break;
+        case 'nextvideo':
+          if (state.home.showMore === 'initial' || state.home.showMore === 'boot'
+            || state.home.showMore === 'partial') {
+            const idx = state.home.data.sponsors.idx;
+            const list = state.home.data.sponsors.items;
+            commit('home/UPDATE_SPONSOR_IDX', (idx + 1) % list.length);
+          }
+          break;
+        case 'nextpage':
+          if (state.home.showMore === 'boot') {
+            if (state.home.slideIdx + 1 < 3) {
+              state.home.slideIdx += 1;
+            }
+          } else if (state.home.showMore === 'initial') {
+            state.home.listType = 'navigable';
+            Vue.nextTick(() => {
+              if (state.home.gridIdx + 1 < 3) {
+                state.home.gridIdx += 1;
+              }
+            });
+          } else if (state.home.showMore === 'partial') {
+            state.home.partialScroll = !state.home.partialScroll;
+          }
+          break;
+        case 'browse':
+          if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
+            if (state.home.listType !== 'autoscroll') {
+              state.home.listType = 'autoscroll';
+            } else if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
+              state.home.panning = !state.home.panning;
+            }
+          }
+          break;
+        case 'partial':
+          state.home.showMore = 'partial';
+          state.home.navId = 'lowerdeck';
+          state.home.data.navs.focus = 0;
+          state.home.selectedIdx = payload.idx;
+          break;
+        case 'down':
+          state.home.showMore = 'partial';
+          state.home.navId = 'lowerdeck';
+          commit('home/SET_HOME_DATA', 0);
+          break;
+        default:
+          break;
+      }
+    },
     CONFIG_UPDATE({ state, dispatch }, payload) {
       switch (payload.subcategory) {
         case 'wakeup':
@@ -246,6 +304,12 @@ const store = new Vuex.Store({
     },
     LAUNCH_COMPONENT({ state, dispatch, commit }, payload) {
       switch (payload.category) {
+        case 'millenials-ut':
+          if (state.viewStack[state.viewStack.length - 1] !== 'home') {
+            dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });
+          }
+          dispatch('UPDATE_MILLENIALS_UT', payload);
+          break;
         case 'millenials':
           if (state.viewStack[state.viewStack.length - 1] !== 'home') {
             dispatch('SWITCH_COMPONENT', { replace: true, name: 'home', transition: 'slide' });

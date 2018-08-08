@@ -49,7 +49,6 @@ export default {
       const div = document.createElement('div');
       div.setAttribute('id', 'clipmotion_result');
       div.classList.add('clipmotion_result');
-      console.log(document.body);
       document.body.appendChild(div);
     }
     this.$nextTick(() => {

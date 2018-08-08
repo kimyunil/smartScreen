@@ -4,6 +4,7 @@ export default {
     items: ['espn', 'cnn', 'ytube1', 'ytube2'],
     title: 'POPULAR FREE MOVIES',
     name: 'now',
+    selIdx: 0,
     itemType: 'sqrtile',
     espn: {
       title: 'Coco',
@@ -43,6 +44,7 @@ export default {
     items: ['twitch', 'ytube1', 'espn', 'amazon', 'item5'],
     title: 'NEW RELEASES',
     name: 'upcoming',
+    selIdx: 0,
     itemType: 'sqrThumb',
     twitch: {
       title: 'Avengers',
@@ -90,6 +92,7 @@ export default {
     items: ['ytube1', 'hulu', 'amazon', 'hulu1', 'item5'],
     title: 'MOVIE TRAILERS',
     itemType: 'sqrThumb',
+    selIdx: 0,
     ytube1: {
       title: 'Book Club',
       gist: '2018  ·  PG  ·  1h 44m',
@@ -130,6 +133,7 @@ export default {
     name: 'continue',
     items: ['ytube1', 'hulu', 'amazon', 'hulu1', 'item5'],
     title: 'ON NOW',
+    selIdx: 0,
     itemType: 'sqrThumb',
     ytube1: {
       title: 'Ant-Man and the Wasp',
@@ -172,6 +176,7 @@ export default {
     items: ['ytube1', 'hulu', 'amazon', 'hulu1', 'item5'],
     title: 'CRITICALLY ACCLAIMED',
     itemType: 'sqrThumb',
+    selIdx: 0,
     ytube1: {
       title: 'Lilo & Stitch',
       gist: '2002  ·  PG  ·  2h 5m',

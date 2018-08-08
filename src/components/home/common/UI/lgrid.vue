@@ -112,13 +112,25 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import Messages from '../../../services/Messages';
+import { mapState, mapMutations } from 'vuex';
+import Messages from '../../../../services/Messages';
 
 export default {
   props: {
+    row: {
+      type: Number,
+      required: true,
+    },
     items: {
       type: Array,
+      required: true,
+    },
+    category: {
+      type: Object,
+      required: true,
+    },
+    Id: {
+      type: String,
       required: true,
     },
     itemType: {
@@ -135,8 +147,13 @@ export default {
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+    this.resetIdx();
   },
   methods: {
+    ...mapMutations('home', {
+      updateIdx: 'UPDATE_CAT_IDX',
+      resetIdx: 'RESET_CAT_IDX',
+    }),
     setWidth(item) {
       let width = item.dim.split('*')[0];
       if (this.isRemoteEnabled) {
@@ -153,15 +170,24 @@ export default {
         case 'DOWN':
           this.$emit('movefocus', { dir: 'down', from: 'lgrid' });
           break;
+        case 'SELECT':
+          this.$emit('movefocus', { dir: 'select', from: 'lgrid', item: this.items[this.index] });
+          break;
         case 'LEFT':
           if (this.index !== 0) {
-            this.index -= 1;
+            const param = {};
+            param.id = this.Id;
+            param.index = this.index - 1;
+            this.updateIdx(param);
             this.scroll('left');
           }
           break;
         case 'RIGHT':
           if (this.index !== this.items.length - 1) {
-            this.index += 1;
+            const param = {};
+            param.id = this.Id;
+            param.index = this.index + 1;
+            this.updateIdx(param);
             this.scroll('right');
           }
           break;
@@ -190,17 +216,63 @@ export default {
     ...mapState([
       'isRemoteEnabled',
     ]),
+    ...mapState('home', [
+      'partialScroll',
+      'speed',
+    ]),
+    index() {
+      return this.category.selIdx;
+    },
+  },
+  watch: {
+    partialScroll() {
+      if (this.row > 0) return;
+      if (!this.anim) {
+        const parentWidth = this.$el.offsetWidth;
+        const ele = this.$el.querySelectorAll('.list .item')[this.items.length - 1];
+        const eleDim = ele.offsetWidth + ele.offsetLeft + parseInt(window.getComputedStyle(ele).marginRight, 10) + this.translateX;
+        let toTranslate = 0;
+        if (eleDim > this.$el.offsetWidth) {
+          toTranslate = (eleDim - parentWidth);
+        }
+        const time = (toTranslate / this.speed);
+        const el = this.$el.querySelector('.list');
+        this.anim = el.animate([
+          { transform: 'translateY(0px)' },
+          { transform: `translateX(-${(toTranslate * 100) / window.innerWidth}vw)` },
+        ], {
+          duration: time * 1000,
+          fill: 'forwards',
+        });
+      } else {
+        if (this.anim.playState === 'paused') {
+          this.anim.play();
+        } else if (this.anim.playState === 'running') {
+          this.anim.pause();
+        } else {
+          this.anim.play();
+        }
+      }
+    },
+    isRemoteEnabled(val) {
+      if (this.anim) {
+        if (!val) {
+          this.anim.cancel();
+          this.anim = null;
+        }
+      }
+    },
   },
   data() {
     return {
-      index: 0,
+      // index: 0,
       translateX: 0,
     };
   },
 };
 </script>
 <style lang="scss" scoped>
-@import '../../../mixins/scss/main';
+@import '../../../../mixins/scss/main';
 
 .list-grid {
   position: relative;

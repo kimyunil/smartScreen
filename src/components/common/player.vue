@@ -123,7 +123,7 @@ export default {
           break;
         case 'BACK':
           if (this.name === 'hbo' || this.name === 'hulu') {
-            this.saveContinue(this.name);
+            // this.saveContinue(this.name);
           }
           this.setPlayer({ playerState: 1, active: false });
           this.$emit('exit', { from: 'player' });

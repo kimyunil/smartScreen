@@ -8,7 +8,7 @@
           <template v-for="(subCat, index) in gridlist">
             <div class="grid-templates template subcategory-template"  :key="subCat.title">
               <div class="title" :class="[{'elevate': (rowIdx === index && active)}]">{{subCat.title}}</div>
-              <lgrid :items="subCat.listItems" :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
+              <lgrid :items="subCat.listItems" :category="subCat" :Id="subCat.key" :row="index"  :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
           </template>
         </div>
@@ -18,7 +18,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 import grid from './common/grid';
-import lgrid from './common/lgrid';
+import lgrid from './common/UI/lgrid';
 import Messages from '../../services/Messages';
 
 export default {
@@ -120,52 +120,22 @@ export default {
           break;
       }
     },
-    autoplayeVieo() {
-      clearTimeout(this.videoTime);
-      this.videoTime = setTimeout(() => {
-        console.log(this.videoEnabled);
-        this.videoEnabled = true;
-      }, 3000);
-    },
-    startSlideShow() {
-      this.slideshow = true;
-      this.autoplayeVieo();
-      this.index = this.pageIdx;
-      clearInterval(this.intervalId);
-      this.intervalId = setInterval(() => {
-        this.transitionName = 'slideshow';
-        this.videoEnabled = false;
-        this.$nextTick(() => {
-          this.index = (((this.index) + 1) % this.grids.length);
-          this.autoplayeVieo();
-        });
-      }, this.timeout);
-      // this.index = 3;
-    },
-    movefocus() {
+    movefocus(data) {
+      if (data.item && data.item.payload && data.item.payload.type) {
+        this.launch(data.item.payload.param);
+      }
       // callback function:::::
-    },
-    stopSlideShow() {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-      this.transitionName = '';
-      this.videoEnabled = true;
-      clearTimeout(this.videoTime);
-      this.pageIdx = this.index;
-      this.slideshow = false;
-      this.updateVOffset();
     },
   },
   data() {
     return {
       transitionName: 'slideshow',
-      videoTime: null,
       colIdx: 0,
       intervalId: null,
       slideWidth: 1700,
       voffset: [],
+      hScroll: null,
       infoArtIdx: 0,
-      videoEnabled: false,
       focus: 'grid',
       pageIdx: 0,
       rowIdx: 0,
@@ -183,12 +153,11 @@ export default {
       this.updatePageIdx(val);
     },
     isRemoteEnabled(val) {
-      if (!val) {
-        this.startSlideShow();
-        this.rowIdx = -1;
-        this.translate = 0;
-      } else {
-        this.stopSlideShow(true);
+      if (this.active) {
+        if (!val) {
+          this.rowIdx = -1;
+          this.translate = 0;
+        }
       }
     },
   },

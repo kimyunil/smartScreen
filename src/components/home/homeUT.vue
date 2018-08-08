@@ -57,14 +57,14 @@
                     <transition name="fade" v-if="showMore === 'boot'">
                       <gridpage class="grid-wrapper slideshow" :details="currentGrid" :colIdx="0" :focus="false" :key="slideIdx"></gridpage>
                     </transition>
-                    <div class="innerlist" :style="translateX" v-else-if="!isRemoteEnabled">
+                    <div class="innerlist" :style="translateX" v-else-if="listType === 'autoscroll' && showMore === 'initial'" :key="'inner'">
                       <template v-for="(grid, idx) in dgridArr">
                         <gridpage v-if="(index - 2) <= idx" class="grid-wrapper gridsele" :details="dgridArr[idx]" :style="computedStyle(idx)" :colIdx="0" :rowIdx="rowVal" :focus="false" :key="idx"></gridpage>
                       </template>
                     </div>
-                    <div class="remote-list" :style="rmScroll" v-else-if="showMore === 'initial' && isRemoteEnabled">
+                    <div class="remote-list" :style="rmScroll" v-else-if="listType === 'navigable' && showMore === 'initial'" :key="'remote'">
                       <template v-for="(grid, idx) in reoderedGrid">
-                        <gridpage  class="grid-wrapper rmGrid" :details="reoderedGrid[idx]" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx)" :key="idx" @movefocus="movefocus"></gridpage>
+                        <gridpage  class="grid-wrapper rmGrid" :details="reoderedGrid[idx]" :colIdx="0" :rowIdx="rowVal" :focus="(navId === 'rightgrid' && gridIdx === idx && isRemoteEnabled)" :key="idx" @movefocus="movefocus"></gridpage>
                       </template>
                     </div>
                 </div>
@@ -103,6 +103,11 @@ export default {
     this.resetVoiceTimer();
     // this.dgridArr = this.gridDetails;
     this.toggleInterval(true);
+    if (!this.isRemoteEnabled) {
+      this.setListType('navigable');
+    } else {
+      this.setListType('autoscroll');
+    }
     this.setpanning(false);
     this.setPanGrid(this.gridDetails);
   },
@@ -127,8 +132,12 @@ export default {
     ...mapState([
       'isRemoteEnabled',
       'vidAutoplay',
+      'withAutoScroll',
     ]),
     ...mapState('home', {
+      slideIdx: 'slideIdx',
+      gridIdx: 'gridIdx',
+      listType: 'listType',
       showMore: 'showMore',
       panning: 'panning',
       navId: 'navId',
@@ -142,7 +151,7 @@ export default {
       return this.sponsors[idx];
     },
     translateX() {
-      return { transform: `translateX(${((this.translate * 100) / window.innerWidth)}vw)` };
+      return { transform: `translateX(${(((this.translate + this.subtrans) * 100) / window.innerWidth)}vw)` };
     },
     rmScroll() {
       return { transform: `translateX(${((this.remoteTrans * 100) / window.innerWidth)}vw)` };
@@ -180,6 +189,10 @@ export default {
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
     ...mapMutations('home', {
+      setListType: 'SET_LIST_TYPE',
+      setGridIdx: 'SET_GRID_IDX',
+      setSlideIdx: 'SET_SLIDE_IDX',
+      is_scrolling: 'IS_SCROLLING',
       toggleMoreData: 'TOGGLE_MORE_DATA',
       updateSponsor: 'UPDATE_SPONSOR_IDX',
       setfocus: 'SET_FOCUS',
@@ -193,37 +206,46 @@ export default {
       this.updateSponsor(idx);
     },
     computedStyle(index) {
-      const left = (((this.$el.querySelector('.grid-wrapper').offsetWidth + 50) * index) * 100) / window.innerWidth;
+      const left = (((532 + 50) * index) * 100) / window.innerWidth;
       // console.log(index);
       return { left: `${left}vw` };
     },
     resetPanning() {
       this.setpanning(false);
       this.translate = 0;
+      this.subtrans = 0;
       this.index = 0;
     },
     setpanning(start) {
       if (this.isRemoteEnabled) {
         clearInterval(this.transID);
         this.transID = null;
+        this.is_scrolling(false);
         return;
       }
-      this.gridWidth = this.$el.querySelector('.grid-wrapper').offsetWidth + 50;
-      const t = parseInt(this.gridWidth, 10);
-      console.log(t);
+      this.gridWidth = this.$el.querySelector('.grid-wrapper');
+      if (!this.gridWidth) return;
+      this.gridWidth = this.gridWidth.offsetWidth;
+      const width = parseInt(this.gridWidth, 10) + 50;
+      // console.log(t);
       if (start) {
         clearInterval(this.transID);
+        this.is_scrolling(true);
         this.transID = setInterval(() => {
-          this.translate -= 1;
-          if (this.translate % t === 0) {
+          if (((this.subtrans - 3) * -1) > width) {
             const index = this.index % this.gridDetails.length;
+            this.translate += this.subtrans;
+            this.subtrans = 0;
             this.index += 1;
-            this.$set(this.dgridArr, this.dgridArr.length, this.dummyGrid[index]);
+            this.$set(this.dgridArr, this.dgridArr.length, this.refGrid[index]);
+          } else {
+            this.subtrans -= 3;
           }
-        }, 50);
+        }, 100);
       } else {
         clearInterval(this.transID);
         this.transID = null;
+        this.is_scrolling(false);
       }
     },
     toggleInterval(bool) {
@@ -232,11 +254,11 @@ export default {
         if (this.isRemoteEnabled) return;
         this.slideshowID = setInterval(() => {
           if (this.slideIdx + 1 === this.gridDetails.length) {
-            this.slideIdx = (this.slideIdx + 1) % this.gridDetails.length;
+            const sIdx = (this.slideIdx + 1) % this.gridDetails.length;
+            this.setSlideIdx(sIdx);
           } else {
-            this.slideIdx += 1;
+            this.setSlideIdx(this.slideIdx + 1);
           }
-          console.log(this.slideIdx);
         }, 10000);
       } else {
         clearInterval(this.slideshowID);
@@ -254,11 +276,11 @@ export default {
               this.setfocus('leftposter');
             }, 800);
           } else {
-            this.gridIdx -= 1;
+            this.setGridIdx(this.gridIdx - 1);
           }
         } else if (param.dir === 'right') {
           if (this.gridIdx < this.gridDetails.length - 1) {
-            this.gridIdx += 1;
+            this.setGridIdx(this.gridIdx + 1);
           }
         } else if (param.dir === 'down') {
           this.setfocus('lowerdeck');
@@ -267,14 +289,14 @@ export default {
         if (param.rowIdx !== 'undefined') {
           this.rowVal = param.rowIdx;
         }
-        this.remoteTrans = this.$el.querySelectorAll('.rmGrid')[this.gridIdx].offsetLeft * -1;
       } else if (param.from === 'homescreen') {
+        this.setListType('navigable');
         if (this.showMore === 'partial') {
           if (param.dir === 'up') {
             this.setfocus('rightgrid');
             this.toggleMoreData('initial');
           }
-        } else if (this.showMore === 'fullhome') {
+        } else {
           this.setfocus('rightgrid');
           this.toggleMoreData('initial');
         }
@@ -287,8 +309,6 @@ export default {
       if (!this.active) return;
       switch (type) {
         case 'EXTRA':
-          // const idx = (this.sponsorIdx + 1) % this.sponsors.length;
-          // this.updateSponsor(idx);
           this.updateMode(!this.isRemoteEnabled);
           break;
         case 'UP':
@@ -298,10 +318,6 @@ export default {
           if (this.navId === 'leftposter') {
             this.setfocus('rightgrid');
             this.toggleMoreData('initial');
-          } else if (this.navId === 'rightgrid') {
-            // if (this.gridIdx < this.gridDetails.length - 1) {
-            //   this.gridIdx += 1;
-            // }
           }
           break;
         case 'DOWN':
@@ -326,8 +342,26 @@ export default {
           break;
       }
     },
+    updatedGrid() {
+      const arr = [];
+      const len = this.reoderedGrid.length;
+      for (let i = 0; i < this.reoderedGrid.length; i += 1) {
+        const index = (i + this.gridIdx) % len;
+        arr[i] = this.reoderedGrid[index];
+      }
+      return arr;
+    },
+    setGridLeft(val) {
+      this.$nextTick(() => {
+        const ele = this.$el.querySelectorAll('.rmGrid');
+        if (ele && ele.length > 0) {
+          this.remoteTrans = ele[val].offsetLeft * -1;
+        }
+      });
+    },
     setPanGrid(grid) {
       this.refGrid = [];
+      this.dgridArr = [];
       for (let i = 0; i < grid.length; i += 1) {
         this.dgridArr[i] = grid[i];
         this.refGrid[i] = grid[i];
@@ -337,15 +371,14 @@ export default {
   data() {
     return {
       dgridArr: [],
+      subtrans: 0,
       remote: true,
       index: 0,
       transDash: 0,
-      slideIdx: 0,
       colVal: 0,
       rowVal: 0,
       translate: 0,
       remoteTrans: 0,
-      gridIdx: 0,
       slideshowID: null,
       direction: 'left',
       focus: 'content',
@@ -357,24 +390,35 @@ export default {
     homescreen,
   },
   watch: {
+    gridIdx(val) {
+      this.setGridLeft(val);
+    },
     playerState(val) {
-      console.log(val, this.$el.querySelector('video'));
       if (val === 0) {
         const video = this.$el.querySelector('.video-feeds video');
         if (video) {
           video.play();
         }
-        // this.clearVoiceTimer();
-        // this.initiateTimer();
       } else if (val === 1) {
         const video = this.$el.querySelector('.video-feeds video');
         if (video) {
           video.pause();
         }
-        // clearTimeout(this.timeoutId);
-        // this.resetVoiceTimer();
-        // this.timeoutId = null;
-        // this.fade = false;
+      }
+    },
+    listType(val) {
+      if (val === 'autoscroll') {
+        this.index = 0;
+        const localGrid = this.updatedGrid();
+        this.setPanGrid(localGrid);
+        this.setpanning(true);
+      } else if (val === 'navigable') {
+        const idx = (this.index % this.gridDetails.length);
+        this.setSlideIdx(idx);
+        this.setGridIdx(0);
+        this.toggleInterval(false);
+        this.resetPanning();
+        this.setGridLeft(0);
       }
     },
     volume(val) {
@@ -399,17 +443,26 @@ export default {
     isRemoteEnabled(val) {
       if (!val) {
         if (this.active) {
-          this.slideIdx = this.gridIdx;
           if (this.showMore === 'boot') {
             this.toggleInterval(true);
           } else if (this.showMore === 'initial') {
-            this.setPanGrid(this.reoderedGrid);
-            this.setpanning(true);
+            if (this.withAutoScroll) {
+              this.setpanning(true);
+            }
+            // });
           }
         }
       } else {
-        this.toggleInterval(false);
-        this.resetPanning();
+        if (this.active) {
+          if (this.showMore === 'boot') {
+            this.setfocus('leftposter');
+          } else if (this.showMore === 'initial') {
+            this.setListType('navigable');
+            this.setfocus('rightgrid');
+          } else if (this.showMore === 'partial') {
+            this.setfocus('lowerdeck');
+          }
+        }
       }
     },
     active(val) {
@@ -419,27 +472,23 @@ export default {
     },
     showMore(val) {
       if (val === 'fullhome') {
-        this.setpanning(false);
-        this.translate = 0;
+        this.resetPanning();
       } else if (val === 'initial') {
+        this.resetPanning();
         this.toggleInterval(false);
-        this.setpanning(true);
-        const len = this.refGrid.length;
-        this.dummyGrid = [];
-        this.dgridArr = [];
-        for (let i = 0; i < len; i += 1) {
-          const index = (i + this.slideIdx) % len;
-          this.dummyGrid[i] = this.refGrid[index];
-          this.dgridArr[i] = this.refGrid[index];
-        }
         this.index = 0;
-      } else {
-        this.setpanning(false);
-        this.toggleInterval(true);
-        for (let i = 0; i < this.gridDetails.length; i += 1) {
-          this.dgridArr[i] = this.gridDetails[i];
+        const localGrid = this.updatedGrid();
+        this.setPanGrid(localGrid);
+        if (this.withAutoScroll) {
+          this.setpanning(true);
         }
-        this.translate = 0;
+      } else {
+        this.resetPanning();
+        this.setPanGrid(this.gridDetails);
+        if (this.withAutoScroll) {
+          this.setpanning(true);
+        }
+        this.toggleInterval(true);
       }
     },
   },
@@ -674,7 +723,7 @@ export default {
       .metadata-twice {
           position: absolute;
           top: 50 * $s;
-          left: 740 * $s;
+          left: 600 * $s;
           width: 540 *  $s;
           height: auto;
           .source-icon {
@@ -829,6 +878,10 @@ export default {
             .next-video {
               transform: scale(1.16);
             }
+            .sub {
+              transform-origin: top center;
+              transform: scale(0.84);
+            }
             .details {
               transform: translateX(#{ 25 * $s });
             }
@@ -844,7 +897,7 @@ export default {
       &.show-more {
         .upperDeck {
           // background: rgba(245,245,245,1);
-          height: 430 * $s;
+          height: 334 * $s;
           .wrapper {
             transition: top 0.8s ease;
             width: 100%;
@@ -858,7 +911,7 @@ export default {
                 // transition: width 0.8s ease 0.8s, height 0.8s ease 0.8s;
                 // width: 580 * $s;
                 // height: 325 * $s;
-                transform: scale(0.52);
+                transform: scale(0.4);
               }
               .metadata {
                 opacity: 0;
@@ -869,7 +922,7 @@ export default {
               // transition: transform 0.2s ease 0.4s;
               width: 703 * $s;
               vertical-align: top;
-              transform: translate(#{ 1080 * $s }, #{-640 * $s });
+              transform: translate(#{ 980 * $s }, #{-640 * $s });
             }
           }
           .right-corner {
@@ -881,7 +934,7 @@ export default {
           position: absolute;
           width: 100%;
           z-index: 9999;
-          transform: translateY(#{-650 * $s});
+          transform: translateY(#{-760 * $s});
           height: 100%;
           .deck-wrapper {
             background-color: rgba(216,216,216,0.3);

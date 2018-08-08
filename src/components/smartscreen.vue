@@ -15,12 +15,12 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import bixby from './bixby/bixby';
-import home from './home/home';
+import home from './home/homeUT';
 import screensaver from './screensaver/screensaver';
 import screenshot from './screenshot/screenshot';
 import musicPlayer from './common/musicplayer';
 import spotify from './spotify/spotify';
-import hbo from './hbo/hbo';
+import hbo from './hbo/hbohome';
 import hulu from './hulu/hulu';
 import volume from './system/volume';
 import result from './result/result';

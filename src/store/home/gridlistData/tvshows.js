@@ -4,9 +4,18 @@ export default {
     items: ['espn', 'cnn', 'ytube1', 'ytube2'],
     title: 'CONTINUE WATCHING',
     name: 'now',
+    selIdx: 0,
     itemType: 'sqrtile',
     espn: {
       title: 'Star Trek: Discovery',
+      payload: {
+        type: 'launch',
+        param: {
+          category: 'hulu',
+          subcategory: 'player',
+          content: 'handmaids',
+        },
+      },
       gist: 'S1 E1  &middot; The Vulcan Hello',
       subtitle: '6:00 - 8:00PM',
       progress: '40',
@@ -51,6 +60,7 @@ export default {
     items: ['twitch', 'ytube1', 'espn', 'amazon', 'item5'],
     title: 'ON NOW',
     name: 'upcoming',
+    selIdx: 0,
     itemType: 'sqrThumb',
     twitch: {
       title: 'American’s Got Talent',
@@ -107,6 +117,7 @@ export default {
     name: 'continue',
     items: ['ytube1', 'hulu', 'amazon', 'hulu1', 'item5'],
     title: 'COMEDY',
+    selIdx: 0,
     itemType: 'sqrThumb',
     ytube1: {
       title: 'Red Oaks',
@@ -148,6 +159,7 @@ export default {
     name: 'drama',
     items: ['ytube1', 'hulu', 'amazon', 'hulu1', 'item5'],
     title: 'DRAMA',
+    selIdx: 0,
     itemType: 'sqrThumb',
     ytube1: {
       title: 'The Man in the High Castle',
@@ -189,6 +201,7 @@ export default {
     name: 'ANIMATED',
     items: ['item1', 'item2', 'item3', 'item4'],
     title: 'ANIMATED',
+    selIdx: 0,
     itemType: 'sqrThumb',
     item1: {
       title: 'Los Simpson',

@@ -74,7 +74,6 @@ export default {
         // give some time to user to update
         this.timeout = setTimeout(() => {
           if (this.bixbyState === 'listen') {
-            console.log('thinking:::::::::::::::::');
             this.showSpeechText = true;
             this.defaultOptions.loop = true;
             this.updateBixby('think');
