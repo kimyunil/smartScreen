@@ -256,13 +256,14 @@ const store = new Vuex.Store({
           break;
         case 'browse':
           if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
-            if (state.home.listType !== 'autoscroll') {
-              state.home.listType = 'autoscroll';
-            }
-            if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
-              Vue.nextTick(() => {
+            if (state.home.showMore === 'initial') {
+              if (state.home.listType !== 'autoscroll') {
+                state.home.listType = 'autoscroll';
+              } else {
                 state.home.panning = !state.home.panning;
-              });
+              }
+            } else {
+              state.home.panning = !state.home.panning;
             }
           }
           break;
