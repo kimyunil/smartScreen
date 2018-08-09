@@ -86,6 +86,7 @@ export default {
     },
     musicLoad(status, event) {
       console.log(status, event);
+      this.playerEle.volume = (this.volume * 1) / 16;
       if (status === -1) {
         this.updateState(-1);
         this.setPlayer({ elapsedTime: event.target.currentTime });

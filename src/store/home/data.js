@@ -46,16 +46,16 @@ export default {
     idx: 0,
     items: ['sp1', 'sp2', 'sp3'],
     sp1: {
-      videoUrl: '/resources/videos/smartscreen/new/yoga.mp4',
-      poster: '/static/Images/home/homeUI/poster.png',
-      icon: '/static/Images/home/homeUI/icons/gia.png',
-      text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span></span>',
-    },
-    sp2: {
       videoUrl: '/resources/videos/smartscreen/new/cook.mp4',
       poster: '/static/Images/home/homeUI/poster.png',
       icon: '/static/Images/home/homeUI/icons/food.png',
       text: '<span>How To Cook<span style="color:rgb(255,96,93)"> Perfect Eggs</span> <span>Every Time</span></span>',
+    },
+    sp2: {
+      videoUrl: '/resources/videos/smartscreen/new/yoga.mp4',
+      poster: '/static/Images/home/homeUI/poster.png',
+      icon: '/static/Images/home/homeUI/icons/gia.png',
+      text: '<span>30 Minutes Daily Workout - <span style="color:rgb(255,96,93)">Chaturanga</span> by School of <span style="color:rgb(255,96,93)">Yoga</span></span>',
     },
     sp3: {
       videoUrl: '/resources/videos/smartscreen/new/music.mp4',
@@ -180,11 +180,33 @@ export default {
     grid3: {
       title: 'grid-1',
       suggest: ['Hey Bixby, tell me more about today’s weather'],
-      content: ['body', 'traffic', 'weather'],
+      content: ['hulu', 'traffic', 'weather'],
       nav: [
         ['tile', 'tile'],
         ['thumbnail1', 'thumbnail2'],
       ],
+      hulu: {
+        type: 'tile',
+        template: 'tile',
+        contentType: 'simple',
+        details: {
+          full: 'partial',
+          action: {
+            category: 'hulu',
+            subcategory: 'home',
+            content: 'handmaids',
+          },
+          continueWatch: {
+            progress: '30',
+          },
+          video: '/resources/videos/smartscreen/Health_1_Daily_Burn.mp4',
+          bottomText: '<span>The Handmaid\'s Tale</span>',
+          tile: '/static/Images/home/homeUI/tile/tile4.png',
+          logo: '/static/Images/home/homeUI/icons/hulu.png',
+          logoType: 'rect',
+          img: '',
+        },
+      },
       body: {
         type: 'tile',
         template: 'tile',

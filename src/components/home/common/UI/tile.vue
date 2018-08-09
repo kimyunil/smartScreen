@@ -14,7 +14,15 @@
             </transition>
           </template>
           <template v-else>
-            <div class="content-tile" :style="{'background-image': `url(${item.details.tile})`}"></div>
+            <div class="content-tile" :style="{'background-image': `url(${item.details.tile})`}">
+              <div v-if="item.details.continueWatch" class="continue-watching">
+                <div class="title">CONTINUE WATCHING</div>
+                <div class="seekbar">
+                  <div class="progress" :style="{'width': `${item.details.continueWatch.progress}%`}">
+                  </div>
+                </div>
+              </div>
+            </div>
           </template>
         </div>
         <div class="content-metadata">
@@ -45,9 +53,9 @@
               <span v-html="item.details.bottomText"></span>
             </div>
           </div>
-          <template v-if="item.key === 'hbo' || item.key === 'hulu'">
+          <template v-if="item.details.continueWatch">
             <div class="seekbar">
-              <div class="progress" :style="{'width': `${item.elapsedTime/item.total * 100}%`}">
+              <div class="progress" :style="{'width': `${item.details.continueWatch.progress}%`}">
               </div>
             </div>
           </template>
@@ -165,6 +173,36 @@ export default {
         width: 100%;
         // background-color: red;
         background-size: 100% 100%;
+        .continue-watching {
+          position: absolute;
+          bottom: 0;
+          width:480 * $s;
+          left: 20 * $s;
+          height: 70 * $s;
+          .title {
+            color: white;
+            font-family: TTNormsBold;
+            font-size: 20 * $s;
+            text-align:left;
+          }
+          .seekbar {
+            position: relative;
+            height: 5 * $s;
+            top: 15 * $s;
+            width: 100%;
+            border-radius:5 * $s;
+            overflow: hidden;
+            background-color: rgba(255,255,255,0.1);
+            .progress {
+              position: absolute;
+              left: 0;
+              top: 0;
+              border-radius:5 * $s;
+              background: white;
+              height: 100%;
+            }
+          }
+        }
       }
       .video {
         position: absolute;

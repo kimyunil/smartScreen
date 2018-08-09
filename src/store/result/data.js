@@ -65,12 +65,12 @@ export default {
     },
     ghost: {
       list: ['ghost1'],
-      title: 'GHOSTBUSTERS',
+      title: '',
       details: {
         ghost1: {
           img: './static/Images/results/ghost/ghost.png',
-          suggestions: ['Hey Bixby, dismiss'],
-          sayWord: 'Try saying',
+          suggestions: ['Hey Bixby, play The Real Ghostbusters'],
+          sayWord: 'Say',
         },
       },
     },

@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import animation from '@/store/animations/';
 import source from '@/store/source/';
 import bixby from '@/store/bixby/';
+import spotifyhome from '@/store/spotifyhome';
 import home from '@/store/home/';
 import result from '@/store/result/';
 import config from './config';
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     gConfig: config,
     withAutoScroll: false,
     screenshot: '',
+    videoUrl: '',
     vidAutoplay: false,
     sleep: false,
     setup: false,
@@ -256,8 +258,11 @@ const store = new Vuex.Store({
           if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
             if (state.home.listType !== 'autoscroll') {
               state.home.listType = 'autoscroll';
-            } else if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
-              state.home.panning = !state.home.panning;
+            }
+            if (state.home.showMore === 'initial' || state.home.showMore === 'partial') {
+              Vue.nextTick(() => {
+                state.home.panning = !state.home.panning;
+              });
             }
           }
           break;
@@ -366,12 +371,17 @@ const store = new Vuex.Store({
           else if (payload.loop) dispatch('source/SKIP_NEXT');
           break;
         }
+        case 'shealth': {
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'shealth' });
+          break;
+        }
         case 'fitbit': {
           dispatch('SWITCH_COMPONENT', { replace: true, name: 'fitbit' });
           break;
         }
         case 'spotifyhome': {
-          dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotifyhome' });
+          commit('spotifyhome/SET_RESULT', payload);
+          dispatch('SWITCH_COMPONENT', { replace: true, name: 'spotifyhome', transition: 'blur' });
           break;
         }
         case 'volume': {
@@ -434,6 +444,10 @@ const store = new Vuex.Store({
           console.log(payload.data);
           break;
         }
+        case 'homeplayer':
+          state.source.player.url = payload.subcategory.videoUrl;
+          dispatch('SWITCH_COMPONENT', { name: 'homeplayer' });
+          break;
         default:
           break;
       }
@@ -464,6 +478,7 @@ const store = new Vuex.Store({
     animation,
     source,
     bixby,
+    spotifyhome,
     home,
     result,
   },

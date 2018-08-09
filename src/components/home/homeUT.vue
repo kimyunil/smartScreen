@@ -9,7 +9,7 @@
                 <div class="video-feeds">
                   <transition name="fade">
                     <div class="video" v-if="true && (showMore !== 'fullhome')">
-                      <video :src="sponsored.videoUrl" autoplay @ended="videoEndCB"/>
+                      <video :src="sponsored.videoUrl" @ended="videoEndCB" @loadstart="setVideoparam"/>
                     </div>
                     <!--<div v-else class="poster" :style="{'background-image':`url(${sponsored.poster})`}"></div>-->
                   </transition>
@@ -185,6 +185,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      launch: 'LAUNCH_COMPONENT',
+    }),
     ...mapMutations({
       updateMode: 'UPDATE_REMOTE_MODE',
     }),
@@ -200,6 +203,11 @@ export default {
     loadVidPoster(evt) {
       const event = evt;
       event.target.currentTime = 5;
+    },
+    setVideoparam(evt) {
+      const event = evt;
+      event.target.volume = (this.volume * 1) / 16;
+      event.target.play();
     },
     videoEndCB() {
       const idx = (this.sponsorIdx + 1) % this.sponsors.length;
@@ -327,7 +335,16 @@ export default {
             this.toggleMoreData('partial');
           }
           break;
-        case 'LEFT':
+        case 'SELECT': {
+          if (!this.isRemoteEnabled) return;
+          const video = this.$el.querySelector('video');
+          if (this.navId === 'leftposter') {
+            if (video) {
+              video.pause();
+            }
+            this.launch({ category: 'homeplayer', subcategory: this.sponsored });
+          }
+        }
           break;
         case 'ONE':
           this.toggleMoreData('initial');
@@ -394,15 +411,17 @@ export default {
       this.setGridLeft(val);
     },
     playerState(val) {
-      if (val === 0) {
-        const video = this.$el.querySelector('.video-feeds video');
-        if (video) {
-          video.play();
-        }
-      } else if (val === 1) {
-        const video = this.$el.querySelector('.video-feeds video');
-        if (video) {
-          video.pause();
+      if (this.active) {
+        if (val === 0) {
+          const video = this.$el.querySelector('.video-feeds video');
+          if (video) {
+            video.play();
+          }
+        } else if (val === 1) {
+          const video = this.$el.querySelector('.video-feeds video');
+          if (video) {
+            video.pause();
+          }
         }
       }
     },
@@ -464,7 +483,12 @@ export default {
       }
     },
     active(val) {
+      const video = this.$el.querySelector('video');
       if (val) {
+        if (video) {
+          video.muted = false;
+          video.play();
+        }
         this.toggleInterval(false);
       }
     },
@@ -850,6 +874,7 @@ export default {
       .deck-wrapper {
         position: absolute;
         width: 100%;
+        overflow: hidden;
         background-image:url('/static/Images/lowebg.png');
         height: auto;
         transition: transform 0.3s ease;

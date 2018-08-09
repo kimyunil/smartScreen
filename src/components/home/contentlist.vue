@@ -6,7 +6,7 @@
         <!-- </template> -->
         <div class="grid-list">
           <template v-for="(subCat, index) in gridlist">
-            <div class="grid-templates template subcategory-template"  :key="subCat.title">
+            <div class="grid-templates template subcategory-template"  :key="subCat.key">
               <div class="title" :class="[{'elevate': (rowIdx === index && active)}]">{{subCat.title}}</div>
               <lgrid :items="subCat.listItems" :category="subCat" :Id="subCat.key" :row="index"  :itemType="subCat.itemType" :class="[{'elevate': (rowIdx === index)}, subCat.itemType, subCat.name]" :focus="(rowIdx === index && active)" class="subCategoryList" @movefocus="movefocus"/>
             </div>
@@ -49,6 +49,7 @@ export default {
     ]),
     ...mapGetters('home', {
       cat_grid: 'GET_CAT_GRID',
+      catNavIdx: 'HOME_FOCUS',
       gridlist: 'GET_FORYOU_LIST',
     }),
   },
@@ -106,11 +107,8 @@ export default {
           if (this.isRemoteEnabled) {
             if (this.rowIdx < this.gridlist.length - 1) {
               this.rowIdx += 1;
-              // const offset = this.voffset[this.rowIdx].top + this.voffset[this.rowIdx].height;
               console.log(this.voffset[this.rowIdx].top);
-              // if (this.translate + offset > 1080) {
               this.scroll('==', this.voffset[this.rowIdx].top * -1);
-              // }
             }
           }
           break;
@@ -151,6 +149,9 @@ export default {
   watch: {
     index(val) {
       this.updatePageIdx(val);
+    },
+    catNavIdx() {
+      this.updateVOffset();
     },
     isRemoteEnabled(val) {
       if (this.active) {
@@ -218,7 +219,7 @@ export default {
     }
     .grid-templates {
       position: static;
-      margin:0 100 * $s;
+      margin:0 90 * $s;
       margin-bottom: 60 * $s;
       height: 840 * $s;
       width: 1700 * $s;

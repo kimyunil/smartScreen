@@ -16,12 +16,14 @@
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import bixby from './bixby/bixby';
 import home from './home/homeUT';
+import spotifyhome from './spotifyhome/spotifyhome';
 import screensaver from './screensaver/screensaver';
 import screenshot from './screenshot/screenshot';
 import musicPlayer from './common/musicplayer';
 import spotify from './spotify/spotify';
-import hbo from './hbo/hbohome';
+import hbo from './hbo/hbo';
 import hulu from './hulu/hulu';
+import homeplayer from './homeplayer/homeplayer';
 import volume from './system/volume';
 import result from './result/result';
 import hboplayer from './hboplayer/hboplayer';
@@ -41,6 +43,13 @@ export default {
   },
   destroyed() {
     Messages.$off('button_down', this.handleKeyDown);
+    const video = this.$el.querySelector('.video-feeds video');
+    if (video) {
+      video.muted = true;
+      setTimeout(() => {
+        video.src = '';
+      }, 800);
+    }
   },
   computed: {
     videoconfig() {
@@ -160,6 +169,7 @@ export default {
   components: {
     bixby,
     hbo,
+    spotifyhome,
     hulu,
     home,
     volume,
@@ -169,6 +179,7 @@ export default {
     screensaver,
     ytplayer,
     musicPlayer,
+    homeplayer,
     vevo,
     screenshot,
     // result,

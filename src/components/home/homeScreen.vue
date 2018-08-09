@@ -6,6 +6,7 @@
         <span>{{item.title}}</span>
         </div>
     </div>
+    <div class="scroll_mask" :class="[activeClass]" v-if="true"></div>
     <div class="content-wrapper">
       <div class="list" :style="translateY">
         <contentlist class="contentlist" @movefocus="movefocus" :active="enabled && focus === 1" :scroll="scroll" :translate="translate"></contentlist>
@@ -35,6 +36,7 @@ export default {
   data() {
     return {
       translate: 0,
+      scrollMask: false,
     };
   },
   computed: {
@@ -197,7 +199,7 @@ export default {
     .headings {
       height: 80 * $s;
       display: flex;
-      left: 144 * $s;
+      left: 124 * $s;
       position: relative;
       width: 1710 * $s;
       justify-content: space-between;
@@ -240,11 +242,24 @@ export default {
         }
       }
     }
+    .scroll_mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 225 * $s;
+      background-image: url('/static/Images/home/scroll_mask.png');
+      z-index: 2;
+      &.push-down {
+        top: -30 * $s;
+      }
+    }
     .content-wrapper {
       position: relative;
       width: 100%;
+      top: 20 * $s;
       height: 970 * $s;
-      overflow: hidden;
+      // overflow: hidden;
       .list {
         position: absolute;
         top: 0;

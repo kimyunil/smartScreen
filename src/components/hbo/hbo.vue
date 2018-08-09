@@ -11,7 +11,7 @@
 import { mapState, mapMutations } from 'vuex';
 import splash from '../common/splash';
 import player from '../common/player';
-import home from './home';
+import home from './hbohome';
 import detail from './detail';
 import Messages from '../../services/Messages';
 

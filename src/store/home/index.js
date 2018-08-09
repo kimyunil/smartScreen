@@ -9,6 +9,7 @@ export default {
     slideIdx: 0,
     partialScroll: false, // for scrolling first list in category
     gridIdx: 0,
+    fullscreenplyr: false,
     panning: false,
     autoScroll: false,
     listType: 'autoscroll', // autoscroll , navigable
@@ -62,6 +63,7 @@ export default {
         const gridItem = gridData[key];
         gridList[i] = gridData[key];
         gridList[i].listItems = [];
+        gridList[i].index = i;
         gridList[i].index = gridItem.selIdx;
         gridList[i].key = key;
         for (let j = 0; j < gridItem.items.length; j += 1) {

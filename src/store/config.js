@@ -15,13 +15,12 @@ export default {
       type: 'app',
     },
     spotifyhome: {
-      vType: 'screenshot',
       type: 'app',
       suggestion: true,
-      sayWod: 'Try saying',
-      theme: 'dark',
-      drivers: ['Hey Bixby, play Strawberry Swing'],
-      img: '/static/Images/screenshot/spotify.png',
+    },
+    homeplayer: {
+      type: 'app',
+      suggestion: false,
     },
     youtube: {
       vType: 'screenshot',
@@ -40,6 +39,15 @@ export default {
       theme: 'light',
       drivers: ['Hey Bixby, let’s do yoga challenge'],
       img: '/static/Images/screenshot/fitbit.png',
+    },
+    shealth: {
+      vType: 'screenshot',
+      type: 'app',
+      sayWod: 'Say',
+      suggestion: true,
+      theme: 'light',
+      drivers: ['Hey Bixby, let’s do yoga challenge'],
+      img: '/static/Images/screenshot/shealth.jpg',
     },
     hbo: {
       type: 'app',
